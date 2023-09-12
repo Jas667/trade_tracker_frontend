@@ -1,3 +1,4 @@
+import Login from './components/Login'
 import './index.css'
 
 function App() {
@@ -5,7 +6,7 @@ function App() {
   return (
     <>
       <div>
-        <h1>React 18 Alpha</h1>
+        <Login />
       </div>
     </>
   )
