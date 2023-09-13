@@ -4,6 +4,7 @@ import { login } from "../services/authService.jsx";
 import { useState, useEffect } from "react";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
+import { Link } from "react-router-dom";
 // import { useHistory } from "react-router-dom";
 
 export default function Login() {
@@ -136,7 +137,7 @@ export default function Login() {
             Sign In
           </button>
           <div className="flex justify-between">
-            <p>Creat Account</p>
+            <Link to ="/register">Creat Account</Link>
           </div>
         </form>
       </div>
