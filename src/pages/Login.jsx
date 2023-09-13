@@ -2,8 +2,8 @@ import React from "react";
 import loginImg from "../assets/data_examine_2_horizontal.jpg";
 import { login } from "../services/authService.jsx";
 import { useState, useEffect } from "react";
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
 // import { useHistory } from "react-router-dom";
 
 export default function Login() {
@@ -13,10 +13,33 @@ export default function Login() {
     password: "",
   });
   //error message for incorrect login popup
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState({
+    identifier: null,
+    password: null,
+  });
+
+  //add state to track when the form is submitted
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  //renderTooltip function for tooltip
+  const renderTooltip = (props, message) => (
+    <Tooltip id="button-tooltip" {...props}>
+      {message}
+    </Tooltip>
+  );
+
+  useEffect(() => {
+    if (isSubmitting) {
+      setErrorMessage({
+        identifier: null,
+        password: null,
+      });
+      setIsSubmitting(false); // Reset the isSubmitting state
+    }
+  }, [formData, isSubmitting]);
 
   //useHistory hook to redirect to dashboard
-//   const history = useHistory();
+  //   const history = useHistory();
 
   //handle change function
   const handleChange = (e) => {
@@ -30,6 +53,8 @@ export default function Login() {
   //handle submit function
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setIsSubmitting(true); // Mark the form as being submitted
     try {
       const response = await login(formData);
       const data = await response.json();
@@ -38,10 +63,19 @@ export default function Login() {
       switch (response.status) {
         case 200:
           console.log("Login successful", data);
+          setErrorMessage({ identifier: null, password: null }); // Clear any previous errors on success
           break;
         case 400:
           console.log("Login failed", data);
-          setErrorMessage(data.message || "Incorrect password or username.");
+          if (data.message.includes("User")) {
+            setErrorMessage((prev) => ({
+              ...prev,
+              identifier: "User not found.",
+            }));
+          } else {
+            setErrorMessage((prev) => ({ ...prev, password: data.message }));
+          }
+          break;
       }
     } catch (e) {
       console.error("Login error", e);
@@ -65,23 +99,35 @@ export default function Login() {
           <h2 className="text-4xl font-bold text-center py-6">Trade Tracker</h2>
           <div className="flex flex-col py-2">
             <label>Username/Email</label>
-            <input
-              name="identifier"
-              value={formData.identifier}
-              onChange={handleChange}
-              className="border p-2"
-              type="text"
-            />
+            <OverlayTrigger
+              placement="right"
+              show={!!errorMessage.identifier}
+              overlay={(props) => renderTooltip(props, errorMessage.identifier)}
+            >
+              <input
+                name="identifier"
+                value={formData.identifier}
+                onChange={handleChange}
+                className="border p-2"
+                type="text"
+              />
+            </OverlayTrigger>
           </div>
           <div className="flex flex-col py-2">
             <label>Password</label>
-            <input
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              className="border p-2"
-              type="password"
-            />
+            <OverlayTrigger
+              placement="right"
+              show={!!errorMessage.password}
+              overlay={(props) => renderTooltip(props, errorMessage.password)}
+            >
+              <input
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                className="border p-2"
+                type="password"
+              />
+            </OverlayTrigger>
           </div>
           <button
             type="submit"
@@ -90,26 +136,9 @@ export default function Login() {
             Sign In
           </button>
           <div className="flex justify-between">
-            <p className="flex items-center">
-              <input className="mr-2" type="checkbox" />
-              Remember Me
-            </p>
             <p>Creat Account</p>
           </div>
         </form>
-        <Modal show={!!errorMessage} onHide={() => setErrorMessage(null)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Error</Modal.Title>
-                </Modal.Header>
-
-                <Modal.Body>
-                    <p>{errorMessage}</p>
-                </Modal.Body>
-
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setErrorMessage(null)}>Close</Button>
-                </Modal.Footer>
-            </Modal>
       </div>
     </div>
   );
