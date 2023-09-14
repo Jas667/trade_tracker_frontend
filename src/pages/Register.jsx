@@ -1,6 +1,6 @@
 import React from "react";
 import loginImg from "../assets/data_examine_2_horizontal.jpg";
-import { login } from "../services/authService.jsx";
+import { register } from "../services/authService.jsx";
 import { useState, useEffect } from "react";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
@@ -9,17 +9,25 @@ import Tooltip from "react-bootstrap/Tooltip";
 export default function Register() {
   //useState hook for form data
   const [formData, setFormData] = useState({
-    identifier: "",
+    username: "",
+    email: "",
+    first_name: "",
+    last_name: "",
     password: "",
+    password_confirm: "",
   });
   //   //error message for incorrect login popup
   const [errorMessage, setErrorMessage] = useState({
-    identifier: null,
+    username: null,
+    email: null,
+    first_name: null,
+    last_name: null,
     password: null,
   });
 
   //   //add state to track when the form is submitted
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   //   //renderTooltip function for tooltip
   const renderTooltip = (props, message) => (
@@ -31,12 +39,30 @@ export default function Register() {
   useEffect(() => {
     if (isSubmitting) {
       setErrorMessage({
-        identifier: null,
+        username: null,
+        email: null,
+        first_name: null,
+        last_name: null,
         password: null,
       });
       setIsSubmitting(false); // Reset the isSubmitting state
     }
   }, [formData, isSubmitting]);
+
+  //This use effect will check if the password and confirm password match
+  useEffect(() => {
+    if (formData.password && formData.password !== confirmPassword) {
+      setErrorMessage((prev) => ({
+        ...prev,
+        password_confirm: "Passwords do not match.",
+      }));
+    } else {
+      setErrorMessage((prev) => ({
+        ...prev,
+        password_confirm: null,
+      }));
+    }
+  }, [formData.password, confirmPassword]);
 
   //useHistory hook to redirect to dashboard
   //   const history = useHistory();
@@ -44,6 +70,11 @@ export default function Register() {
   //handle change function
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === "password_confirm") {
+      setConfirmPassword(value);
+    }
+
     setFormData((prevState) => ({
       ...prevState,
       [name]: value,
@@ -56,26 +87,65 @@ export default function Register() {
 
     setIsSubmitting(true); // Mark the form as being submitted
     try {
-      const response = await login(formData);
+      const response = await register(formData);
       const data = await response.json();
 
       //switch statement to handle different responses
       switch (response.status) {
-        case 200:
-          console.log("Login successful", data);
-          setErrorMessage({ identifier: null, password: null }); // Clear any previous errors on success
+        case 201:
+          console.log("User Registered", data);
+          setErrorMessage({
+            username: null,
+            email: null,
+            first_name: null,
+            last_name: null,
+            password: null,
+          }); // Clear any previous errors on success
           break;
         case 400:
-          console.log("Login failed", data);
-          if (data.message.includes("User")) {
+          console.log("Registration failed", data);
+          if (data.message.includes("Missing")) {
             setErrorMessage((prev) => ({
               ...prev,
-              identifier: "User not found.",
+              username: "Missing required fields.",
             }));
-          } else {
-            setErrorMessage((prev) => ({ ...prev, password: data.message }));
+          } else if (data.message.includes("Invalid fields")) {
+            setErrorMessage((prev) => ({
+              ...prev,
+              username: "Invalid fields.",
+            }));
+          } else if (data.message.includes("Invalid email")) {
+            setErrorMessage((prev) => ({
+              ...prev,
+              email: "Invalid Email.",
+            }));
+          } else if (data.message.includes("Username must")) {
+            setErrorMessage((prev) => ({
+              ...prev,
+              username: "Username must be between 3 and 20 characters.",
+            }));
+          } else if (data.message.includes("Password")) {
+            setErrorMessage((prev) => ({
+              ...prev,
+              password: "Password must be at least 8 characters.",
+            }));
+          } else if (data.message.includes("Email alread")) {
+            setErrorMessage((prev) => ({
+              ...prev,
+              email: "Email already exists.",
+            }));
+          } else if (data.message.includes("Username alread")) {
+            setErrorMessage((prev) => ({
+              ...prev,
+              username: "Username already exists.",
+            }));
           }
           break;
+        default:
+          setErrorMessage((prev) => ({
+            ...prev,
+            email: "Oops, something went wrong! Please try again.",
+          }));
       }
     } catch (e) {
       console.error("Login error", e);
@@ -99,67 +169,144 @@ export default function Register() {
           <h2 className="text-4xl font-bold text-center py-6">Register</h2>
           <div className="flex flex-col py-2">
             <label>Username</label>
-            <input
-              name="username"
-              value={formData.identifier}
-              onChange={handleChange}
-              className="border p-2"
-              type="text"
-            />
-          </div>
-          <div className="flex flex-col py-2">
-            <label>Email</label>
-            <input
-              name="email"
-              value={formData.identifier}
-              onChange={handleChange}
-              className="border p-2"
-              type="text"
-            />
-          </div>
-          <div className="flex flex-col py-2">
-            <label>First Name</label>
-            <input
-              name="firstName"
-              value={formData.identifier}
-              onChange={handleChange}
-              className="border p-2"
-              type="text"
-            />
-            <div className="flex flex-col py-2">
-              <label>Last name</label>
+            <OverlayTrigger
+              placement="right"
+              show={!!errorMessage.username}
+              overlay={(props) =>
+                errorMessage.username ? (
+                  renderTooltip(props, errorMessage.username)
+                ) : (
+                  <></>
+                )
+              }
+            >
               <input
-                name="lastName"
-                value={formData.identifier}
+                name="username"
+                value={formData.username}
                 onChange={handleChange}
                 className="border p-2"
                 type="text"
               />
+            </OverlayTrigger>
+          </div>
+          <div className="flex flex-col py-2">
+            <label>Email</label>
+            <OverlayTrigger
+              placement="right"
+              show={!!errorMessage.email}
+              overlay={(props) =>
+                errorMessage.email ? (
+                  renderTooltip(props, errorMessage.email)
+                ) : (
+                  <></>
+                )
+              }
+            >
+              <input
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="border p-2"
+                type="text"
+              />
+            </OverlayTrigger>
+          </div>
+          <div className="flex flex-col py-2">
+            <label>First Name</label>
+            <OverlayTrigger
+              placement="right"
+              show={!!errorMessage.first_name}
+              overlay={(props) =>
+                errorMessage.first_name ? (
+                  renderTooltip(props, errorMessage.first_name)
+                ) : (
+                  <></>
+                )
+              }
+            >
+              <input
+                name="first_name"
+                value={formData.first_name}
+                onChange={handleChange}
+                className="border p-2"
+                type="text"
+              />
+            </OverlayTrigger>
+            <div className="flex flex-col py-2">
+              <label>Last name</label>
+              <OverlayTrigger
+                placement="right"
+                show={!!errorMessage.last_name}
+                overlay={(props) =>
+                  errorMessage.last_name ? (
+                    renderTooltip(props, errorMessage.last_name)
+                  ) : (
+                    <></>
+                  )
+                }
+              >
+                <input
+                  name="last_name"
+                  value={formData.last_name}
+                  onChange={handleChange}
+                  className="border p-2"
+                  type="text"
+                />
+              </OverlayTrigger>
             </div>
           </div>
           <div className="flex flex-col py-2">
             <label>Password</label>
-            <input
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              className="border p-2"
-              type="password"
-            />
+            <OverlayTrigger
+              placement="right"
+              show={!!errorMessage.password}
+              overlay={(props) =>
+                errorMessage.password ? (
+                  renderTooltip(props, errorMessage.password)
+                ) : (
+                  <></>
+                )
+              }
+            >
+              <input
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                className="border p-2"
+                type="password"
+              />
+            </OverlayTrigger>
           </div>
           <div className="flex flex-col py-2">
             <label>Password Confirm</label>
-            <input
-              name="passwordConfirm"
-              value={formData.identifier}
-              onChange={handleChange}
-              className="border p-2"
-              type="text"
-            />
+            <OverlayTrigger
+              placement="right"
+              show={!!errorMessage.password_confirm}
+              overlay={(props) =>
+                errorMessage.password_confirm ? (
+                  renderTooltip(props, errorMessage.password_confirm)
+                ) : (
+                  <></>
+                )
+              }
+            >
+              <input
+                name="password_confirm"
+                value={formData.identifier}
+                onChange={handleChange}
+                className="border p-2"
+                type="password"
+              />
+            </OverlayTrigger>
           </div>
           <button
             type="submit"
-            className="border w-full my-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white"
+            disabled={formData.password !== confirmPassword} // disable if passwords don't match
+            className={`border w-full my-5 py-2 ${
+              formData.password !== confirmPassword
+                ? "bg-indigo-600 text-white cursor-not-allowed" // Disabled state
+                : "bg-indigo-600 hover:bg-indigo-500 text-white" // Enabled state
+            }`}
           >
             Register
           </button>

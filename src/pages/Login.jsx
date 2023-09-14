@@ -78,9 +78,10 @@ export default function Login() {
           }
           break;
         default:
-          console.log("Unexpected response", data);
-          // Handle or show a general error message
-          break;
+          setErrorMessage((prev) => ({
+            ...prev,
+            email: "Oops, something went wrong! Please try again.",
+          }));
       }
     } catch (e) {
       console.error("Login error", e);
@@ -129,8 +130,13 @@ export default function Login() {
             <OverlayTrigger
               placement="right"
               show={!!errorMessage.password}
-              overlay={(props) => 
-                errorMessage.password ? renderTooltip(props, errorMessage.password) : <></>}
+              overlay={(props) =>
+                errorMessage.password ? (
+                  renderTooltip(props, errorMessage.password)
+                ) : (
+                  <></>
+                )
+              }
             >
               <input
                 name="password"
