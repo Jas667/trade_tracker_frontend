@@ -4,6 +4,8 @@ import { register } from "../services/authService.jsx";
 import { useState, useEffect } from "react";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
+import { Link } from "react-router-dom";
+import { InputWithErrorTooltip } from "../components/InputWithErrorTooltip";
 // import { useHistory } from "react-router-dom";
 
 export default function Register() {
@@ -167,7 +169,15 @@ export default function Register() {
           className="max-w-[400px] w-full mx-auto bg-white p-4"
         >
           <h2 className="text-4xl font-bold text-center py-6">Register</h2>
-          <div className="flex flex-col py-2">
+          <InputWithErrorTooltip
+            name="username"
+            label="Username"
+            type="text"
+            value={formData.username}
+            errorMessage={errorMessage.username}
+            onChange={handleChange}
+          />
+          {/* <div className="flex flex-col py-2">
             <label>Username</label>
             <OverlayTrigger
               placement="right"
@@ -188,7 +198,7 @@ export default function Register() {
                 type="text"
               />
             </OverlayTrigger>
-          </div>
+          </div> */}
           <div className="flex flex-col py-2">
             <label>Email</label>
             <OverlayTrigger
@@ -310,6 +320,9 @@ export default function Register() {
           >
             Register
           </button>
+          <div className="flex justify-between">
+            <Link to="/login">Login</Link>
+          </div>
         </form>
       </div>
     </div>
