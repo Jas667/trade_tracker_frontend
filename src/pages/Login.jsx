@@ -22,13 +22,6 @@ export default function Login() {
   //add state to track when the form is submitted
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  //renderTooltip function for tooltip
-  const renderTooltip = (props, message) => (
-    <Tooltip id="button-tooltip" {...props}>
-      {message}
-    </Tooltip>
-  );
-
   useEffect(() => {
     if (isSubmitting) {
       setErrorMessage({
@@ -37,7 +30,7 @@ export default function Login() {
       });
       setIsSubmitting(false); // Reset the isSubmitting state
     }
-  }, [formData, isSubmitting]);
+  }, [isSubmitting]);
 
   //useHistory hook to redirect to dashboard
   //   const history = useHistory();
@@ -50,6 +43,13 @@ export default function Login() {
       [name]: value,
     }));
   };
+
+  //renderTooltip function for tooltip
+  const renderTooltip = (props, message) => (
+    <Tooltip id="button-tooltip" {...props}>
+      {message}
+    </Tooltip>
+  );
 
   //handle submit function
   const handleSubmit = async (e) => {
@@ -77,6 +77,10 @@ export default function Login() {
             setErrorMessage((prev) => ({ ...prev, password: data.message }));
           }
           break;
+        default:
+          console.log("Unexpected response", data);
+          // Handle or show a general error message
+          break;
       }
     } catch (e) {
       console.error("Login error", e);
@@ -103,7 +107,13 @@ export default function Login() {
             <OverlayTrigger
               placement="right"
               show={!!errorMessage.identifier}
-              overlay={(props) => renderTooltip(props, errorMessage.identifier)}
+              overlay={(props) =>
+                errorMessage.identifier ? (
+                  renderTooltip(props, errorMessage.identifier)
+                ) : (
+                  <></>
+                )
+              }
             >
               <input
                 name="identifier"
@@ -119,7 +129,8 @@ export default function Login() {
             <OverlayTrigger
               placement="right"
               show={!!errorMessage.password}
-              overlay={(props) => renderTooltip(props, errorMessage.password)}
+              overlay={(props) => 
+                errorMessage.password ? renderTooltip(props, errorMessage.password) : <></>}
             >
               <input
                 name="password"
@@ -137,7 +148,7 @@ export default function Login() {
             Sign In
           </button>
           <div className="flex justify-between">
-            <Link to ="/register">Creat Account</Link>
+            <Link to="/register">Creat Account</Link>
           </div>
         </form>
       </div>
