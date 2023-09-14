@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import { Link } from "react-router-dom";
+import { InputWithErrorTooltip } from "../components/InputWithErrorTooltip";
+import { HalfScreenImageVertical } from "../components/HalfScreenImageVertical";
 // import { useHistory } from "react-router-dom";
 
 export default function Login() {
@@ -90,63 +92,32 @@ export default function Login() {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 h-screen w-full">
-      <div className="hidden sm:block">
-        <img
-          className="w-full h-full object-cover"
-          src={loginImg}
-          alt="stock market chart data being examined"
-        />
-      </div>
+      <HalfScreenImageVertical
+        src={loginImg}
+        alt="stock market chart data being examined"
+      />
       <div className="bg-gray-100 flex flex-col justify-center">
         <form
           onSubmit={handleSubmit}
           className="max-w-[400px] w-full mx-auto bg-white p-4"
         >
           <h2 className="text-4xl font-bold text-center py-6">Trade Tracker</h2>
-          <div className="flex flex-col py-2">
-            <label>Username/Email</label>
-            <OverlayTrigger
-              placement="right"
-              show={!!errorMessage.identifier}
-              overlay={(props) =>
-                errorMessage.identifier ? (
-                  renderTooltip(props, errorMessage.identifier)
-                ) : (
-                  <></>
-                )
-              }
-            >
-              <input
-                name="identifier"
-                value={formData.identifier}
-                onChange={handleChange}
-                className="border p-2"
-                type="text"
-              />
-            </OverlayTrigger>
-          </div>
-          <div className="flex flex-col py-2">
-            <label>Password</label>
-            <OverlayTrigger
-              placement="right"
-              show={!!errorMessage.password}
-              overlay={(props) =>
-                errorMessage.password ? (
-                  renderTooltip(props, errorMessage.password)
-                ) : (
-                  <></>
-                )
-              }
-            >
-              <input
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className="border p-2"
-                type="password"
-              />
-            </OverlayTrigger>
-          </div>
+          <InputWithErrorTooltip
+            name="identifier"
+            label="Username/Email"
+            type="text"
+            value={formData.identifier}
+            errorMessage={errorMessage.identifier}
+            onChange={handleChange}
+          />
+          <InputWithErrorTooltip
+            name="password"
+            label="Password"
+            type="password"
+            value={formData.password}
+            errorMessage={errorMessage.password}
+            onChange={handleChange}
+          />
           <button
             type="submit"
             className="border w-full my-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white"

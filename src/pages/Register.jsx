@@ -2,10 +2,9 @@ import React from "react";
 import loginImg from "../assets/data_examine_2_horizontal.jpg";
 import { register } from "../services/authService.jsx";
 import { useState, useEffect } from "react";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Tooltip from "react-bootstrap/Tooltip";
 import { Link } from "react-router-dom";
 import { InputWithErrorTooltip } from "../components/InputWithErrorTooltip";
+import { HalfScreenImageVertical } from "../components/HalfScreenImageVertical";
 // import { useHistory } from "react-router-dom";
 
 export default function Register() {
@@ -30,13 +29,6 @@ export default function Register() {
   //   //add state to track when the form is submitted
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
-
-  //   //renderTooltip function for tooltip
-  const renderTooltip = (props, message) => (
-    <Tooltip id="button-tooltip" {...props}>
-      {message}
-    </Tooltip>
-  );
 
   useEffect(() => {
     if (isSubmitting) {
@@ -156,13 +148,10 @@ export default function Register() {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 h-screen w-full">
-      <div className="hidden sm:block">
-        <img
-          className="w-full h-full object-cover"
-          src={loginImg}
-          alt="stock market chart data being examined"
-        />
-      </div>
+      <HalfScreenImageVertical
+        src={loginImg}
+        alt="stock market chart data being examined"
+      />
       <div className="bg-gray-100 flex flex-col justify-center">
         <form
           onSubmit={handleSubmit}
@@ -177,138 +166,46 @@ export default function Register() {
             errorMessage={errorMessage.username}
             onChange={handleChange}
           />
-          {/* <div className="flex flex-col py-2">
-            <label>Username</label>
-            <OverlayTrigger
-              placement="right"
-              show={!!errorMessage.username}
-              overlay={(props) =>
-                errorMessage.username ? (
-                  renderTooltip(props, errorMessage.username)
-                ) : (
-                  <></>
-                )
-              }
-            >
-              <input
-                name="username"
-                value={formData.username}
-                onChange={handleChange}
-                className="border p-2"
-                type="text"
-              />
-            </OverlayTrigger>
-          </div> */}
-          <div className="flex flex-col py-2">
-            <label>Email</label>
-            <OverlayTrigger
-              placement="right"
-              show={!!errorMessage.email}
-              overlay={(props) =>
-                errorMessage.email ? (
-                  renderTooltip(props, errorMessage.email)
-                ) : (
-                  <></>
-                )
-              }
-            >
-              <input
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className="border p-2"
-                type="text"
-              />
-            </OverlayTrigger>
-          </div>
-          <div className="flex flex-col py-2">
-            <label>First Name</label>
-            <OverlayTrigger
-              placement="right"
-              show={!!errorMessage.first_name}
-              overlay={(props) =>
-                errorMessage.first_name ? (
-                  renderTooltip(props, errorMessage.first_name)
-                ) : (
-                  <></>
-                )
-              }
-            >
-              <input
-                name="first_name"
-                value={formData.first_name}
-                onChange={handleChange}
-                className="border p-2"
-                type="text"
-              />
-            </OverlayTrigger>
-            <div className="flex flex-col py-2">
-              <label>Last name</label>
-              <OverlayTrigger
-                placement="right"
-                show={!!errorMessage.last_name}
-                overlay={(props) =>
-                  errorMessage.last_name ? (
-                    renderTooltip(props, errorMessage.last_name)
-                  ) : (
-                    <></>
-                  )
-                }
-              >
-                <input
-                  name="last_name"
-                  value={formData.last_name}
-                  onChange={handleChange}
-                  className="border p-2"
-                  type="text"
-                />
-              </OverlayTrigger>
-            </div>
-          </div>
-          <div className="flex flex-col py-2">
-            <label>Password</label>
-            <OverlayTrigger
-              placement="right"
-              show={!!errorMessage.password}
-              overlay={(props) =>
-                errorMessage.password ? (
-                  renderTooltip(props, errorMessage.password)
-                ) : (
-                  <></>
-                )
-              }
-            >
-              <input
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className="border p-2"
-                type="password"
-              />
-            </OverlayTrigger>
-          </div>
-          <div className="flex flex-col py-2">
-            <label>Password Confirm</label>
-            <OverlayTrigger
-              placement="right"
-              show={!!errorMessage.password_confirm}
-              overlay={(props) =>
-                errorMessage.password_confirm ? (
-                  renderTooltip(props, errorMessage.password_confirm)
-                ) : (
-                  <></>
-                )
-              }
-            >
-              <input
-                name="password_confirm"
-                value={formData.identifier}
-                onChange={handleChange}
-                className="border p-2"
-                type="password"
-              />
-            </OverlayTrigger>
-          </div>
+          <InputWithErrorTooltip
+            name="email"
+            label="Email"
+            type="text"
+            value={formData.email}
+            errorMessage={errorMessage.email}
+            onChange={handleChange}
+          />
+          <InputWithErrorTooltip
+            name="first_name"
+            label="First Name"
+            type="text"
+            value={formData.first_name}
+            errorMessage={errorMessage.first_name}
+            onChange={handleChange}
+          />
+          <InputWithErrorTooltip
+            name="last_name"
+            label="Last Name"
+            type="text"
+            value={formData.last_name}
+            errorMessage={errorMessage.last_name}
+            onChange={handleChange}
+          />
+          <InputWithErrorTooltip
+            name="password"
+            label="Password"
+            type="password"
+            value={formData.password}
+            errorMessage={errorMessage.password}
+            onChange={handleChange}
+          />
+          <InputWithErrorTooltip
+            name="password_confirm"
+            label="Password Confirm"
+            type="password"
+            value={confirmPassword}
+            errorMessage={errorMessage.password_confirm}
+            onChange={handleChange}
+          />
           <button
             type="submit"
             disabled={formData.password !== confirmPassword} // disable if passwords don't match
