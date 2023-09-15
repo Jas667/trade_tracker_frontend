@@ -20,7 +20,7 @@ export function InputWithErrorTooltip({
 }) {
   return (
     <div className="flex flex-col py-2">
-      <label for={name}>{label}</label>
+      <label htmlFor={name}>{label}</label>
       <OverlayTrigger
         placement="right"
         show={!!errorMessage}

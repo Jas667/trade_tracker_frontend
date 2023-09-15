@@ -2,7 +2,6 @@ import React from "react";
 import loginImg from "../assets/data_examine_2_horizontal.jpg";
 import { login } from "../services/authService.jsx";
 import { useState, useEffect } from "react";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import { Link } from "react-router-dom";
 import { InputWithErrorTooltip } from "../components/InputWithErrorTooltip";
