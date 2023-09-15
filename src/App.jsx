@@ -4,7 +4,6 @@ import LoggedIn from "./pages/LoggedIn";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import ColorSchemesExample from "./components/NavBar";
 
 function App() {
   return (

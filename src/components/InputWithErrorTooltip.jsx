@@ -20,7 +20,7 @@ export function InputWithErrorTooltip({
 }) {
   return (
     <div className="flex flex-col py-2">
-      <label>{label}</label>
+      <label for={name}>{label}</label>
       <OverlayTrigger
         placement="right"
         show={!!errorMessage}
@@ -29,11 +29,13 @@ export function InputWithErrorTooltip({
         }
       >
         <input
+          id={name}
           name={name}
           value={value}
           onChange={onChange}
           className="border p-2"
           type={type}
+          autoComplete="on"
         />
       </OverlayTrigger>
     </div>
