@@ -7,7 +7,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 import { Link } from "react-router-dom";
 import { InputWithErrorTooltip } from "../components/InputWithErrorTooltip";
 import { HalfScreenImageVertical } from "../components/HalfScreenImageVertical";
-// import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   //useState hook for form data
@@ -35,7 +35,7 @@ export default function Login() {
   }, [isSubmitting]);
 
   //useHistory hook to redirect to dashboard
-  //   const history = useHistory();
+    const navigate = useNavigate();
 
   //handle change function
   const handleChange = (e) => {
@@ -67,6 +67,7 @@ export default function Login() {
         case 200:
           console.log("Login successful", data);
           setErrorMessage({ identifier: null, password: null }); // Clear any previous errors on success
+          navigate("/");
           break;
         case 400:
           console.log("Login failed", data);
