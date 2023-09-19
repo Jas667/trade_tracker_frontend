@@ -9,6 +9,7 @@ function LogoutButton({ onLogout }) {
   const handleLogout = async () => {
     try {
       const response = await logout();
+      console.log(response);
 
       if (response.status === 200) {
         navigate("/login");

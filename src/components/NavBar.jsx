@@ -10,8 +10,8 @@ function ColorSchemesExample() {
         <Container>
           <Navbar.Brand href="#home">Trade Tracker</Navbar.Brand>
           <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#features">Upload Trades</Nav.Link>
+            <Nav.Link href="/">Home</Nav.Link>
+            <Nav.Link href="/upload">Upload Trades</Nav.Link>
             <Nav.Link href="#pricing">Account</Nav.Link>
           </Nav>
           <Navbar.Toggle />
