@@ -21,7 +21,6 @@ export default function LoggedIn() {
   //Set legend to correct info
   const [label, setLabel] = useState("Trades for Last 30 days");
 
-
   const [tradeData, setTradeData] = useState({
     labels: [],
     datasets: [
@@ -31,6 +30,13 @@ export default function LoggedIn() {
       },
     ],
   });
+
+  const handleTradeFilter = (filteredStartDate, filteredEndDate) => {
+    setStartDate(filteredStartDate);
+    setEndDate(filteredEndDate);
+    setLabel(`Trades from ${filteredStartDate} to ${filteredEndDate}`);
+    // Once you set the new date range, useEffect will automatically trigger to fetch new data
+  };
 
   useEffect(() => {
     async function fetchAndProcessTrades() {
@@ -44,15 +50,19 @@ export default function LoggedIn() {
     }
 
     fetchAndProcessTrades();
-  }, []); // Run this effect only once, on component mount
+  }, [startDate, endDate]); // Run this effect only once, on component mount
 
   return (
     <>
       <ColorSchemesExample />
       <div className="my-3 mx-5 bg-gray-50 flex flex-col justify-center">
-        <TradeFilterBar />
+        <TradeFilterBar
+          startDate={startDate}
+          endDate={endDate}
+          onFilter={handleTradeFilter}
+        />
         <div className="my-3">
-          <LineChart labels={tradeData.labels} datasets={tradeData.datasets}  />
+          <LineChart labels={tradeData.labels} datasets={tradeData.datasets} />
         </div>
       </div>
     </>

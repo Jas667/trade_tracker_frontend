@@ -1,4 +1,14 @@
-function TradeFilterBar() {
+import { useState } from "react";
+
+function TradeFilterBar({ onFilter, startDate, endDate }) {
+  // Local state for the filters
+  const [localStartDate, setLocalStartDate] = useState(startDate);
+  const [localEndDate, setLocalEndDate] = useState(endDate);
+
+  const handleFilter = () => {
+    onFilter(localStartDate, localEndDate); // send the filter criteria back to parent
+  };
+
   return (
     <div className="bg-gray-800 text-white p-4 sm:p-2">
       <div className="flex flex-wrap items-center">
@@ -57,6 +67,8 @@ function TradeFilterBar() {
             </label>
             <input
               type="date"
+              value={localStartDate}
+              onChange={(e) => setLocalStartDate(e.target.value)}
               id="startDate"
               className="form-input p-1 rounded bg-gray-700 text-white"
             />
@@ -69,6 +81,8 @@ function TradeFilterBar() {
             </label>
             <input
               type="date"
+              value={localEndDate}
+              onChange={(e) => setLocalEndDate(e.target.value)}
               id="endDate"
               className="form-input p-1 rounded bg-gray-700 text-white"
             />
@@ -76,7 +90,7 @@ function TradeFilterBar() {
 
           {/* Filter & Clear Buttons Group */}
           <div className="flex items-center">
-            <button className="btn bg-blue-600 hover:bg-blue-500 text-white border border-blue-400 p-1 rounded mr-2">
+            <button className="btn bg-blue-600 hover:bg-blue-500 text-white border border-blue-400 p-1 rounded mr-2" onClick={handleFilter}>
               Filter
             </button>
             <button className="btn bg-red-600 hover:bg-red-500 text-white border border-red-400 p-1 rounded">
