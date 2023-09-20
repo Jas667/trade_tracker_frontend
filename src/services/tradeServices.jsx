@@ -15,7 +15,22 @@ export const getTrades = async () => {
   }
 };
 
-export function processTrades(trades) {
+export const getTradesByDateRange = async (startDate, endDate) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}trade/dateRange?startDate=${startDate}&endDate=${endDate}`, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response.json();
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export function processTrades(trades, label) {
       // 1. Sort the trades by close_date
       trades.sort((a, b) => new Date(a.close_date) - new Date(b.close_date));
   
@@ -51,7 +66,7 @@ export function processTrades(trades) {
       return {
           labels: labels,
           datasets: [{
-              label: "Trades Profit/Loss",
+              label: label,
               data: data
           }]
       };
