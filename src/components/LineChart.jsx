@@ -23,6 +23,13 @@ function LineChart({ labels, datasets, customOptions }) {
   const defaultOptions = {
     plugins: {
       legend: true,
+      tooltip: {
+        callbacks: {
+          label: function (tooltipItem) { 
+            return `Ccumulative P&L: $${tooltipItem.formattedValue}`;
+          },
+        }
+      }
     },
   };
 
@@ -34,26 +41,6 @@ function LineChart({ labels, datasets, customOptions }) {
     ...LineChart.defaultProps.singleDatasetDefaults,
     ...dataset,
   }));
-
-  // const data = {
-  //   labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-  //   datasets: [
-  //     {
-  //       label: "Sales for 2020 (M)",
-  //       data: [3, 2, 2, 1, 5, 6],
-  //       borderColor: "black",
-  //       backgroundColor: "aqua",
-  //       pointBackgroundColor: "aqua",
-  //       pointBorderColor: "aqua",
-  //     },
-  //   ],
-  // };
-
-  // const options = {
-  //   plugins: {
-  //     legend: true,
-  //   },
-  // };
 
   return (
     <>
