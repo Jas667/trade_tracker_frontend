@@ -57,7 +57,6 @@ function LineChart({ labels, datasets, customOptions }) {
 
   return (
     <>
-      <div>LineChart</div>
       <div className="h-screen">
         <div className="h-1/2 flex justify-center items-center">
         <Line
