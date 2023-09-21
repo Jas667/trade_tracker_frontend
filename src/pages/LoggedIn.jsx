@@ -2,7 +2,7 @@ import React from "react";
 import ColorSchemesExample from "../components/NavBar";
 import LineChart from "../components/LineChart";
 import { useState, useEffect } from "react";
-import { processTrades, getTradesByDateRange } from "../services/tradeServices";
+import { processTrades, getTradesByDateRange, filterTradesBySymbol } from "../services/tradeServices";
 import TradeFilterBar from "../components/TradeFilterBar";
 
 export default function LoggedIn() {
@@ -48,9 +48,7 @@ export default function LoggedIn() {
 
       // If there is a symbol, filter the trades by symbol before processing
       if (symbol !== "") { 
-        const filteredTrades = trades.filter((trade) => trade.symbol === symbol);
-        trades = filteredTrades;
-        console.log(trades);
+        trades = filterTradesBySymbol(trades, symbol);
       }
 
       if (trades) {
