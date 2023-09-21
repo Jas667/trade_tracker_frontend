@@ -20,6 +20,8 @@ export default function LoggedIn() {
   const [endDate, setEndDate] = useState(today);
   //Set legend to correct info
   const [label, setLabel] = useState("Trades for Last 30 days");
+  //set symbol to correct info
+  const [symbol, setSymbol] = useState("");
 
   const [tradeData, setTradeData] = useState({
     labels: [],
@@ -31,17 +33,25 @@ export default function LoggedIn() {
     ],
   });
 
-  const handleTradeFilter = (filteredStartDate, filteredEndDate) => {
+  const handleTradeFilter = (filteredStartDate, filteredEndDate, filteredSymbol) => {
     setStartDate(filteredStartDate);
     setEndDate(filteredEndDate);
     setLabel(`Trades from ${filteredStartDate} to ${filteredEndDate}`);
+    setSymbol(filteredSymbol);
     // Once you set the new date range, useEffect will automatically trigger to fetch new data
   };
 
   useEffect(() => {
     async function fetchAndProcessTrades() {
       const response = await getTradesByDateRange(startDate, endDate);
-      const trades = response.data.trades;
+      let trades = response.data.trades;
+
+      // If there is a symbol, filter the trades by symbol before processing
+      if (symbol !== "") { 
+        const filteredTrades = trades.filter((trade) => trade.symbol === symbol);
+        trades = filteredTrades;
+        console.log(trades);
+      }
 
       if (trades) {
         const processedTrades = processTrades(trades, label);
@@ -50,7 +60,7 @@ export default function LoggedIn() {
     }
 
     fetchAndProcessTrades();
-  }, [startDate, endDate]); // Run this effect only once, on component mount
+  }, [startDate, endDate, symbol]);
 
   return (
     <>

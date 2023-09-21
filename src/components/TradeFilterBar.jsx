@@ -4,9 +4,10 @@ function TradeFilterBar({ onFilter, startDate, endDate }) {
   // Local state for the filters
   const [localStartDate, setLocalStartDate] = useState(startDate);
   const [localEndDate, setLocalEndDate] = useState(endDate);
+  const [symbol, setSymbol] = useState("");
 
   const handleFilter = () => {
-    onFilter(localStartDate, localEndDate); // send the filter criteria back to parent
+    onFilter(localStartDate, localEndDate, symbol); // send the filter criteria back to parent
   };
 
   return (
@@ -21,6 +22,8 @@ function TradeFilterBar({ onFilter, startDate, endDate }) {
             type="text"
             id="symbol"
             placeholder="Symbol"
+            value={symbol}
+            onChange={(e) => setSymbol(e.target.value)}
             className="form-input p-1 rounded bg-gray-700 text-white"
           />
         </div>
