@@ -2,7 +2,11 @@ import React from "react";
 import ColorSchemesExample from "../components/NavBar";
 import LineChart from "../components/LineChart";
 import { useState, useEffect } from "react";
-import { processTrades, getTradesByDateRange, filterTradesBySymbol } from "../services/tradeServices";
+import {
+  processTrades,
+  getTradesByDateRange,
+  filterTradesBySymbol,
+} from "../services/tradeServices";
 import TradeFilterBar from "../components/TradeFilterBar";
 
 export default function LoggedIn() {
@@ -23,6 +27,11 @@ export default function LoggedIn() {
   //set symbol to correct info
   const [symbol, setSymbol] = useState("");
 
+  //trade tags state
+  const [tags, setTags] = useState("At least one");
+  //selected tags state
+  const [selectedTags, setSelectedTags] = useState([]);
+
   const [tradeData, setTradeData] = useState({
     labels: [],
     datasets: [
@@ -33,12 +42,19 @@ export default function LoggedIn() {
     ],
   });
 
-  const handleTradeFilter = (filteredStartDate, filteredEndDate, filteredSymbol) => {
+  const handleTradeFilter = (
+    filteredStartDate,
+    filteredEndDate,
+    filteredSymbol,
+    filteredTags,
+    filteredSelectedTags
+  ) => {
     setStartDate(filteredStartDate);
     setEndDate(filteredEndDate);
     setLabel(`Trades from ${filteredStartDate} to ${filteredEndDate}`);
     setSymbol(filteredSymbol);
-    // Once you set the new date range, useEffect will automatically trigger to fetch new data
+    setTags(filteredTags);
+    setSelectedTags(filteredSelectedTags);
   };
 
   useEffect(() => {
@@ -46,8 +62,11 @@ export default function LoggedIn() {
       const response = await getTradesByDateRange(startDate, endDate);
       let trades = response.data.trades;
 
+      // console.log(tags);
+      // console.log(selectedTags);
+
       // If there is a symbol, filter the trades by symbol before processing
-      if (symbol !== "") { 
+      if (symbol !== "") {
         trades = filterTradesBySymbol(trades, symbol);
       }
 
@@ -58,7 +77,7 @@ export default function LoggedIn() {
     }
 
     fetchAndProcessTrades();
-  }, [startDate, endDate, symbol]);
+  }, [startDate, endDate, symbol, tags, selectedTags]);
 
   return (
     <>
