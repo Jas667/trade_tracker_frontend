@@ -22,6 +22,9 @@ export default function LoggedIn() {
   const [label, setLabel] = useState("Trades for Last 30 days");
   //set symbol to correct info
   const [symbol, setSymbol] = useState("");
+  //set selected tags to correct info
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [tagOptions, setTagOptions] = useState("");
 
   const [tradeData, setTradeData] = useState({
     labels: [],
@@ -33,11 +36,13 @@ export default function LoggedIn() {
     ],
   });
 
-  const handleTradeFilter = (filteredStartDate, filteredEndDate, filteredSymbol) => {
+  const handleTradeFilter = (filteredStartDate, filteredEndDate, filteredSymbol, filteredTags, filteredSelectedTagOptions) => {
     setStartDate(filteredStartDate);
     setEndDate(filteredEndDate);
     setLabel(`Trades from ${filteredStartDate} to ${filteredEndDate}`);
     setSymbol(filteredSymbol);
+    setSelectedTags(filteredTags);
+    setTagOptions(filteredSelectedTagOptions);
     // Once you set the new date range, useEffect will automatically trigger to fetch new data
   };
 
@@ -49,6 +54,11 @@ export default function LoggedIn() {
       // If there is a symbol, filter the trades by symbol before processing
       if (symbol !== "") { 
         trades = filterTradesBySymbol(trades, symbol);
+      }
+
+      // If there are tags, filter the trades by tags before processing
+      if (selectedTags.length > 0) { 
+        //FILTER TRADES BY TAGS
       }
 
       if (trades) {

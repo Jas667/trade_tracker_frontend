@@ -6,17 +6,19 @@ function TradeFilterBar({ onFilter, startDate, endDate, initialTags }) {
   const [localStartDate, setLocalStartDate] = useState(startDate);
   const [localEndDate, setLocalEndDate] = useState(endDate);
   const [localSymbol, setLocalSymbol] = useState("");
+  const [localSelectedTags, setLocalSelectedTags] = useState([]);
+  const [localSelectedTagOption, setLocalSelectedTagOption] = useState('atLeastOne');
+
   //for tags
   const [initialTagsFromFetch, setInitialTagsFromFetch] = useState([]);
   const [tags, setTags] = useState([]);
-  const [selectedTags, setSelectedTags] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [inputValue, setInputValue] = useState("");
 
   const wrapperRef = useRef(null);
 
   const handleFilter = () => {
-    onFilter(localStartDate, localEndDate, localSymbol); // send the filter criteria back to parent
+    onFilter(localStartDate, localEndDate, localSymbol, localSelectedTags, localSelectedTagOption); // send the filter criteria back to parent
   };
 
   useEffect(() => { 
@@ -55,13 +57,13 @@ function TradeFilterBar({ onFilter, startDate, endDate, initialTags }) {
   };
 
   const addTag = (tag) => {
-    setSelectedTags((prev) => [...prev, tag]);
+    setLocalSelectedTags((prev) => [...prev, tag]);
     setTags(tags.filter((t) => t !== tag));
     setShowDropdown(false);
   };
 
   const removeTag = (tag) => {
-    setSelectedTags(selectedTags.filter((t) => t !== tag));
+    setLocalSelectedTags(localSelectedTags.filter((t) => t !== tag));
     //find if tag is in initial tags from fetch
     const tagInInitialTags = initialTagsFromFetch.find((t) => t === tag);
     //if tag is in initial tags from fetch, add tag back to tags
@@ -95,6 +97,8 @@ function TradeFilterBar({ onFilter, startDate, endDate, initialTags }) {
           </label>
           <select
             id="tagsDropdown"
+            value={localSelectedTagOption}
+            onChange={(e) => setLocalSelectedTagOption(e.target.value)}
             className="form-select-sm bg-gray-700 text-white p-1 rounded mr-4 pr-8"
           >
             <option value="atLeastOne" className="bg-gray-700">
@@ -123,7 +127,7 @@ function TradeFilterBar({ onFilter, startDate, endDate, initialTags }) {
               onClick={() => setShowDropdown(true)}
             />
             <div className="flex ml-2">
-              {selectedTags.map((tag) => (
+              {localSelectedTags.map((tag) => (
                 <div
                   key={tag}
                   className="mr-2 bg-blue-500 p-1 rounded text-white"
