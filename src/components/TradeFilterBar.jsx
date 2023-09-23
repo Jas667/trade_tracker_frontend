@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { getTags } from "../services/tagService";
 
 function TradeFilterBar({ onFilter, startDate, endDate, initialTags }) {
   // Local state for the filters
@@ -6,7 +7,8 @@ function TradeFilterBar({ onFilter, startDate, endDate, initialTags }) {
   const [localEndDate, setLocalEndDate] = useState(endDate);
   const [localSymbol, setLocalSymbol] = useState("");
   //for tags
-  const [tags, setTags] = useState(["tag1", "tag2", "tag3", "tag4", "tag5"]);
+  const [initialTagsFromFetch, setInitialTagsFromFetch] = useState([]);
+  const [tags, setTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -16,6 +18,21 @@ function TradeFilterBar({ onFilter, startDate, endDate, initialTags }) {
   const handleFilter = () => {
     onFilter(localStartDate, localEndDate, localSymbol); // send the filter criteria back to parent
   };
+
+  useEffect(() => { 
+    async function fetchTags() {
+      const response = await getTags();
+      const tags = response.data.tags;
+      //get each tags_name and put into array
+      const tagsArray = tags.map((tag) => tag.tag_name);
+      //set initial tags from fetch
+      setInitialTagsFromFetch(tagsArray);
+      //set tags to initial tags from fetch for first load
+      setTags(tagsArray);
+    }
+
+    fetchTags();
+  }, []);
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
@@ -36,7 +53,6 @@ function TradeFilterBar({ onFilter, startDate, endDate, initialTags }) {
       setInputValue(""); // clear the input field
     }
   };
-  
 
   const addTag = (tag) => {
     setSelectedTags((prev) => [...prev, tag]);
@@ -46,7 +62,12 @@ function TradeFilterBar({ onFilter, startDate, endDate, initialTags }) {
 
   const removeTag = (tag) => {
     setSelectedTags(selectedTags.filter((t) => t !== tag));
-    setTags((prev) => [...prev, tag]);
+    //find if tag is in initial tags from fetch
+    const tagInInitialTags = initialTagsFromFetch.find((t) => t === tag);
+    //if tag is in initial tags from fetch, add tag back to tags
+    if (tagInInitialTags) { 
+      setTags((prev) => [...prev, tag]);
+    }
   };
 
   return (
@@ -85,42 +106,53 @@ function TradeFilterBar({ onFilter, startDate, endDate, initialTags }) {
           </select>
         </div>
 
-{/* Select Tags Input */}
-<div className="flex-grow flex items-center mr-4 sm:mr-2 mb-2">
-  <label htmlFor="selectTags" className="mr-2">
-    Select Tags:
-  </label>
-  <div className="flex relative flex-grow" ref={wrapperRef}>
-  <input
-  type="text"
-  id="selectTags"
-  placeholder="Select Tags"
-  value={inputValue}
-  onChange={(e) => setInputValue(e.target.value)}
-  onKeyDown={(e) => handleKeyDown(e)}
-  className="form-input p-1 rounded bg-gray-700 text-white"
-  onClick={() => setShowDropdown(true)}
-/>
-    <div className="flex ml-2">
-      {selectedTags.map(tag => (
-        <div key={tag} className="mr-2 bg-blue-500 p-1 rounded text-white">
-          {tag}
-          <span className="ml-2 cursor-pointer" onClick={() => removeTag(tag)}>x</span>
-        </div>
-      ))}
-    </div>
-    {showDropdown && (
-      <div className="absolute w-full top-full mt-1 bg-gray-700 border z-10">
-        {tags.map(tag => (
-          <div key={tag} onClick={() => addTag(tag)} className="p-2 hover:bg-gray-900 cursor-pointer">
-            {tag}
+        {/* Select Tags Input */}
+        <div className="flex-grow flex items-center mr-4 sm:mr-2 mb-2">
+          <label htmlFor="selectTags" className="mr-2">
+            Select Tags:
+          </label>
+          <div className="flex relative flex-grow" ref={wrapperRef}>
+            <input
+              type="text"
+              id="selectTags"
+              placeholder="Select Tags"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyDown={(e) => handleKeyDown(e)}
+              className="form-input p-1 rounded bg-gray-700 text-white"
+              onClick={() => setShowDropdown(true)}
+            />
+            <div className="flex ml-2">
+              {selectedTags.map((tag) => (
+                <div
+                  key={tag}
+                  className="mr-2 bg-blue-500 p-1 rounded text-white"
+                >
+                  {tag}
+                  <span
+                    className="ml-2 cursor-pointer"
+                    onClick={() => removeTag(tag)}
+                  >
+                    x
+                  </span>
+                </div>
+              ))}
+            </div>
+            {showDropdown && (
+              <div className="absolute w-full top-full mt-1 bg-gray-700 border z-10">
+                {tags.map((tag) => (
+                  <div
+                    key={tag}
+                    onClick={() => addTag(tag)}
+                    className="p-2 hover:bg-gray-900 cursor-pointer"
+                  >
+                    {tag}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
-        ))}
-      </div>
-    )}
-  </div>
-</div>
-
+        </div>
 
         {/* Date Range, Filter & Clear sections */}
         <div className="flex flex-wrap items-center mb-2">
