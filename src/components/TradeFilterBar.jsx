@@ -9,6 +9,8 @@ function TradeFilterBar({ onFilter, startDate, endDate, initialTags }) {
   const [tags, setTags] = useState(["tag1", "tag2", "tag3", "tag4", "tag5"]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+
   const wrapperRef = useRef(null);
 
   const handleFilter = () => {
@@ -27,6 +29,14 @@ function TradeFilterBar({ onFilter, startDate, endDate, initialTags }) {
       setShowDropdown(false);
     }
   };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && inputValue.trim() !== "") {
+      addTag(inputValue.trim());
+      setInputValue(""); // clear the input field
+    }
+  };
+  
 
   const addTag = (tag) => {
     setSelectedTags((prev) => [...prev, tag]);
@@ -75,48 +85,42 @@ function TradeFilterBar({ onFilter, startDate, endDate, initialTags }) {
           </select>
         </div>
 
-        {/* Select Tags Input */}
-        <div className="flex-grow flex items-center mr-4 sm:mr-2 mb-2">
-          <label htmlFor="selectTags" className="mr-2">
-            Select Tags:
-          </label>
-          <div className="relative flex-grow" ref={wrapperRef}>
-            <input
-              type="text"
-              id="selectTags"
-              placeholder="Select Tags"
-              className="form-input flex-grow p-1 rounded bg-gray-700 text-white"
-              onClick={() => setShowDropdown(true)}
-              readOnly
-            />
-            {showDropdown && (
-              <div className="absolute w-full mt-1 bg-gray-700 border z-10">
-                {tags.map((tag) => (
-                  <div
-                    key={tag}
-                    onClick={() => addTag(tag)}
-                    className="p-2 hover:bg-gray-900 cursor-pointer"
-                  >
-                    {tag}
-                  </div>
-                ))}
-              </div>
-            )}
+{/* Select Tags Input */}
+<div className="flex-grow flex items-center mr-4 sm:mr-2 mb-2">
+  <label htmlFor="selectTags" className="mr-2">
+    Select Tags:
+  </label>
+  <div className="flex relative flex-grow" ref={wrapperRef}>
+  <input
+  type="text"
+  id="selectTags"
+  placeholder="Select Tags"
+  value={inputValue}
+  onChange={(e) => setInputValue(e.target.value)}
+  onKeyDown={(e) => handleKeyDown(e)}
+  className="form-input p-1 rounded bg-gray-700 text-white"
+  onClick={() => setShowDropdown(true)}
+/>
+    <div className="flex ml-2">
+      {selectedTags.map(tag => (
+        <div key={tag} className="mr-2 bg-blue-500 p-1 rounded text-white">
+          {tag}
+          <span className="ml-2 cursor-pointer" onClick={() => removeTag(tag)}>x</span>
+        </div>
+      ))}
+    </div>
+    {showDropdown && (
+      <div className="absolute w-full top-full mt-1 bg-gray-700 border z-10">
+        {tags.map(tag => (
+          <div key={tag} onClick={() => addTag(tag)} className="p-2 hover:bg-gray-900 cursor-pointer">
+            {tag}
           </div>
-        </div>
-        <div className="flex ml-2">
-          {selectedTags.map((tag) => (
-            <div key={tag} className="mr-2 bg-blue-500 p-1 rounded text-white">
-              {tag}
-              <span
-                className="ml-2 cursor-pointer"
-                onClick={() => removeTag(tag)}
-              >
-                x
-              </span>
-            </div>
-          ))}
-        </div>
+        ))}
+      </div>
+    )}
+  </div>
+</div>
+
 
         {/* Date Range, Filter & Clear sections */}
         <div className="flex flex-wrap items-center mb-2">
