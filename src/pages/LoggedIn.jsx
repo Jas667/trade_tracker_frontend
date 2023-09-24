@@ -3,6 +3,7 @@ import ColorSchemesExample from "../components/NavBar";
 import LineChart from "../components/LineChart";
 import { useState, useEffect } from "react";
 import { processTrades, getTradesByDateRange, filterTradesBySymbol } from "../services/tradeServices";
+import {retrieveTradesByTag} from "../services/tagService";
 import TradeFilterBar from "../components/TradeFilterBar";
 
 export default function LoggedIn() {
@@ -58,7 +59,16 @@ export default function LoggedIn() {
 
       // If there are tags, filter the trades by tags before processing
       if (selectedTags.length > 0) { 
-        //FILTER TRADES BY TAGS
+        let onlyWithAllTags = false;
+        if (tagOptions === "all") {
+          onlyWithAllTags = true;
+        }
+        const data = {
+          tagIds: selectedTags,
+          onlyWithAllTags: onlyWithAllTags
+        }
+        const response = await retrieveTradesByTag(data);
+        trades = response.data.trades;
       }
 
       if (trades) {
@@ -68,7 +78,7 @@ export default function LoggedIn() {
     }
 
     fetchAndProcessTrades();
-  }, [startDate, endDate, symbol]);
+  }, [startDate, endDate, symbol, selectedTags, tagOptions]);
 
   return (
     <>

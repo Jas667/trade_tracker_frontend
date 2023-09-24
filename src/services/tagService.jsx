@@ -14,3 +14,19 @@ export const getTags = async () => {
     console.error(e);
   }
 };
+
+export const retrieveTradesByTag = async (data) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}tradetag/retrievetradeswithanyofthetagids`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    return response.json();
+  } catch (e) {
+    console.error(e)
+  }
+}
