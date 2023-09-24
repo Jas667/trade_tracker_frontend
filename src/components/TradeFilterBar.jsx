@@ -23,7 +23,8 @@ function TradeFilterBar({ onFilter, startDate, endDate, initialTags }) {
       localStartDate,
       localEndDate,
       localSymbol,
-      localSelectedTags,
+      //send back only the ids of the selected tags. This makes it easier to filter.
+      localSelectedTags.map(tag => tag.id),
       localSelectedTagOption
     ); // send the filter criteria back to parent
   };
@@ -32,9 +33,8 @@ function TradeFilterBar({ onFilter, startDate, endDate, initialTags }) {
     async function fetchTags() {
       const response = await getTags();
       const tags = response.data.tags;
-      console.log(tags)
       //get each tags_name and put into array
-      const tagsArray = tags.map((tag) => tag.tag_name);
+      const tagsArray = tags.map((tag) => ({ id: tag.id, name: tag.tag_name }));
       //set initial tags from fetch
       setInitialTagsFromFetch(tagsArray);
       //set tags to initial tags from fetch for first load
@@ -59,28 +59,24 @@ function TradeFilterBar({ onFilter, startDate, endDate, initialTags }) {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && inputValue.trim() !== "") {
-      // Check if the tag exists in the dropdown list
-      if (tags.includes(inputValue.trim())) {
-        addTag(inputValue.trim());
-        setInputValue(""); // clear the input field
-      }
+        const matchingTag = initialTagsFromFetch.find(t => t.name === inputValue.trim());
+        if (matchingTag) {
+            addTag(matchingTag);
+            setInputValue("");
+        }
     }
-  };
+};
 
   const addTag = (tag) => {
     setLocalSelectedTags((prev) => [...prev, tag]);
-    setTags(
-      initialTagsFromFetch.filter(
-        (t) => !localSelectedTags.includes(t) && t !== tag
-      )
-    );
-    setInputValue(""); // Reset the input value
-  };
+    setTags(initialTagsFromFetch.filter((t) => t.id !== tag.id));
+    setInputValue(""); 
+};
 
-  const removeTag = (tag) => {
-    setLocalSelectedTags(localSelectedTags.filter((t) => t !== tag));
-    setTags((prev) => [...prev, tag]); // Directly add the removed tag back
-  };
+const removeTag = (tag) => {
+  setLocalSelectedTags(localSelectedTags.filter((t) => t.id !== tag.id));
+  setTags((prev) => [...prev, tag]);
+};
 
   return (
     <div className="bg-gray-800 text-white p-4 sm:p-2">
@@ -146,10 +142,10 @@ function TradeFilterBar({ onFilter, startDate, endDate, initialTags }) {
             <div className="flex ml-2">
               {localSelectedTags.map((tag) => (
                 <div
-                  key={tag}
+                  key={tag.id}
                   className="mr-2 bg-blue-500 p-1 rounded text-white"
                 >
-                  {tag}
+                  {tag.name}
                   <span
                     className="ml-2 cursor-pointer"
                     onClick={() => removeTag(tag)}
@@ -163,11 +159,11 @@ function TradeFilterBar({ onFilter, startDate, endDate, initialTags }) {
               <div className="absolute w-full top-full mt-1 bg-gray-700 border z-10">
                 {tags.map((tag) => (
                   <div
-                    key={tag}
+                    key={tag.id}
                     onClick={() => addTag(tag)}
                     className="p-2 hover:bg-gray-900 cursor-pointer"
                   >
-                    {tag}
+                    {tag.name}
                   </div>
                 ))}
               </div>
