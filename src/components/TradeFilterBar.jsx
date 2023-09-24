@@ -7,7 +7,8 @@ function TradeFilterBar({ onFilter, startDate, endDate, initialTags }) {
   const [localEndDate, setLocalEndDate] = useState(endDate);
   const [localSymbol, setLocalSymbol] = useState("");
   const [localSelectedTags, setLocalSelectedTags] = useState([]);
-  const [localSelectedTagOption, setLocalSelectedTagOption] = useState('atLeastOne');
+  const [localSelectedTagOption, setLocalSelectedTagOption] =
+    useState("atLeastOne");
 
   //for tags
   const [initialTagsFromFetch, setInitialTagsFromFetch] = useState([]);
@@ -18,13 +19,20 @@ function TradeFilterBar({ onFilter, startDate, endDate, initialTags }) {
   const wrapperRef = useRef(null);
 
   const handleFilter = () => {
-    onFilter(localStartDate, localEndDate, localSymbol, localSelectedTags, localSelectedTagOption); // send the filter criteria back to parent
+    onFilter(
+      localStartDate,
+      localEndDate,
+      localSymbol,
+      localSelectedTags,
+      localSelectedTagOption
+    ); // send the filter criteria back to parent
   };
 
-  useEffect(() => { 
+  useEffect(() => {
     async function fetchTags() {
       const response = await getTags();
       const tags = response.data.tags;
+      console.log(tags)
       //get each tags_name and put into array
       const tagsArray = tags.map((tag) => tag.tag_name);
       //set initial tags from fetch
@@ -51,25 +59,27 @@ function TradeFilterBar({ onFilter, startDate, endDate, initialTags }) {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && inputValue.trim() !== "") {
-      addTag(inputValue.trim());
-      setInputValue(""); // clear the input field
+      // Check if the tag exists in the dropdown list
+      if (tags.includes(inputValue.trim())) {
+        addTag(inputValue.trim());
+        setInputValue(""); // clear the input field
+      }
     }
   };
 
   const addTag = (tag) => {
     setLocalSelectedTags((prev) => [...prev, tag]);
-    setTags(tags.filter((t) => t !== tag));
-    setShowDropdown(false);
+    setTags(
+      initialTagsFromFetch.filter(
+        (t) => !localSelectedTags.includes(t) && t !== tag
+      )
+    );
+    setInputValue(""); // Reset the input value
   };
 
   const removeTag = (tag) => {
     setLocalSelectedTags(localSelectedTags.filter((t) => t !== tag));
-    //find if tag is in initial tags from fetch
-    const tagInInitialTags = initialTagsFromFetch.find((t) => t === tag);
-    //if tag is in initial tags from fetch, add tag back to tags
-    if (tagInInitialTags) { 
-      setTags((prev) => [...prev, tag]);
-    }
+    setTags((prev) => [...prev, tag]); // Directly add the removed tag back
   };
 
   return (
@@ -121,7 +131,14 @@ function TradeFilterBar({ onFilter, startDate, endDate, initialTags }) {
               id="selectTags"
               placeholder="Select Tags"
               value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
+              onChange={(e) => {
+                setInputValue(e.target.value);
+                setTags(
+                  initialTagsFromFetch.filter((tag) =>
+                    tag.toLowerCase().includes(e.target.value.toLowerCase())
+                  )
+                );
+              }}
               onKeyDown={(e) => handleKeyDown(e)}
               className="form-input p-1 rounded bg-gray-700 text-white"
               onClick={() => setShowDropdown(true)}
