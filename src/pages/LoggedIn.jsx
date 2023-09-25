@@ -2,8 +2,12 @@ import React from "react";
 import ColorSchemesExample from "../components/NavBar";
 import LineChart from "../components/LineChart";
 import { useState, useEffect } from "react";
-import { processTrades, getTradesByDateRange, filterTradesBySymbol } from "../services/tradeServices";
-import {retrieveTradesByTag} from "../services/tagService";
+import {
+  processTrades,
+  getTradesByDateRange,
+  filterTradesBySymbol,
+} from "../services/tradeServices";
+import { retrieveTradesByTag } from "../services/tagService";
 import TradeFilterBar from "../components/TradeFilterBar";
 
 export default function LoggedIn() {
@@ -37,38 +41,65 @@ export default function LoggedIn() {
     ],
   });
 
-  const handleTradeFilter = (filteredStartDate, filteredEndDate, filteredSymbol, filteredTags, filteredSelectedTagOptions) => {
+  const handleTradeFilter = (
+    filteredStartDate,
+    filteredEndDate,
+    filteredSymbol,
+    filteredTags,
+    filteredSelectedTagOptions
+  ) => {
     setStartDate(filteredStartDate);
     setEndDate(filteredEndDate);
-    setLabel(`Trades from ${filteredStartDate} to ${filteredEndDate}`);
+    
+    // Check if the dates are default or not
+    if (filteredStartDate === thirtyDaysAgo && filteredEndDate === today) {
+      setLabel("Trades for Last 30 days");
+    } else {
+      setLabel(`Trades from ${filteredStartDate} to ${filteredEndDate}`);
+    }
+    
     setSymbol(filteredSymbol);
     setSelectedTags(filteredTags);
     setTagOptions(filteredSelectedTagOptions);
     // Once you set the new date range, useEffect will automatically trigger to fetch new data
   };
+  
 
   useEffect(() => {
     async function fetchAndProcessTrades() {
-      const response = await getTradesByDateRange(startDate, endDate);
-      let trades = response.data.trades;
+      //variable to hold the trades
+      let trades;
 
-      // If there is a symbol, filter the trades by symbol before processing
-      if (symbol !== "") { 
-        trades = filterTradesBySymbol(trades, symbol);
-      }
-
-      // If there are tags, filter the trades by tags before processing
-      if (selectedTags.length > 0) { 
+      //check if tags are provided, as that will change the data we need to fetch
+      if (selectedTags.length > 0) {
         let onlyWithAllTags = false;
+
         if (tagOptions === "all") {
           onlyWithAllTags = true;
         }
+
         const data = {
           tagIds: selectedTags,
-          onlyWithAllTags: onlyWithAllTags
-        }
+          onlyWithAllTags: onlyWithAllTags,
+          startDate: startDate,
+          endDate: endDate,
+        };
+
         const response = await retrieveTradesByTag(data);
-        trades = response.data.trades;
+        if (response.message === "Trades found") {
+          trades = response.data.trades;
+        }
+
+      } else {
+        const response = await getTradesByDateRange(startDate, endDate);
+        if (response.message === "Trades found") { 
+          trades = response.data.trades;
+        }
+      }
+
+      // If there is a symbol, filter the trades by symbol before processing
+      if (symbol !== "") {
+        trades = filterTradesBySymbol(trades, symbol);
       }
 
       if (trades) {
@@ -88,6 +119,8 @@ export default function LoggedIn() {
           startDate={startDate}
           endDate={endDate}
           onFilter={handleTradeFilter}
+          today={today}
+          thirtyDaysAgo={thirtyDaysAgo}
         />
         <div className="my-3">
           <LineChart labels={tradeData.labels} datasets={tradeData.datasets} />

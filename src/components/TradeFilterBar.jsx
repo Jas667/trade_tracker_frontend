@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { getTags } from "../services/tagService";
 
-function TradeFilterBar({ onFilter, startDate, endDate, initialTags }) {
+function TradeFilterBar({ onFilter, startDate, endDate, today, thirtyDaysAgo }) {
   // Local state for the filters
   const [localStartDate, setLocalStartDate] = useState(startDate);
   const [localEndDate, setLocalEndDate] = useState(endDate);
@@ -27,6 +27,16 @@ function TradeFilterBar({ onFilter, startDate, endDate, initialTags }) {
       localSelectedTags.map(tag => tag.id),
       localSelectedTagOption
     ); // send the filter criteria back to parent
+  };
+
+  //handle clear button
+  const handleClear = () => { 
+    setLocalStartDate(thirtyDaysAgo);
+    setLocalEndDate(today);
+    setLocalSymbol("");
+    setLocalSelectedTags([]);
+    setLocalSelectedTagOption("atLeastOne");
+    onFilter(thirtyDaysAgo, today, "", [], "atLeastOne");
   };
 
   useEffect(() => {
@@ -206,12 +216,14 @@ const removeTag = (tag) => {
           {/* Filter & Clear Buttons Group */}
           <div className="flex items-center">
             <button
-              className="btn bg-blue-600 hover:bg-blue-500 text-white border border-blue-400 p-1 rounded mr-2"
+              className="text-white border p-1 rounded mr-2  hover:bg-gray-400"
               onClick={handleFilter}
             >
               Filter
             </button>
-            <button className="btn bg-red-600 hover:bg-red-500 text-white border border-red-400 p-1 rounded">
+            <button className="text-white border p-1 rounded hover:bg-gray-400"
+            onClick={handleClear}
+            >
               Clear
             </button>
           </div>
