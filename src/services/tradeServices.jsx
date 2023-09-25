@@ -43,7 +43,7 @@ export function filterTradesBySymbol(trades, symbol) {
   return filteredTrades;
 }
 
-export function processTrades(trades, label) {
+export function processTrades(trades, label, accumulativePL = false) {
   // 1. Sort the trades by close_date
   trades.sort((a, b) => new Date(a.close_date) - new Date(b.close_date));
 
@@ -65,11 +65,18 @@ export function processTrades(trades, label) {
   // 3. Accumulate the profit/loss for the grouped trades
   let cumulative = 0;
   const processedTrades = groupedTradesArray.map((trade) => {
-    cumulative += trade.profit_loss;
-    return {
-      date: trade.date,
-      profit_loss: cumulative,
-    };
+    if (accumulativePL) {
+      cumulative += trade.profit_loss;
+      return {
+        date: trade.date,
+        profit_loss: cumulative,
+      };
+    } else { 
+      return {
+        date: trade.date,
+        profit_loss: trade.profit_loss,
+      };
+    }
   });
 
   // 4. Extract labels and dataset

@@ -9,6 +9,7 @@ import {
 } from "../services/tradeServices";
 import { retrieveTradesByTag } from "../services/tagService";
 import TradeFilterBar from "../components/TradeFilterBar";
+import BarChart from "../components/BarChart";
 
 export default function LoggedIn() {
   //variables
@@ -41,6 +42,16 @@ export default function LoggedIn() {
     ],
   });
 
+  const [tradeDataForBarChart, setTradeDataForBarChart] = useState({
+    labels: [],
+    datasets: [
+      {
+        label: "Trades Profit/Loss",
+        data: [],
+      },
+    ],
+  });
+
   const handleTradeFilter = (
     filteredStartDate,
     filteredEndDate,
@@ -50,20 +61,19 @@ export default function LoggedIn() {
   ) => {
     setStartDate(filteredStartDate);
     setEndDate(filteredEndDate);
-    
+
     // Check if the dates are default or not
     if (filteredStartDate === thirtyDaysAgo && filteredEndDate === today) {
       setLabel("Trades for Last 30 days");
     } else {
       setLabel(`Trades from ${filteredStartDate} to ${filteredEndDate}`);
     }
-    
+
     setSymbol(filteredSymbol);
     setSelectedTags(filteredTags);
     setTagOptions(filteredSelectedTagOptions);
     // Once you set the new date range, useEffect will automatically trigger to fetch new data
   };
-  
 
   useEffect(() => {
     async function fetchAndProcessTrades() {
@@ -89,10 +99,9 @@ export default function LoggedIn() {
         if (response.message === "Trades found") {
           trades = response.data.trades;
         }
-
       } else {
         const response = await getTradesByDateRange(startDate, endDate);
-        if (response.message === "Trades found") { 
+        if (response.message === "Trades found") {
           trades = response.data.trades;
         }
       }
@@ -103,8 +112,10 @@ export default function LoggedIn() {
       }
 
       if (trades) {
-        const processedTrades = processTrades(trades, label);
-        setTradeData(processedTrades);
+        const processedTradesLineChart = processTrades(trades, label, true);
+        const processedTradesBarChart = processTrades(trades, label, false);
+        setTradeData(processedTradesLineChart);
+        setTradeDataForBarChart(processedTradesBarChart);
       }
     }
 
@@ -114,18 +125,29 @@ export default function LoggedIn() {
   return (
     <>
       <ColorSchemesExample />
-      <div className="my-3 mx-5 bg-gray-50 flex flex-col justify-center">
+      <div className="my-3 mx-5 bg-gray-50 flex flex-col justify-center overflow-hidden">
         <TradeFilterBar
           startDate={startDate}
           endDate={endDate}
           onFilter={handleTradeFilter}
           today={today}
           thirtyDaysAgo={thirtyDaysAgo}
-        />
-        <div className="my-3">
-          <LineChart labels={tradeData.labels} datasets={tradeData.datasets} />
+          />
+          <div className="flex justify-center">
+            <div className="col-auto py-3 px-0 px-md-4">
+              <BarChart
+                labels={tradeDataForBarChart.labels}
+                datasets={tradeDataForBarChart.datasets}
+              />
+            </div>
+            <div className="col-auto py-3 px-0 px-md-4">
+              <LineChart
+                labels={tradeData.labels}
+                datasets={tradeData.datasets}
+              />
+            </div>
+          </div>
         </div>
-      </div>
-    </>
+      </>
   );
 }

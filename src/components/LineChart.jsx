@@ -26,7 +26,7 @@ function LineChart({ labels, datasets, customOptions }) {
       tooltip: {
         callbacks: {
           label: function (tooltipItem) { 
-            return `Ccumulative P&L: $${tooltipItem.formattedValue}`;
+            return `Cumulative P&L: $${tooltipItem.formattedValue}`;
           },
         }
       }
@@ -44,8 +44,8 @@ function LineChart({ labels, datasets, customOptions }) {
 
   return (
     <>
-      <div className="h-screen">
-        <div className="h-1/2 flex justify-center items-center">
+      <div className="">
+        <div className="">
         <Line
           data={{ labels, datasets: enhancedDatasets }}
           options={options}
