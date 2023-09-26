@@ -6,6 +6,8 @@ import {
   processTrades,
   getTradesByDateRange,
   filterTradesBySymbol,
+  processTradesByDayOfWeek,
+  performanceByIntradayHoldTime,
 } from "../services/tradeServices";
 import { retrieveTradesByTag } from "../services/tagService";
 import TradeFilterBar from "../components/TradeFilterBar";
@@ -43,6 +45,32 @@ export default function LoggedIn() {
   });
 
   const [tradeDataForBarChart, setTradeDataForBarChart] = useState({
+    labels: [],
+    datasets: [
+      {
+        label: "Trades Profit/Loss",
+        data: [],
+      },
+    ],
+  });
+
+  const [
+    tradeDataForHorizontalDayOfWeekBarChart,
+    setTradeDataForHorizontalDayOfWeekBarChart,
+  ] = useState({
+    labels: [],
+    datasets: [
+      {
+        label: "Trades Profit/Loss",
+        data: [],
+      },
+    ],
+  });
+
+  const [
+    tradeDataForIntradayPerformanceHorizontalBarChart,
+    setTradeDataForIntradayPerformanceHorizontalBarChart,
+  ] = useState({
     labels: [],
     datasets: [
       {
@@ -114,8 +142,21 @@ export default function LoggedIn() {
       if (trades) {
         const processedTradesLineChart = processTrades(trades, label, true);
         const processedTradesBarChart = processTrades(trades, label, false);
+        //process trades by day of the week for bar chart
+        const processedTradesByDayOfWeek = processTradesByDayOfWeek(
+          trades,
+          label
+        );
+        //process trades by intraday performance for horizontal bar chart
+        const processedTradesByIntradayPerformance = performanceByIntradayHoldTime(
+          trades,
+          label
+        );
+
         setTradeData(processedTradesLineChart);
         setTradeDataForBarChart(processedTradesBarChart);
+        setTradeDataForHorizontalDayOfWeekBarChart(processedTradesByDayOfWeek);
+        setTradeDataForIntradayPerformanceHorizontalBarChart(processedTradesByIntradayPerformance);
       }
     }
 
@@ -132,22 +173,36 @@ export default function LoggedIn() {
           onFilter={handleTradeFilter}
           today={today}
           thirtyDaysAgo={thirtyDaysAgo}
-          />
-          <div className="flex justify-center">
-            <div className="col-auto py-3 px-0 px-md-4">
-              <BarChart
-                labels={tradeDataForBarChart.labels}
-                datasets={tradeDataForBarChart.datasets}
-              />
-            </div>
-            <div className="col-auto py-3 px-0 px-md-4">
-              <LineChart
-                labels={tradeData.labels}
-                datasets={tradeData.datasets}
-              />
-            </div>
+        />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+          <div className="col-auto py-3 px-0 px-md-4">
+            <BarChart
+              labels={tradeDataForBarChart.labels}
+              datasets={tradeDataForBarChart.datasets}
+            />
+          </div>
+          <div className="col-auto py-3 px-0 px-md-4">
+            <LineChart
+              labels={tradeData.labels}
+              datasets={tradeData.datasets}
+            />
+          </div>
+          <div className="col-auto py-3 px-0 px-md-4">
+            <BarChart
+              labels={tradeDataForHorizontalDayOfWeekBarChart.labels}
+              datasets={tradeDataForHorizontalDayOfWeekBarChart.datasets}
+              indexAxis="y"
+            />
+          </div>
+          <div className="col-auto py-3 px-0 px-md-4">
+            <BarChart
+              labels={tradeDataForIntradayPerformanceHorizontalBarChart.labels}
+              datasets={tradeDataForIntradayPerformanceHorizontalBarChart.datasets}
+              indexAxis="y"
+            />
           </div>
         </div>
-      </>
+      </div>
+    </>
   );
 }

@@ -25,11 +25,11 @@ function LineChart({ labels, datasets, customOptions }) {
       legend: true,
       tooltip: {
         callbacks: {
-          label: function (tooltipItem) { 
+          label: function (tooltipItem) {
             return `Cumulative P&L: $${tooltipItem.formattedValue}`;
           },
-        }
-      }
+        },
+      },
     },
   };
 
@@ -44,14 +44,11 @@ function LineChart({ labels, datasets, customOptions }) {
 
   return (
     <>
-      <div className="">
-        <div className="">
         <Line
+          className="w-full h-full justify-center"
           data={{ labels, datasets: enhancedDatasets }}
           options={options}
         ></Line>
-        </div>
-        </div>
     </>
   );
 }

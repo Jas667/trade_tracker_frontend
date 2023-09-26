@@ -12,7 +12,7 @@ import { Bar } from "react-chartjs-2";
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
-function BarChart({ labels, datasets, customOptions }) {
+function BarChart({ labels, datasets, customOptions, indexAxis = "x" }) {
   const formatLossValue = (value) => {
     let formattedWithoutMinus = value.split("-")[1];
     let parts = formattedWithoutMinus.split(".");
@@ -39,6 +39,7 @@ function BarChart({ labels, datasets, customOptions }) {
         },
       },
     },
+    indexAxis: indexAxis,
   };
 
   // merge default options with custom options
@@ -48,18 +49,16 @@ function BarChart({ labels, datasets, customOptions }) {
   const enhancedDatasets = datasets.map((dataset) => ({
     ...BarChart.defaultProps.singleDatasetDefaults,
     ...dataset,
+    backgroundColor: dataset.data.map((value) => (value >= 0 ? "aqua" : "red")),
   }));
 
   return (
     <>
-      <div className="">
-        <div className="">
-          <Bar
-            data={{ labels, datasets: enhancedDatasets }}
-            options={options}
-          ></Bar>
-        </div>
-      </div>
+      <Bar
+        className="w-full h-full justify-center"
+        data={{ labels, datasets: enhancedDatasets }}
+        options={options}
+      ></Bar>
     </>
   );
 }
