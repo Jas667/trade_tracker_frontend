@@ -201,11 +201,13 @@ export function performanceByIntradayHoldTime(trades, label) {
     "1 - 1:59": { min: 1, max: 2, profit_loss: 0 },
     "2 - 2.59": { min: 2, max: 3, profit_loss: 0 },
     "3 - 3.59": { min: 3, max: 4, profit_loss: 0 },
-    "4 - 4.49": { min: 4, max: 5, profit_loss: 0 },
-    "5 - 5.59": { min: 5, max: 6, profit_loss: 0 },
-    "6 - 9.59": { min: 6, max: 10, profit_loss: 0 },
-    "10 - 19.99": { min: 10, max: 20, profit_loss: 0 },
-    "20 +": { min: 20, max: Infinity, profit_loss: 0 },
+    "4 - 4.49": { min: 4, max: Infinity, profit_loss: 0 },
+    "5 +": { min: 5, max: 6, profit_loss: 0 },
+    //further time durations can be added here
+
+    // "6 - 9.59": { min: 6, max: 10, profit_loss: 0 },
+    // "10 - 19.99": { min: 10, max: 20, profit_loss: 0 },
+    // "20 +": { min: 20, max: Infinity, profit_loss: 0 },
   };
 
   tradesWithHoldTime.forEach((trade) => {

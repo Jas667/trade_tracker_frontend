@@ -72,7 +72,7 @@ BarChart.defaultProps = {
     label: "",
     backgroundColor: "aqua",
     borderColor: "black",
-    borderWidth: 1,
+    borderWidth: 2,
   },
 };
 

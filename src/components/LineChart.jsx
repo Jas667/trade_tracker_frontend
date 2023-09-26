@@ -64,6 +64,7 @@ LineChart.defaultProps = {
     backgroundColor: "aqua",
     pointBackgroundColor: "aqua",
     pointBorderColor: "aqua",
+    borderWidth: 2,
   },
 };
 

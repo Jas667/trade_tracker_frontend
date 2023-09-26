@@ -27,7 +27,14 @@ export default function LoggedIn() {
   const [startDate, setStartDate] = useState(thirtyDaysAgo);
   const [endDate, setEndDate] = useState(today);
   //Set legend to correct info
-  const [label, setLabel] = useState("Trades for Last 30 days");
+  //base chart labels so name for each can be set
+  const [baseChartLabels, setBaseChartLabels] = useState({
+    barChart: "Net Daily P&L",
+    lineChart: "Net Cumulative P&L",
+    horizontalDayOfWeek: "Performance by Day of Week",
+    horizontalIntradayDuration: "Performance by Intraday Hold Time",
+  });
+  const [label, setLabel] = useState("(Trades for Last 30 days)");
   //set symbol to correct info
   const [symbol, setSymbol] = useState("");
   //set selected tags to correct info
@@ -92,9 +99,9 @@ export default function LoggedIn() {
 
     // Check if the dates are default or not
     if (filteredStartDate === thirtyDaysAgo && filteredEndDate === today) {
-      setLabel("Trades for Last 30 days");
+      setLabel("(Trades for Last 30 days)");
     } else {
-      setLabel(`Trades from ${filteredStartDate} to ${filteredEndDate}`);
+      setLabel(`(${filteredStartDate} to ${filteredEndDate})`);
     }
 
     setSymbol(filteredSymbol);
@@ -140,17 +147,17 @@ export default function LoggedIn() {
       }
 
       if (trades) {
-        const processedTradesLineChart = processTrades(trades, label, true);
-        const processedTradesBarChart = processTrades(trades, label, false);
+        const processedTradesBarChart = processTrades(trades, `${baseChartLabels.barChart} ${label}`, false);
+        const processedTradesLineChart = processTrades(trades, `${baseChartLabels.lineChart} ${label}`, true);
         //process trades by day of the week for bar chart
         const processedTradesByDayOfWeek = processTradesByDayOfWeek(
           trades,
-          label
+          `${baseChartLabels.horizontalDayOfWeek} ${label}`
         );
         //process trades by intraday performance for horizontal bar chart
         const processedTradesByIntradayPerformance = performanceByIntradayHoldTime(
           trades,
-          label
+          `${baseChartLabels.horizontalIntradayDuration} ${label}`
         );
 
         setTradeData(processedTradesLineChart);
