@@ -1,91 +1,92 @@
-import { useState, useEffect, useRef } from "react";
-import { getTags } from "../services/tagServices";
+import { useState, useRef, useEffect } from "react";
+import { getTags } from "../services/tagService";
 
-function TradeFilterBar({ onFilter, startDate, endDate }) {
+function TradeFilterBar({ onFilter, startDate, endDate, today, thirtyDaysAgo }) {
   // Local state for the filters
   const [localStartDate, setLocalStartDate] = useState(startDate);
   const [localEndDate, setLocalEndDate] = useState(endDate);
   const [localSymbol, setLocalSymbol] = useState("");
-  const [localTags, setLocalTags] = useState("At least one");
   const [localSelectedTags, setLocalSelectedTags] = useState([]);
-  //states for the tags dropdown/functionality when selecting tage names to display
-  const [tagInputValue, setTagInputValue] = useState("");
-  const [tagSuggestions, setTagSuggestions] = useState([]);
-  //make sure tags are only fetched once
-  const [hasFetchedTags, setHasFetchedTags] = useState(false);
-  //save tags so they can be reused
-  const [savedTags, setSavedTags] = useState([]);
+  const [localSelectedTagOption, setLocalSelectedTagOption] =
+    useState("atLeastOne");
 
-  // Refs for the dropdown
-  const inputRef = useRef(null);
-  const dropdownRef = useRef(null);
+  //for tags
+  const [initialTagsFromFetch, setInitialTagsFromFetch] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [inputValue, setInputValue] = useState("");
 
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (
-        inputRef.current &&
-        !inputRef.current.contains(e.target) &&
-        dropdownRef.current &&
-        !dropdownRef.current.contains(e.target)
-      ) {
-        setTagSuggestions([]); // Clear the suggestions to hide the dropdown
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      // Cleanup the listener on component unmount
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  //handle api call to get tags and make sure it only happens once
-  const fetchTagSuggestions = async () => {
-    if (!hasFetchedTags) {
-      const fetchedTags = await getTags();
-      const tagArray = fetchedTags.data.tags.map((tag) => tag.tag_name);
-      setSavedTags(tagArray);
-      setTagSuggestions(tagArray);
-      setHasFetchedTags(true); // Set to true after fetching
-    } else {
-      setTagSuggestions(savedTags);
-    }
-  };
-
-  //function to handle the tag input change
-  const handleTagInputKeyDown = (e) => {
-    if (e.key === "Enter" && tagInputValue.trim() !== "") {
-      setLocalSelectedTags((prev) => [...prev, tagInputValue.trim()]);
-      setTagInputValue("");
-    }
-  };
-
-  //check if the tag is already in the array
-  const handleAddTag = (tag) => {
-    if (!localSelectedTags.includes(tag)) {
-      setLocalSelectedTags((prevTags) => [...prevTags, tag]);
-      setInputValue(""); // Clear the input after adding the tag
-    }
-  };
-
-  const handleRemoveTag = (tag) => {
-    setLocalSelectedTags((prevTags) => prevTags.filter((t) => t !== tag));
-  };
-
-  const handleTagClick = (tag) => {
-    setLocalSelectedTags((prev) => [...prev, tag]);
-  };
+  const wrapperRef = useRef(null);
 
   const handleFilter = () => {
     onFilter(
       localStartDate,
       localEndDate,
       localSymbol,
-      localTags,
-      localSelectedTags
+      //send back only the ids of the selected tags. This makes it easier to filter.
+      localSelectedTags.map(tag => tag.id),
+      localSelectedTagOption
     ); // send the filter criteria back to parent
   };
+
+  //handle clear button
+  const handleClear = () => { 
+    setLocalStartDate(thirtyDaysAgo);
+    setLocalEndDate(today);
+    setLocalSymbol("");
+    setLocalSelectedTags([]);
+    setLocalSelectedTagOption("atLeastOne");
+    onFilter(thirtyDaysAgo, today, "", [], "atLeastOne");
+  };
+
+  useEffect(() => {
+    async function fetchTags() {
+      const response = await getTags();
+      const tags = response.data.tags;
+      //get each tags_name and put into array
+      const tagsArray = tags.map((tag) => ({ id: tag.id, name: tag.tag_name }));
+      //set initial tags from fetch
+      setInitialTagsFromFetch(tagsArray);
+      //set tags to initial tags from fetch for first load
+      setTags(tagsArray);
+    }
+
+    fetchTags();
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleClickOutside = (event) => {
+    if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+      setShowDropdown(false);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && inputValue.trim() !== "") {
+        const matchingTag = initialTagsFromFetch.find(t => t.name === inputValue.trim());
+        if (matchingTag) {
+            addTag(matchingTag);
+            setInputValue("");
+        }
+    }
+};
+
+  const addTag = (tag) => {
+    setLocalSelectedTags((prev) => [...prev, tag]);
+    setTags(initialTagsFromFetch.filter((t) => t.id !== tag.id));
+    setInputValue(""); 
+};
+
+const removeTag = (tag) => {
+  setLocalSelectedTags(localSelectedTags.filter((t) => t.id !== tag.id));
+  setTags((prev) => [...prev, tag]);
+};
 
   return (
     <div className="bg-gray-800 text-white p-4 sm:p-2">
@@ -112,8 +113,8 @@ function TradeFilterBar({ onFilter, startDate, endDate }) {
           </label>
           <select
             id="tagsDropdown"
-            value={localTags}
-            onChange={(e) => setLocalTags(e.target.value)}
+            value={localSelectedTagOption}
+            onChange={(e) => setLocalSelectedTagOption(e.target.value)}
             className="form-select-sm bg-gray-700 text-white p-1 rounded mr-4 pr-8"
           >
             <option value="atLeastOne" className="bg-gray-700">
@@ -131,48 +132,49 @@ function TradeFilterBar({ onFilter, startDate, endDate }) {
           <label htmlFor="selectTags" className="mr-2">
             Select Tags:
           </label>
-
-          <div className="relative flex-grow flex items-center p-1 border border-gray-600 rounded">
-            {localSelectedTags.map((tag) => (
-              <span
-                key={tag}
-                className="mr-2 bg-blue-500 px-2 py-1 rounded-full text-sm flex items-center"
-              >
-                {tag}
-                <button
-                  className="ml-1 text-white"
-                  onClick={() => handleRemoveTag(tag)}
-                >
-                  x
-                </button>
-              </span>
-            ))}
-
+          <div className="flex relative flex-grow" ref={wrapperRef}>
             <input
-              ref={inputRef}
               type="text"
               id="selectTags"
-              value={tagInputValue}
-              onChange={(e) => setTagInputValue(e.target.value)}
-              onKeyDown={handleTagInputKeyDown}
-              onFocus={fetchTagSuggestions}
               placeholder="Select Tags"
-              className="form-input bg-transparent p-1 flex-grow rounded text-white outline-none"
-              style={{ boxShadow: "none" }} // to remove default styling if any
+              value={inputValue}
+              onChange={(e) => {
+                setInputValue(e.target.value);
+                setTags(
+                  initialTagsFromFetch.filter((tag) =>
+                    tag.toLowerCase().includes(e.target.value.toLowerCase())
+                  )
+                );
+              }}
+              onKeyDown={(e) => handleKeyDown(e)}
+              className="form-input p-1 rounded bg-gray-700 text-white"
+              onClick={() => setShowDropdown(true)}
             />
-
-            {tagSuggestions && inputRef.current === document.activeElement && (
-              <div
-                ref={dropdownRef}
-                className="absolute top-full left-0 bg-gray-700 border border-gray-600 mt-1 rounded w-full max-h-40 overflow-y-auto"
-              >
-                {tagSuggestions.map((tag) => (
-                  <div
-                    key={tag}
-                    onClick={() => handleTagClick(tag)}
-                    className="cursor-pointer p-2 hover:bg-gray-600"
+            <div className="flex ml-2">
+              {localSelectedTags.map((tag) => (
+                <div
+                  key={tag.id}
+                  className="mr-2 bg-blue-500 p-1 rounded text-white"
+                >
+                  {tag.name}
+                  <span
+                    className="ml-2 cursor-pointer"
+                    onClick={() => removeTag(tag)}
                   >
-                    {tag}
+                    x
+                  </span>
+                </div>
+              ))}
+            </div>
+            {showDropdown && (
+              <div className="absolute w-full top-full mt-1 bg-gray-700 border z-10">
+                {tags.map((tag) => (
+                  <div
+                    key={tag.id}
+                    onClick={() => addTag(tag)}
+                    className="p-2 hover:bg-gray-900 cursor-pointer"
+                  >
+                    {tag.name}
                   </div>
                 ))}
               </div>
@@ -215,12 +217,14 @@ function TradeFilterBar({ onFilter, startDate, endDate }) {
           {/* Filter & Clear Buttons Group */}
           <div className="flex items-center">
             <button
-              className="btn bg-blue-600 hover:bg-blue-500 text-white border border-blue-400 p-1 rounded mr-2"
+              className="text-white border p-1 rounded mr-2  hover:bg-gray-400"
               onClick={handleFilter}
             >
               Filter
             </button>
-            <button className="btn bg-red-600 hover:bg-red-500 text-white border border-red-400 p-1 rounded">
+            <button className="text-white border p-1 rounded hover:bg-gray-400"
+            onClick={handleClear}
+            >
               Clear
             </button>
           </div>

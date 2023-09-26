@@ -25,11 +25,11 @@ function LineChart({ labels, datasets, customOptions }) {
       legend: true,
       tooltip: {
         callbacks: {
-          label: function (tooltipItem) { 
-            return `Ccumulative P&L: $${tooltipItem.formattedValue}`;
+          label: function (tooltipItem) {
+            return `Cumulative P&L: $${tooltipItem.formattedValue}`;
           },
-        }
-      }
+        },
+      },
     },
   };
 
@@ -44,14 +44,11 @@ function LineChart({ labels, datasets, customOptions }) {
 
   return (
     <>
-      <div className="h-screen">
-        <div className="h-1/2 flex justify-center items-center">
         <Line
+          className="w-full h-full justify-center"
           data={{ labels, datasets: enhancedDatasets }}
           options={options}
         ></Line>
-        </div>
-        </div>
     </>
   );
 }
@@ -67,6 +64,7 @@ LineChart.defaultProps = {
     backgroundColor: "aqua",
     pointBackgroundColor: "aqua",
     pointBorderColor: "aqua",
+    borderWidth: 2,
   },
 };
 
