@@ -14,6 +14,7 @@ import { retrieveTradesByTag } from "../services/tagService";
 import TradeFilterBar from "../components/TradeFilterBar";
 import BarChart from "../components/BarChart";
 import TableForStats from "../components/TableForStats";
+import GrossNetButton from "../components/GrossNetButton";
 
 export default function LoggedIn() {
   //variables
@@ -42,6 +43,8 @@ export default function LoggedIn() {
   //set selected tags to correct info
   const [selectedTags, setSelectedTags] = useState([]);
   const [tagOptions, setTagOptions] = useState("");
+  //radio buttons for net/gross display
+  const [radioValue, setRadioValue] = useState(true);
 
   const [tradeData, setTradeData] = useState({
     labels: [],
@@ -152,12 +155,14 @@ export default function LoggedIn() {
         const processedTradesBarChart = processTrades(
           trades,
           `${baseChartLabels.barChart} ${label}`,
-          false
+          false,
+          radioValue
         );
         const processedTradesLineChart = processTrades(
           trades,
           `${baseChartLabels.lineChart} ${label}`,
-          true
+          true,
+          radioValue
         );
         //process trades by day of the week for bar chart
         const processedTradesByDayOfWeek = processTradesByDayOfWeek(
@@ -181,7 +186,7 @@ export default function LoggedIn() {
     }
 
     fetchAndProcessTrades();
-  }, [startDate, endDate, symbol, selectedTags, tagOptions]);
+  }, [startDate, endDate, symbol, selectedTags, tagOptions, radioValue]);
 
   return (
     <>
@@ -194,6 +199,7 @@ export default function LoggedIn() {
           today={today}
           thirtyDaysAgo={thirtyDaysAgo}
         />
+        <GrossNetButton radioValue={radioValue} setRadioValue={setRadioValue} />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
           <div className="col-auto py-3 px-5 px-md-5">
             <BarChart
@@ -224,11 +230,11 @@ export default function LoggedIn() {
             />
           </div>
         </div>
-        <div >
-        <div className="flexbox justify-center w-5/6">
-          <TableForStats />
+        <div>
+          <div className="flexbox justify-center w-5/6">
+            <TableForStats />
           </div>
-          </div>
+        </div>
       </div>
     </>
   );

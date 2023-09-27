@@ -65,7 +65,12 @@ export function filterTradesBySymbol(trades, symbol) {
   return filteredTrades;
 }
 
-export function processTrades(trades, label, accumulativePL = false) {
+export function processTrades(
+  trades,
+  label,
+  accumulativePL = false,
+  net = true
+) {
   // Convert grouped trades to an array
   const groupedTradesArray = Object.values(groupTradesByDate(trades));
 
@@ -95,15 +100,28 @@ export function processTrades(trades, label, accumulativePL = false) {
   const data = processedTrades.map((trade) => trade.profit_loss);
   const grossData = processedTrades.map((trade) => trade.gross_profit_loss);
 
-  return {
-    labels: labels,
-    datasets: [
-      {
-        label: "Net " + label,
-        data: data,
-      },
-    ],
-  };
+  if (net) {
+    return {
+      labels: labels,
+      datasets: [
+        {
+          label: "Net " + label,
+          data: data,
+        },
+      ],
+    };
+    //else statement returns gross data instead of net
+  } else {
+    return {
+      labels: labels,
+      datasets: [
+        {
+          label: "Gross " + label,
+          data: grossData,
+        },
+      ],
+    };
+  }
 }
 
 export function processTradesByDayOfWeek(trades, label) {
