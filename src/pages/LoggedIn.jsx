@@ -9,9 +9,11 @@ import {
   processTradesByDayOfWeek,
   performanceByIntradayHoldTime,
 } from "../services/tradeServices";
+import { getStatistics } from "../services/statisticsService";
 import { retrieveTradesByTag } from "../services/tagService";
 import TradeFilterBar from "../components/TradeFilterBar";
 import BarChart from "../components/BarChart";
+import TableForStats from "../components/TableForStats";
 
 export default function LoggedIn() {
   //variables
@@ -29,8 +31,8 @@ export default function LoggedIn() {
   //Set legend to correct info
   //base chart labels so name for each can be set
   const [baseChartLabels, setBaseChartLabels] = useState({
-    barChart: "Net Daily P&L",
-    lineChart: "Net Cumulative P&L",
+    barChart: "Daily P&L",
+    lineChart: "Cumulative P&L",
     horizontalDayOfWeek: "Performance by Day of Week",
     horizontalIntradayDuration: "Performance by Intraday Hold Time",
   });
@@ -147,23 +149,34 @@ export default function LoggedIn() {
       }
 
       if (trades) {
-        const processedTradesBarChart = processTrades(trades, `${baseChartLabels.barChart} ${label}`, false);
-        const processedTradesLineChart = processTrades(trades, `${baseChartLabels.lineChart} ${label}`, true);
+        const processedTradesBarChart = processTrades(
+          trades,
+          `${baseChartLabels.barChart} ${label}`,
+          false
+        );
+        const processedTradesLineChart = processTrades(
+          trades,
+          `${baseChartLabels.lineChart} ${label}`,
+          true
+        );
         //process trades by day of the week for bar chart
         const processedTradesByDayOfWeek = processTradesByDayOfWeek(
           trades,
           `${baseChartLabels.horizontalDayOfWeek} ${label}`
         );
         //process trades by intraday performance for horizontal bar chart
-        const processedTradesByIntradayPerformance = performanceByIntradayHoldTime(
-          trades,
-          `${baseChartLabels.horizontalIntradayDuration} ${label}`
-        );
+        const processedTradesByIntradayPerformance =
+          performanceByIntradayHoldTime(
+            trades,
+            `${baseChartLabels.horizontalIntradayDuration} ${label}`
+          );
 
         setTradeData(processedTradesLineChart);
         setTradeDataForBarChart(processedTradesBarChart);
         setTradeDataForHorizontalDayOfWeekBarChart(processedTradesByDayOfWeek);
-        setTradeDataForIntradayPerformanceHorizontalBarChart(processedTradesByIntradayPerformance);
+        setTradeDataForIntradayPerformanceHorizontalBarChart(
+          processedTradesByIntradayPerformance
+        );
       }
     }
 
@@ -182,33 +195,40 @@ export default function LoggedIn() {
           thirtyDaysAgo={thirtyDaysAgo}
         />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-          <div className="col-auto py-3 px-0 px-md-4">
+          <div className="col-auto py-3 px-5 px-md-5">
             <BarChart
               labels={tradeDataForBarChart.labels}
               datasets={tradeDataForBarChart.datasets}
             />
           </div>
-          <div className="col-auto py-3 px-0 px-md-4">
+          <div className="col-auto py-3 px-5 px-md-5">
             <LineChart
               labels={tradeData.labels}
               datasets={tradeData.datasets}
             />
           </div>
-          <div className="col-auto py-3 px-0 px-md-4">
+          <div className="col-auto py-3 px-5 px-md-5">
             <BarChart
               labels={tradeDataForHorizontalDayOfWeekBarChart.labels}
               datasets={tradeDataForHorizontalDayOfWeekBarChart.datasets}
               indexAxis="y"
             />
           </div>
-          <div className="col-auto py-3 px-0 px-md-4">
+          <div className="col-auto py-3 px-5 px-md-5">
             <BarChart
               labels={tradeDataForIntradayPerformanceHorizontalBarChart.labels}
-              datasets={tradeDataForIntradayPerformanceHorizontalBarChart.datasets}
+              datasets={
+                tradeDataForIntradayPerformanceHorizontalBarChart.datasets
+              }
               indexAxis="y"
             />
           </div>
         </div>
+        <div >
+        <div className="flexbox justify-center w-5/6">
+          <TableForStats />
+          </div>
+          </div>
       </div>
     </>
   );

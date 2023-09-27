@@ -10,10 +10,14 @@ export function groupTradesByDate(trades) {
       acc[trade.close_date] = {
         date: trade.close_date,
         profit_loss: 0,
+        gross_profit_loss: 0,
         dayOfWeek: new Date(trade.close_date).getDay(),
       };
     }
     acc[trade.close_date].profit_loss += parseFloat(trade.profit_loss);
+    acc[trade.close_date].gross_profit_loss += parseFloat(
+      trade.gross_profit_loss
+    );
     return acc;
   }, {});
 }
@@ -62,24 +66,26 @@ export function filterTradesBySymbol(trades, symbol) {
 }
 
 export function processTrades(trades, label, accumulativePL = false) {
-  trades = sortTradesByDate(trades);
-
   // Convert grouped trades to an array
   const groupedTradesArray = Object.values(groupTradesByDate(trades));
 
   // 3. Accumulate the profit/loss for the grouped trades
   let cumulative = 0;
+  let grossCumulative = 0;
   const processedTrades = groupedTradesArray.map((trade) => {
     if (accumulativePL) {
       cumulative += trade.profit_loss;
+      grossCumulative += trade.gross_profit_loss;
       return {
         date: trade.date,
         profit_loss: cumulative,
+        gross_profit_loss: grossCumulative,
       };
     } else {
       return {
         date: trade.date,
         profit_loss: trade.profit_loss,
+        gross_profit_loss: trade.gross_profit_loss,
       };
     }
   });
@@ -87,12 +93,13 @@ export function processTrades(trades, label, accumulativePL = false) {
   // 4. Extract labels and dataset
   const labels = processedTrades.map((trade) => trade.date);
   const data = processedTrades.map((trade) => trade.profit_loss);
+  const grossData = processedTrades.map((trade) => trade.gross_profit_loss);
 
   return {
     labels: labels,
     datasets: [
       {
-        label: label,
+        label: "Net " + label,
         data: data,
       },
     ],
