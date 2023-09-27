@@ -9,12 +9,12 @@ import {
   processTradesByDayOfWeek,
   performanceByIntradayHoldTime,
 } from "../services/tradeServices";
-import { getStatistics } from "../services/statisticsService";
 import { retrieveTradesByTag } from "../services/tagService";
 import TradeFilterBar from "../components/TradeFilterBar";
 import BarChart from "../components/BarChart";
 import TableForStats from "../components/TableForStats";
 import GrossNetButton from "../components/GrossNetButton";
+import { chunkArray } from "../services/statisticsService";
 
 export default function LoggedIn() {
   //variables
@@ -45,6 +45,30 @@ export default function LoggedIn() {
   const [tagOptions, setTagOptions] = useState("");
   //radio buttons for net/gross display
   const [radioValue, setRadioValue] = useState(true);
+
+  //statistic data for table
+  const [statisticData, setStatisticData] = useState([
+    { title: "Total gain/loss:", value: "0.00" },
+    { title: "Largest gain:", value: "0.00" },
+    { title: "Average daily gain/loss:", value: "0.00" },
+    { title: "Largest loss:", value: "0.00" },
+    { title: "Average daily volume:", value: "0" },
+    { title: "Average per-share gain/loss:", value: "0.00" },
+    { title: "Average losing trade:", value: "0.00" },
+    { title: "Trade P&L standard deviation:", value: "0.00" },
+    { title: "Probability of random chance:", value: "0%" },
+    { title: "Total number of trades:", value: "0" },
+    { title: "Profit factor:", value: "0" },
+    { title: "Kelly percentage:", value: "0%" },
+    { title: "Number of winning trades:", value: "0" },
+    { title: "Average Hold Time (winning trades):", value: "0" },
+    { title: "Average Hold Time (losing trades):", value: "0" },
+    { title: "Number of losing trades:", value: "0" },
+    { title: "Max consecutive wins:", value: "0" },
+    { title: "Max consecutive losses:", value: "0" },
+    { title: "Total commissions:", value: "0.00" },
+    { title: "Total fees:", value: "0.00" },
+  ]);
 
   const [tradeData, setTradeData] = useState({
     labels: [],
@@ -152,6 +176,7 @@ export default function LoggedIn() {
       }
 
       if (trades) {
+        console.log("RENDER TRADES ", trades);
         const processedTradesBarChart = processTrades(
           trades,
           `${baseChartLabels.barChart} ${label}`,
@@ -231,7 +256,7 @@ export default function LoggedIn() {
           </div>
         </div>
         <div>
-            <TableForStats />
+          <TableForStats statisticData={statisticData} />
         </div>
       </div>
     </>
