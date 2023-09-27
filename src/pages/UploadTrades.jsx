@@ -5,12 +5,14 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import { uploadTrades } from "../services/uploadExcelService";
 import { Alert, Spinner } from "react-bootstrap";
+import SideBar from "../components/Sidebar";
 
 export default function UploadTradesFromExcel() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [alertMessage, setAlertMessage] = useState(null);
   const [alertType, setAlertType] = useState(null); // This can be 'success' or 'danger'
   const [isLoading, setIsLoading] = useState(false);
+  const [inputKey, setInputKey] = useState(Date.now()); // Using the current timestamp as an initial value. Will be used to reset the input field
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -36,6 +38,7 @@ export default function UploadTradesFromExcel() {
         setAlertMessage("Something went wrong. Please try again.");
       }
       setSelectedFile(null);
+      setInputKey(Date.now()); // Resetting the input field
     } catch (e) {
       console.error(e);
     } finally {
@@ -46,6 +49,8 @@ export default function UploadTradesFromExcel() {
   return (
     <>
       <ColorSchemesExample />
+      {/* <SideBar /> */}
+      <div className="my-3 mx-40 bg-gray-50 flex flex-col justify-center overflow-hidden">
       <Card>
         <Card.Header>Upload Trades</Card.Header>
         <Card.Body>
@@ -71,6 +76,7 @@ export default function UploadTradesFromExcel() {
             </Alert>
           )}
           <input
+            key={inputKey}
             className="form-control"
             type="file"
             id="formFile"
@@ -80,13 +86,14 @@ export default function UploadTradesFromExcel() {
           <Button
             variant="dark"
             type="submit"
-            disabled={!selectedFile}
+            disabled={!selectedFile || isLoading}
             onClick={handleUpload}
           >
             Upload
           </Button>
         </Card.Body>
       </Card>
+      </div>
     </>
   );
 }

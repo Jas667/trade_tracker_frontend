@@ -15,6 +15,7 @@ import TradeFilterBar from "../components/TradeFilterBar";
 import BarChart from "../components/BarChart";
 import TableForStats from "../components/TableForStats";
 import GrossNetButton from "../components/GrossNetButton";
+import SideBar from "../components/Sidebar";
 
 export default function LoggedIn() {
   //variables
@@ -223,6 +224,7 @@ export default function LoggedIn() {
   return (
     <>
       <ColorSchemesExample />
+      {/* <SideBar /> */}
       <div className="my-3 mx-40 bg-gray-50 flex flex-col justify-center overflow-hidden">
         <TradeFilterBar
           startDate={startDate}
