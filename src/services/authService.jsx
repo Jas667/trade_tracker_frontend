@@ -1,3 +1,4 @@
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const login = async (credentials) => {
@@ -31,7 +32,7 @@ export const register = async (credentials) => {
   }
 };
 
-export const logout = async () => { 
+export const logout = async (navigateCallback) => { 
   try {
     const response = await fetch(`${API_BASE_URL}user/logout`, {
       method: "POST",
@@ -40,6 +41,11 @@ export const logout = async () => {
         "Content-Type": "application/json",
       },
     });
+
+    if (response.status === 200) {
+      navigateCallback("/login");
+    }
+
     return response;
   } catch (e) {
     console.error(e);

@@ -1,7 +1,6 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const getStatistics = (trades, initialStatistics, isNet = true) => {
-  console.log("trades", trades);
   //clone initial stats
   const updatedStatistics = [...initialStatistics];
 
