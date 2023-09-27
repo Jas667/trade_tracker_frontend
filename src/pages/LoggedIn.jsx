@@ -191,7 +191,7 @@ export default function LoggedIn() {
   return (
     <>
       <ColorSchemesExample />
-      <div className="my-3 mx-5 bg-gray-50 flex flex-col justify-center overflow-hidden">
+      <div className="my-3 mx-20 bg-gray-50 flex flex-col justify-center overflow-hidden">
         <TradeFilterBar
           startDate={startDate}
           endDate={endDate}
@@ -231,9 +231,7 @@ export default function LoggedIn() {
           </div>
         </div>
         <div>
-          <div className="flexbox justify-center w-5/6">
             <TableForStats />
-          </div>
         </div>
       </div>
     </>

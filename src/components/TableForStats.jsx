@@ -2,7 +2,8 @@ import Table from "react-bootstrap/Table";
 
 function TableForStats() {
   return (
-    <Table striped bordered hover variant="light justify-centre">
+    <div className="flex justify-center">
+    <Table striped bordered hover variant="light">
       <tbody>
         <tr>
           <td>Mark</td>
@@ -23,7 +24,8 @@ function TableForStats() {
           <td>Test</td>
         </tr>
       </tbody>
-    </Table>
+      </Table>
+    </div>
   );
 }
 
