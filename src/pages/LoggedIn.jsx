@@ -9,12 +9,12 @@ import {
   processTradesByDayOfWeek,
   performanceByIntradayHoldTime,
 } from "../services/tradeServices";
+import { getStatistics } from "../services/statisticsService";
 import { retrieveTradesByTag } from "../services/tagService";
 import TradeFilterBar from "../components/TradeFilterBar";
 import BarChart from "../components/BarChart";
 import TableForStats from "../components/TableForStats";
 import GrossNetButton from "../components/GrossNetButton";
-import { chunkArray } from "../services/statisticsService";
 
 export default function LoggedIn() {
   //variables
@@ -55,7 +55,7 @@ export default function LoggedIn() {
     { title: "Average daily volume:", value: "0" },
     { title: "Average per-share gain/loss:", value: "0.00" },
     { title: "Average losing trade:", value: "0.00" },
-    { title: "Trade P&L standard deviation:", value: "0.00" },
+    { title: "Average winning trade:", value: "0.00" },
     { title: "Probability of random chance:", value: "0%" },
     { title: "Total number of trades:", value: "0" },
     { title: "Profit factor:", value: "0" },
@@ -176,7 +176,13 @@ export default function LoggedIn() {
       }
 
       if (trades) {
-        console.log("RENDER TRADES ", trades);
+        //update statistics table
+        const updatedStatistics = getStatistics(
+          trades,
+          statisticData,
+          radioValue
+        );
+
         const processedTradesBarChart = processTrades(
           trades,
           `${baseChartLabels.barChart} ${label}`,
@@ -201,6 +207,7 @@ export default function LoggedIn() {
             `${baseChartLabels.horizontalIntradayDuration} ${label}`
           );
 
+        setStatisticData(updatedStatistics);
         setTradeData(processedTradesLineChart);
         setTradeDataForBarChart(processedTradesBarChart);
         setTradeDataForHorizontalDayOfWeekBarChart(processedTradesByDayOfWeek);
