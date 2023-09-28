@@ -16,6 +16,7 @@ import BarChart from "../components/BarChart";
 import TableForStats from "../components/TableForStats";
 import GrossNetButton from "../components/GrossNetButton";
 import ViewsMenu from "../components/ViewsMenu";
+import Trades from "../components/Trades";
 
 export default function LoggedIn() {
   //variables
@@ -73,6 +74,8 @@ export default function LoggedIn() {
     { title: "Total commissions:", value: "0.00" },
     { title: "Total fees:", value: "0.00" },
   ]);
+
+  const [rawTradeData, setRawTradeData] = useState([]);
 
   const [tradeData, setTradeData] = useState({
     labels: [],
@@ -180,6 +183,8 @@ export default function LoggedIn() {
       }
 
       if (trades) {
+        //set raw trade data for use in trades table
+        setRawTradeData(trades);
         //update statistics table
         const updatedStatistics = getStatistics(
           trades,
@@ -218,6 +223,7 @@ export default function LoggedIn() {
         setTradeDataForIntradayPerformanceHorizontalBarChart(
           processedTradesByIntradayPerformance
         );
+        console.log(rawTradeData)
       }
     }
 
@@ -282,9 +288,9 @@ export default function LoggedIn() {
         )}
         {currentView === "tradeView" && (
           <>
-            <TableForStats statisticData={statisticData} />
-
-            <p>TEST</p>
+            <div>
+              <Trades rawTradeData={rawTradeData} />
+              </div>
           </>
         )}
       </div>
