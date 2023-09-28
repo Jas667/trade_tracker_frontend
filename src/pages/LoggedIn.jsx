@@ -15,6 +15,7 @@ import TradeFilterBar from "../components/TradeFilterBar";
 import BarChart from "../components/BarChart";
 import TableForStats from "../components/TableForStats";
 import GrossNetButton from "../components/GrossNetButton";
+import ViewsMenu from "../components/ViewsMenu";
 
 export default function LoggedIn() {
   //variables
@@ -235,6 +236,7 @@ export default function LoggedIn() {
           today={today}
           thirtyDaysAgo={thirtyDaysAgo}
         />
+        <ViewsMenu currentView={currentView} setCurrentView={setCurrentView} />
         {currentView === "chartView" && (
           <>
             <GrossNetButton
@@ -276,6 +278,13 @@ export default function LoggedIn() {
             <div>
               <TableForStats statisticData={statisticData} />
             </div>
+          </>
+        )}
+        {currentView === "tradeView" && (
+          <>
+            <TableForStats statisticData={statisticData} />
+
+            <p>TEST</p>
           </>
         )}
       </div>

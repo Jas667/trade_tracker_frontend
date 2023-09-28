@@ -5,7 +5,6 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import { uploadTrades } from "../services/uploadExcelService";
 import { Alert, Spinner } from "react-bootstrap";
-import SideBar from "../components/Sidebar";
 
 export default function UploadTradesFromExcel() {
   const [selectedFile, setSelectedFile] = useState(null);
