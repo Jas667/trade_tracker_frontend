@@ -223,7 +223,6 @@ export default function LoggedIn() {
         setTradeDataForIntradayPerformanceHorizontalBarChart(
           processedTradesByIntradayPerformance
         );
-        console.log(rawTradeData)
       }
     }
 

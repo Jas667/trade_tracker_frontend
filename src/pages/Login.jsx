@@ -64,12 +64,10 @@ export default function Login() {
       //switch statement to handle different responses
       switch (response.status) {
         case 200:
-          console.log("Login successful", data);
           setErrorMessage({ identifier: null, password: null }); // Clear any previous errors on success
           navigate("/");
           break;
         case 400:
-          console.log("Login failed", data);
           if (data.message.includes("User")) {
             setErrorMessage((prev) => ({
               ...prev,

@@ -51,7 +51,6 @@ export function useErrorHandler(context) {
         resetErrorMessage();
         break;
       case 400:
-        console.log("Registration failed", data);
         if (data.message.includes("Missing")) {
           setErrorMessage((prev) => ({
             ...prev,

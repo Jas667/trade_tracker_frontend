@@ -87,7 +87,6 @@ export default function Register() {
       //switch statement to handle different responses
       switch (response.status) {
         case 201:
-          console.log("User Registered", data);
           setErrorMessage({
             username: null,
             email: null,
@@ -97,7 +96,6 @@ export default function Register() {
           }); // Clear any previous errors on success
           break;
         case 400:
-          console.log("Registration failed", data);
           if (data.message.includes("Missing")) {
             setErrorMessage((prev) => ({
               ...prev,

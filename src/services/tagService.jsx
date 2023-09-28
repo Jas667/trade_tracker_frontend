@@ -30,3 +30,18 @@ export const retrieveTradesByTag = async (data) => {
     console.error(e)
   }
 }
+
+export const retrieveAllTagsForTrade = async (tradeId) => { 
+  try {
+    const response = await fetch(`${API_BASE_URL}tradetag/all/${tradeId}`, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response.json();
+  } catch (e) {
+    console.error(e)
+  }
+}

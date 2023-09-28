@@ -3,12 +3,15 @@ import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import { useState } from "react";
 import Pagination from "react-bootstrap/Pagination";
+import { retrieveAllTagsForTrade } from "../services/tagService";
 
 const Trades = ({ rawTradeData }) => {
   if (rawTradeData.length === 0) return null;
 
   const [viewingDetails, setViewingDetails] = useState(false);
   const [selectedTrade, setSelectedTrade] = useState(null);
+
+  const [tags, setTags] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const tradesPerPage = 10;
@@ -33,9 +36,17 @@ const Trades = ({ rawTradeData }) => {
     pageNumbers.push(i);
   }
 
-  const handleViewClick = (tradeId) => {
+  const handleViewClick = async (tradeId) => {
     setSelectedTrade(rawTradeData.find((trade) => trade.id === tradeId));
     setViewingDetails(true);
+
+    // Assuming retrieveAllTagsForTrade is an async function
+    const tagResponse = await retrieveAllTagsForTrade(tradeId);
+    if (tagResponse && tagResponse.data && tagResponse.data.tags) {
+      setTags(tagResponse.data.tags);
+    } else {
+      setTags([]);
+    }
   };
 
   return (
@@ -80,6 +91,9 @@ const Trades = ({ rawTradeData }) => {
             {/* Tags box */}
             <div className="border border-gray-300 p-4">
               <p className="font-bold">Tags:</p>
+              {tags.length > 0 ? tags.map((tag) => (
+                <p key={tag.id}>{tag.tag_name}</p>
+              )) : <p>No tags set for this trade.</p>}
               <Button
                 variant="secondary"
                 onClick={() => handleViewClick(trade.id)}
