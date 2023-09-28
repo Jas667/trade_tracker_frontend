@@ -7,6 +7,9 @@ import Pagination from "react-bootstrap/Pagination";
 const Trades = ({ rawTradeData }) => {
   if (rawTradeData.length === 0) return null;
 
+  const [viewingDetails, setViewingDetails] = useState(false);
+  const [selectedTrade, setSelectedTrade] = useState(null);
+
   const [currentPage, setCurrentPage] = useState(1);
   const tradesPerPage = 10;
 
@@ -15,14 +18,97 @@ const Trades = ({ rawTradeData }) => {
   const indexOfFirstTrade = indexOfLastTrade - tradesPerPage;
   const currentTrades = rawTradeData.slice(indexOfFirstTrade, indexOfLastTrade);
 
-  const handleViewClick = (tradeId) => {
-    console.log(`Viewing details for trade with id: ${tradeId}`);
-  };
-
   const totalPages = Math.ceil(rawTradeData.length / tradesPerPage);
 
+  const maxPageNumbersToShow = 5;
+  let startPage = Math.max(
+    1,
+    currentPage - Math.floor(maxPageNumbersToShow / 2)
+  );
+  let endPage = Math.min(totalPages, startPage + maxPageNumbersToShow - 1);
+  startPage = Math.max(1, endPage - maxPageNumbersToShow + 1); // Recalculate start to adjust for end
+
+  const pageNumbers = [];
+  for (let i = startPage; i <= endPage; i++) {
+    pageNumbers.push(i);
+  }
+
+  const handleViewClick = (tradeId) => {
+    setSelectedTrade(rawTradeData.find((trade) => trade.id === tradeId));
+    setViewingDetails(true);
+  };
+
   return (
-    <div className="flex justify-center flex-col items-center">
+    <div className="flex flex-col">
+      {selectedTrade ? (
+        <div className="flex mb-4">
+          {/* Left-hand section (vertical layout) */}
+          <div className="flex flex-col mr-4 w-1/3">
+            {/* Trade details box */}
+            <div className="border border-gray-300 p-4 mb-4">
+              <p className="font-bold">{selectedTrade.symbol}</p>
+              <p className="font-bold">
+                {selectedTrade.open_date} {selectedTrade.open_time}
+              </p>
+              <p>
+                Shares Traded:{" "}
+                <span className="font-bold">
+                  {selectedTrade.total_shares_traded}
+                </span>
+              </p>
+              <p>
+                Closed Gross P&L:{" "}
+                <span className="font-bold">
+                  {Number(selectedTrade.gross_profit_loss).toFixed(2)}
+                </span>
+              </p>
+              <p></p>
+              <p>
+                Commissions/Fees:
+                <span className="font-bold">
+                  {(
+                    Number(selectedTrade.total_commission) +
+                    Number(selectedTrade.total_fees)
+                  ).toFixed(2)}
+                </span>
+              </p>
+              <p>
+                Closed Net P&L:{" "}
+                <span className="font-bold">{selectedTrade.profit_loss}</span>
+              </p>
+            </div>
+            {/* Tags box */}
+            <div className="border border-gray-300 p-4">
+              <p className="font-bold">Tags:</p>
+              <Button
+                variant="secondary"
+                onClick={() => handleViewClick(trade.id)}
+              >
+                Add Tags
+              </Button>
+            </div>
+          </div>
+
+          {/* Right-hand section for the notes */}
+          <div className="border border-gray-300 p-4 flex-grow">
+            <Button
+              variant="secondary"
+              onClick={() => handleViewClick(trade.id)}
+            >
+              Add Notes
+            </Button>
+            {selectedTrade.notes ? (
+              <p>{selectedTrade.notes}</p>
+            ) : (
+              <p>
+                <br />
+                No Notes...
+              </p>
+            )}
+          </div>
+        </div>
+      ) : null}
+
       <Table striped bordered hover variant="light">
         <thead>
           <tr>
@@ -71,15 +157,35 @@ const Trades = ({ rawTradeData }) => {
             onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
             disabled={currentPage === 1}
           />
-          {[...Array(totalPages).keys()].map((num) => (
+
+          {startPage > 1 && (
+            <>
+              <Pagination.Item onClick={() => setCurrentPage(1)}>
+                1
+              </Pagination.Item>
+              {startPage > 2 && <Pagination.Ellipsis />}
+            </>
+          )}
+
+          {pageNumbers.map((num) => (
             <Pagination.Item
-              key={num + 1}
-              active={num + 1 === currentPage}
-              onClick={() => setCurrentPage(num + 1)}
+              key={num}
+              active={num === currentPage}
+              onClick={() => setCurrentPage(num)}
             >
-              {num + 1}
+              {num}
             </Pagination.Item>
           ))}
+
+          {endPage < totalPages && (
+            <>
+              {endPage < totalPages - 1 && <Pagination.Ellipsis />}
+              <Pagination.Item onClick={() => setCurrentPage(totalPages)}>
+                {totalPages}
+              </Pagination.Item>
+            </>
+          )}
+
           <Pagination.Next
             onClick={() =>
               setCurrentPage((prev) => Math.min(totalPages, prev + 1))
