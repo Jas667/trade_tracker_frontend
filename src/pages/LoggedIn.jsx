@@ -15,7 +15,6 @@ import TradeFilterBar from "../components/TradeFilterBar";
 import BarChart from "../components/BarChart";
 import TableForStats from "../components/TableForStats";
 import GrossNetButton from "../components/GrossNetButton";
-import SideBar from "../components/Sidebar";
 
 export default function LoggedIn() {
   //variables
@@ -26,6 +25,9 @@ export default function LoggedIn() {
     new Date().getTime() - 30 * 24 * 60 * 60 * 1000
   );
   const thirtyDaysAgo = thirtyDaysAgoDate.toISOString().split("T")[0];
+
+  //state to manage which view we are displaying on the page. This is used to switch between things like chart views or trade views etc.
+  const [currentView, setCurrentView] = useState("chartView");
 
   //start and end date states
   const [startDate, setStartDate] = useState(thirtyDaysAgo);
@@ -233,40 +235,49 @@ export default function LoggedIn() {
           today={today}
           thirtyDaysAgo={thirtyDaysAgo}
         />
-        <GrossNetButton radioValue={radioValue} setRadioValue={setRadioValue} />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-          <div className="col-auto py-3 px-5 px-md-5">
-            <BarChart
-              labels={tradeDataForBarChart.labels}
-              datasets={tradeDataForBarChart.datasets}
+        {currentView === "chartView" && (
+          <>
+            <GrossNetButton
+              radioValue={radioValue}
+              setRadioValue={setRadioValue}
             />
-          </div>
-          <div className="col-auto py-3 px-5 px-md-5">
-            <LineChart
-              labels={tradeData.labels}
-              datasets={tradeData.datasets}
-            />
-          </div>
-          <div className="col-auto py-3 px-5 px-md-5">
-            <BarChart
-              labels={tradeDataForHorizontalDayOfWeekBarChart.labels}
-              datasets={tradeDataForHorizontalDayOfWeekBarChart.datasets}
-              indexAxis="y"
-            />
-          </div>
-          <div className="col-auto py-3 px-5 px-md-5">
-            <BarChart
-              labels={tradeDataForIntradayPerformanceHorizontalBarChart.labels}
-              datasets={
-                tradeDataForIntradayPerformanceHorizontalBarChart.datasets
-              }
-              indexAxis="y"
-            />
-          </div>
-        </div>
-        <div>
-          <TableForStats statisticData={statisticData} />
-        </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+              <div className="col-auto py-3 px-5 px-md-5">
+                <BarChart
+                  labels={tradeDataForBarChart.labels}
+                  datasets={tradeDataForBarChart.datasets}
+                />
+              </div>
+              <div className="col-auto py-3 px-5 px-md-5">
+                <LineChart
+                  labels={tradeData.labels}
+                  datasets={tradeData.datasets}
+                />
+              </div>
+              <div className="col-auto py-3 px-5 px-md-5">
+                <BarChart
+                  labels={tradeDataForHorizontalDayOfWeekBarChart.labels}
+                  datasets={tradeDataForHorizontalDayOfWeekBarChart.datasets}
+                  indexAxis="y"
+                />
+              </div>
+              <div className="col-auto py-3 px-5 px-md-5">
+                <BarChart
+                  labels={
+                    tradeDataForIntradayPerformanceHorizontalBarChart.labels
+                  }
+                  datasets={
+                    tradeDataForIntradayPerformanceHorizontalBarChart.datasets
+                  }
+                  indexAxis="y"
+                />
+              </div>
+            </div>
+            <div>
+              <TableForStats statisticData={statisticData} />
+            </div>
+          </>
+        )}
       </div>
     </>
   );
