@@ -1,5 +1,8 @@
 import React from "react";
-import Button from "react-bootstrap/Button";
+import TagsBox from "./TagsBox";
+import NotesBox from "./NotesBox";
+import TradeDetailsBox from "./TradeDetailsBox";
+
 
 const TradeDetails = ({ selectedTrade, tags, isEditing, setIsEditing }) => {
   const handleEditTags = () => {
@@ -11,7 +14,8 @@ const TradeDetails = ({ selectedTrade, tags, isEditing, setIsEditing }) => {
       {/* Left-hand section (vertical layout) */}
       <div className="flex flex-col mr-4 w-1/3">
         {/* Trade details box */}
-        <div className="border border-gray-300 p-4 mb-4">
+        <TradeDetailsBox selectedTrade={selectedTrade} />
+        {/* <div className="border border-gray-300 p-4 mb-4">
           <p className="font-bold">{selectedTrade.symbol}</p>
           <p className="font-bold">
             {selectedTrade.open_date} -- {selectedTrade.open_time} to{" "}
@@ -43,9 +47,10 @@ const TradeDetails = ({ selectedTrade, tags, isEditing, setIsEditing }) => {
             Closed Net P&L:{" "}
             <span className="font-bold">{selectedTrade.profit_loss}</span>
           </p>
-        </div>
+        </div> */}
         {/* Tags box */}
-        <div className="border border-gray-300 p-4">
+        <TagsBox tags={tags} isEditing={isEditing} setIsEditing={setIsEditing} />
+        {/* <div className="border border-gray-300 p-4">
           <p className="font-bold">Tags:</p>
           {tags.length > 0 ? (
             tags.map((tag) => (
@@ -102,7 +107,7 @@ const TradeDetails = ({ selectedTrade, tags, isEditing, setIsEditing }) => {
               </Button>
               <Button
                 variant="secondary"
-                className="mr-2" // Added margin for spacing between buttons
+                className="mr-2 mb-2" // Added margin for spacing between buttons
                 onClick={() => {
                   // ... Any save logic you might have ...
                   setIsEditing(false); // Turn off editing mode
@@ -116,11 +121,12 @@ const TradeDetails = ({ selectedTrade, tags, isEditing, setIsEditing }) => {
               Edit Tags
             </Button>
           )}
-        </div>
+        </div> */}
       </div>
 
       {/* Right-hand section for the notes */}
-      <div className="border border-gray-300 p-4 flex-grow">
+      <NotesBox notes={selectedTrade.notes} tradeId={selectedTrade.id} selectedTrade={selectedTrade} />
+      {/* <div className="border border-gray-300 p-4 flex-grow">
         <Button
           variant="secondary"
           onClick={() => console.log("Add notes to - ", selectedTrade.id)}
@@ -135,7 +141,7 @@ const TradeDetails = ({ selectedTrade, tags, isEditing, setIsEditing }) => {
             No Notes...
           </p>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };

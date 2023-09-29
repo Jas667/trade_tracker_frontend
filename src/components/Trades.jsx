@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import TradeDetails from "./TradeDetails";
+import TradeDetails from "./TradeDetails/TradeDetails";
 import TradeList from "./TradeList";
 import Pagination from "./Pagination";
 import { retrieveAllTagsForTrade } from "../services/tagService";
