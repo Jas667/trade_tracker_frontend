@@ -12,6 +12,7 @@ const Trades = ({ rawTradeData }) => {
   const [selectedTrade, setSelectedTrade] = useState(null);
 
   const [tags, setTags] = useState([]);
+  const [isEditing, setIsEditing] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
   const tradesPerPage = 10;
@@ -59,7 +60,8 @@ const Trades = ({ rawTradeData }) => {
             <div className="border border-gray-300 p-4 mb-4">
               <p className="font-bold">{selectedTrade.symbol}</p>
               <p className="font-bold">
-                {selectedTrade.open_date} {selectedTrade.open_time}
+                {selectedTrade.open_date} -- {selectedTrade.open_time} to{" "}
+                {selectedTrade.close_time}
               </p>
               <p>
                 Shares Traded:{" "}
@@ -91,15 +93,75 @@ const Trades = ({ rawTradeData }) => {
             {/* Tags box */}
             <div className="border border-gray-300 p-4">
               <p className="font-bold">Tags:</p>
-              {tags.length > 0 ? tags.map((tag) => (
-                <p key={tag.id}>{tag.tag_name}</p>
-              )) : <p>No tags set for this trade.</p>}
-              <Button
-                variant="secondary"
-                onClick={() => handleViewClick(trade.id)}
-              >
-                Add Tags
-              </Button>
+              {tags.length > 0 ? (
+                tags.map((tag) => (
+                  // This outer wrapper ensures the entire tag behaves as a single unit for layout
+                  <div key={tag.id} className="inline-block mr-2 mb-2">
+                    <span className="bg-blue-500 p-1 rounded text-white">
+                      {tag.tag_name}
+                      {isEditing && (
+                        <span
+                          className="cursor-pointer ml-3 mr-1 text-black"
+                          onClick={() => removeTag(tag)}
+                        >
+                          x
+                        </span>
+                      )}
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <div>No tags set for this trade.</div>
+              )}
+              <br />
+              {isEditing ? (
+                <>
+                  <Button
+                    variant="success"
+                    className="mr-2" // Added margin for spacing between buttons
+                    onClick={() => {
+                      // ... Any save logic you might have ...
+                      setIsEditing(false); // Turn off editing mode
+                    }}
+                  >
+                    Save
+                  </Button>
+                  <Button
+                    variant="dark"
+                    className="mr-2"
+                    onClick={() => {
+                      // ... Any cancel logic you might have, like restoring the previous tags ...
+                      setIsEditing(false); // Turn off editing mode without saving changes
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    className="mr-2" // Added margin for spacing between buttons
+                    onClick={() => {
+                      // ... Any save logic you might have ...
+                      setIsEditing(false); // Turn off editing mode
+                    }}
+                  >
+                    Add
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    className="mr-2" // Added margin for spacing between buttons
+                    onClick={() => {
+                      // ... Any save logic you might have ...
+                      setIsEditing(false); // Turn off editing mode
+                    }}
+                  >
+                    Create New
+                  </Button>
+                </>
+              ) : (
+                <Button variant="secondary" onClick={() => setIsEditing(true)}>
+                  Edit Tags
+                </Button>
+              )}
             </div>
           </div>
 
@@ -107,7 +169,7 @@ const Trades = ({ rawTradeData }) => {
           <div className="border border-gray-300 p-4 flex-grow">
             <Button
               variant="secondary"
-              onClick={() => handleViewClick(trade.id)}
+              onClick={() => console.log("Add notes to - ", selectedTrade.id)}
             >
               Add Notes
             </Button>
