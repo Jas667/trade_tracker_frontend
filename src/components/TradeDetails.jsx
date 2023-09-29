@@ -72,7 +72,7 @@ const TradeDetails = ({ selectedTrade, tags, isEditing, setIsEditing }) => {
             <>
               <Button
                 variant="success"
-                className="mr-2" // Added margin for spacing between buttons
+                className="mr-2 mb-2" // Added margin for spacing between buttons
                 onClick={() => {
                   // ... Any save logic you might have ...
                   setIsEditing(false); // Turn off editing mode
@@ -81,8 +81,8 @@ const TradeDetails = ({ selectedTrade, tags, isEditing, setIsEditing }) => {
                 Save
               </Button>
               <Button
-                variant="dark"
-                className="mr-2"
+                variant="danger"
+                className="mr-2 mb-2"
                 onClick={() => {
                   // ... Any cancel logic you might have, like restoring the previous tags ...
                   setIsEditing(false); // Turn off editing mode without saving changes
@@ -92,7 +92,7 @@ const TradeDetails = ({ selectedTrade, tags, isEditing, setIsEditing }) => {
               </Button>
               <Button
                 variant="secondary"
-                className="mr-2" // Added margin for spacing between buttons
+                className="mr-2 mb-2" // Added margin for spacing between buttons
                 onClick={() => {
                   // ... Any save logic you might have ...
                   setIsEditing(false); // Turn off editing mode
