@@ -1,7 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import { getTags } from "../services/tagService";
 
-function TradeFilterBar({ onFilter, startDate, endDate, today, thirtyDaysAgo }) {
+function TradeFilterBar({
+  onFilter,
+  startDate,
+  endDate,
+  today,
+  thirtyDaysAgo,
+}) {
   // Local state for the filters
   const [localStartDate, setLocalStartDate] = useState(startDate);
   const [localEndDate, setLocalEndDate] = useState(endDate);
@@ -24,13 +30,13 @@ function TradeFilterBar({ onFilter, startDate, endDate, today, thirtyDaysAgo }) 
       localEndDate,
       localSymbol,
       //send back only the ids of the selected tags. This makes it easier to filter.
-      localSelectedTags.map(tag => tag.id),
+      localSelectedTags.map((tag) => tag.id),
       localSelectedTagOption
     ); // send the filter criteria back to parent
   };
 
   //handle clear button
-  const handleClear = () => { 
+  const handleClear = () => {
     setLocalStartDate(thirtyDaysAgo);
     setLocalEndDate(today);
     setLocalSymbol("");
@@ -69,24 +75,43 @@ function TradeFilterBar({ onFilter, startDate, endDate, today, thirtyDaysAgo }) 
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && inputValue.trim() !== "") {
-        const matchingTag = initialTagsFromFetch.find(t => t.name === inputValue.trim());
-        if (matchingTag) {
-            addTag(matchingTag);
-            setInputValue("");
-        }
+      const matchingTag = initialTagsFromFetch.find(
+        (t) => t.name === inputValue.trim()
+      );
+      if (matchingTag) {
+        addTag(matchingTag);
+        setInputValue("");
+      }
     }
-};
+  };
+  
 
   const addTag = (tag) => {
-    setLocalSelectedTags((prev) => [...prev, tag]);
-    setTags(initialTagsFromFetch.filter((t) => t.id !== tag.id));
-    setInputValue(""); 
-};
+    if (!localSelectedTags.some((t) => t.id === tag.id)) {
+      setLocalSelectedTags((prev) => {
+        const newSelectedTags = [...prev, tag];
+        resetTagsDropdown(newSelectedTags);
+        return newSelectedTags;
+      });
+    }
+  };
+  
+  const removeTag = (tag) => {
+    setLocalSelectedTags((prevSelected) => {
+      const newSelectedTags = prevSelected.filter((t) => t.id !== tag.id);
+      resetTagsDropdown(newSelectedTags);
+      return newSelectedTags;
+    });
+  };
 
-const removeTag = (tag) => {
-  setLocalSelectedTags(localSelectedTags.filter((t) => t.id !== tag.id));
-  setTags((prev) => [...prev, tag]);
-};
+  const resetTagsDropdown = (currentSelectedTags) => {
+    setTags(
+      initialTagsFromFetch.filter(
+        (tag) => !currentSelectedTags.some((t) => t.id === tag.id)
+      )
+    );
+  };
+  
 
   return (
     <div className="bg-gray-800 text-white p-4 sm:p-2">
@@ -142,13 +167,16 @@ const removeTag = (tag) => {
                 setInputValue(e.target.value);
                 setTags(
                   initialTagsFromFetch.filter((tag) =>
-                    tag.toLowerCase().includes(e.target.value.toLowerCase())
+                    tag.name
+                      .toLowerCase()
+                      .includes(e.target.value.toLowerCase())
                   )
                 );
               }}
               onKeyDown={(e) => handleKeyDown(e)}
               className="form-input p-1 rounded bg-gray-700 text-white"
               onClick={() => setShowDropdown(true)}
+              autoComplete="off"
             />
             <div className="flex ml-2">
               {localSelectedTags.map((tag) => (
@@ -222,8 +250,9 @@ const removeTag = (tag) => {
             >
               Filter
             </button>
-            <button className="text-white border p-1 rounded hover:bg-gray-400"
-            onClick={handleClear}
+            <button
+              className="text-white border p-1 rounded hover:bg-gray-400"
+              onClick={handleClear}
             >
               Clear
             </button>
