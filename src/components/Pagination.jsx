@@ -1,8 +1,19 @@
 import React from "react";
 import Pagination from "react-bootstrap/Pagination";
 
-const TradePagination = ({ currentPage, setCurrentPage, totalPages, startPage, pageNumbers, endPage }) => {
+const TradePagination = ({ currentPage, setCurrentPage, totalPages }) => {
+  const maxPageNumbersToShow = 5;
+  let startPage = Math.max(
+    1,
+    currentPage - Math.floor(maxPageNumbersToShow / 2)
+  );
+  let endPage = Math.min(totalPages, startPage + maxPageNumbersToShow - 1);
+  startPage = Math.max(1, endPage - maxPageNumbersToShow + 1); // Recalculate start to adjust for end
 
+  const pageNumbers = [];
+  for (let i = startPage; i <= endPage; i++) {
+    pageNumbers.push(i);
+  }
   return (
     <div className="mt-4">
       <Pagination>

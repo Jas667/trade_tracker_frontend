@@ -4,8 +4,8 @@ import React from "react";
 import { useState } from "react";
 // import Pagination from "react-bootstrap/Pagination";
 import TradeDetails from "./TradeDetails";
-import TradeList from './TradeList';
-import Pagination from './Pagination';
+import TradeList from "./TradeList";
+import Pagination from "./Pagination";
 import { retrieveAllTagsForTrade } from "../services/tagService";
 
 const Trades = ({ rawTradeData }) => {
@@ -26,19 +26,6 @@ const Trades = ({ rawTradeData }) => {
 
   const totalPages = Math.ceil(rawTradeData.length / tradesPerPage);
 
-  const maxPageNumbersToShow = 5;
-  let startPage = Math.max(
-    1,
-    currentPage - Math.floor(maxPageNumbersToShow / 2)
-  );
-  let endPage = Math.min(totalPages, startPage + maxPageNumbersToShow - 1);
-  startPage = Math.max(1, endPage - maxPageNumbersToShow + 1); // Recalculate start to adjust for end
-
-  const pageNumbers = [];
-  for (let i = startPage; i <= endPage; i++) {
-    pageNumbers.push(i);
-  }
-
   const handleViewClick = async (tradeId) => {
     setSelectedTrade(rawTradeData.find((trade) => trade.id === tradeId));
     setViewingDetails(true);
@@ -54,17 +41,24 @@ const Trades = ({ rawTradeData }) => {
 
   return (
     <div className="flex flex-col">
-    {selectedTrade && (
-        <TradeDetails 
-            selectedTrade={selectedTrade} 
-            tags={tags} 
-            isEditing={isEditing} 
-            setIsEditing={setIsEditing} 
+      {selectedTrade && (
+        <TradeDetails
+          selectedTrade={selectedTrade}
+          tags={tags}
+          isEditing={isEditing}
+          setIsEditing={setIsEditing}
         />
-    )}
-    <TradeList currentTrades={currentTrades} handleViewClick={handleViewClick} />
-      <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={totalPages} startPage={startPage} pageNumbers={pageNumbers} />
-</div>
+      )}
+      <TradeList
+        currentTrades={currentTrades}
+        handleViewClick={handleViewClick}
+      />
+      <Pagination
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        totalPages={totalPages}
+      />
+    </div>
   );
 };
 
