@@ -1,21 +1,26 @@
 import Button from "react-bootstrap/Button";
 
-
-const TagsBox = ({ tags, isEditing, setIsEditing }) => {
-  // ... Other component-specific methods and logic...
-
+const TagsBox = ({
+  tags,
+  isEditing,
+  setIsEditing,
+  handleCancel,
+  markForDeletion,
+  tagsToDelete,
+  handleSave,
+}) => {
   return (
     <div className="border border-gray-300 p-4">
       <p className="font-bold">Tags:</p>
       {tags.length > 0 ? (
         tags.map((tag) => (
           <div key={tag.id} className="inline-block mr-2 mb-2">
-            <span className="bg-blue-500 p-1 rounded text-white">
+            <span className={`bg-blue-500 p-1 rounded text-white ${tagsToDelete.includes(tag.id) ? 'line-through bg-gray-400' : ''}`}>
               {tag.tag_name}
               {isEditing && (
                 <span
                   className="cursor-pointer ml-3 mr-1 text-black"
-                  onClick={() => removeTag(tag)}
+                  onClick={() => markForDeletion(tag.id)}
                 >
                   x
                 </span>
@@ -34,7 +39,7 @@ const TagsBox = ({ tags, isEditing, setIsEditing }) => {
             className="mr-2 mb-2"
             onClick={() => {
               // Logic to save changes goes here
-              setIsEditing(false);
+              handleSave();
             }}
           >
             Save
@@ -44,7 +49,7 @@ const TagsBox = ({ tags, isEditing, setIsEditing }) => {
             className="mr-2 mb-2"
             onClick={() => {
               // Logic to cancel editing goes here
-              setIsEditing(false);
+              handleCancel();
             }}
           >
             Cancel

@@ -5,6 +5,7 @@ import TradeList from "./TradeList";
 import Pagination from "./Pagination";
 import { retrieveAllTagsForTrade } from "../services/tagService";
 import BackToTradesButton from "./BackToTradesButton";
+import AppContext from "../../context/ContextProvider";
 
 const Trades = ({ rawTradeData }) => {
   if (rawTradeData.length === 0) return null;
@@ -28,7 +29,9 @@ const Trades = ({ rawTradeData }) => {
   const handleViewClick = async (tradeId) => {
     setSelectedTrade(rawTradeData.find((trade) => trade.id === tradeId));
     setIsViewingDetails(true);
+  };
 
+  const fetchTagsForTrade = async (tradeId) => {
     const tagResponse = await retrieveAllTagsForTrade(tradeId);
     if (tagResponse && tagResponse.data && tagResponse.data.tags) {
       setTags(tagResponse.data.tags);
@@ -50,18 +53,24 @@ const Trades = ({ rawTradeData }) => {
           <BackToTradesButton
             handleBackToTradesClick={handleBackToTradesClick}
           />
-          <TradeDetails
-            selectedTrade={selectedTrade}
-            tags={tags}
-            isEditing={isEditing}
-            setIsEditing={setIsEditing}
-          />
+          <AppContext.Provider
+            value={{ selectedTrade, tags, isEditing, setIsEditing }}
+          >
+            <TradeDetails
+              selectedTrade={selectedTrade}
+              tags={tags}
+              isEditing={isEditing}
+              setIsEditing={setIsEditing}
+              fetchTagsForTrade={fetchTagsForTrade}
+            />
+          </AppContext.Provider>
         </>
       ) : (
         <>
           <TradeList
             currentTrades={currentTrades}
-            handleViewClick={handleViewClick}
+              handleViewClick={handleViewClick}
+              fetchTagsForTrade={fetchTagsForTrade}
           />
           <Pagination
             currentPage={currentPage}

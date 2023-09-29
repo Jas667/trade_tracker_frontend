@@ -2,6 +2,7 @@ import React from "react";
 import ColorSchemesExample from "../components/NavBar";
 import LineChart from "../components/LineChart";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   processTrades,
   getTradesByDateRange,
@@ -19,6 +20,7 @@ import ViewsMenu from "../components/ViewsMenu";
 import Trades from "../components/Trades";
 
 export default function LoggedIn() {
+  const navigate = useNavigate();
   //variables
   //date values for default date range for line chart of last 30 days in format YYYY-MM-DD
   const today = new Date().toISOString().split("T")[0];
@@ -167,11 +169,18 @@ export default function LoggedIn() {
         };
 
         const response = await retrieveTradesByTag(data);
+        if (response.statusCode === 403 || response.statusCode === 401) {
+          navigate("/login");
+        }
+
         if (response.message === "Trades found") {
           trades = response.data.trades;
         }
       } else {
         const response = await getTradesByDateRange(startDate, endDate);
+        if (response.statusCode === 403 || response.statusCode === 401) {
+          navigate("/login");
+        }
         if (response.message === "Trades found") {
           trades = response.data.trades;
         }
@@ -289,7 +298,7 @@ export default function LoggedIn() {
           <>
             <div>
               <Trades rawTradeData={rawTradeData} />
-              </div>
+            </div>
           </>
         )}
       </div>

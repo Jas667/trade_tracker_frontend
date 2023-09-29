@@ -17,21 +17,24 @@ export const getTags = async () => {
 
 export const retrieveTradesByTag = async (data) => {
   try {
-    const response = await fetch(`${API_BASE_URL}tradetag/retrievetradeswithanyofthetagids`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+    const response = await fetch(
+      `${API_BASE_URL}tradetag/retrievetradeswithanyofthetagids`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
     return response.json();
   } catch (e) {
-    console.error(e)
+    console.error(e);
   }
-}
+};
 
-export const retrieveAllTagsForTrade = async (tradeId) => { 
+export const retrieveAllTagsForTrade = async (tradeId) => {
   try {
     const response = await fetch(`${API_BASE_URL}tradetag/all/${tradeId}`, {
       method: "GET",
@@ -42,6 +45,26 @@ export const retrieveAllTagsForTrade = async (tradeId) => {
     });
     return response.json();
   } catch (e) {
-    console.error(e)
+    console.error(e);
   }
-}
+};
+
+export const deleteTagFromTrade = async (tagIdsObject, tradeId) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}tradetag/delete/${tradeId}`, {
+      method: "DELETE",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(tagIdsObject),
+    });
+    if (response.headers.get("content-type")?.includes("application/json")) {
+      return response.json();
+    }
+
+    return { status: response.status }; // Return status if there's no JSON body
+  } catch (e) {
+    console.error(e);
+  }
+};

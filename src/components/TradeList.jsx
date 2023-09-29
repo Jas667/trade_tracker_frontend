@@ -2,7 +2,7 @@ import React from "react";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 
-const TradeList = ({ currentTrades, handleViewClick }) => {
+const TradeList = ({ currentTrades, handleViewClick, fetchTagsForTrade }) => {
   return (
     <Table striped bordered hover variant="light">
       <thead>
@@ -16,7 +16,6 @@ const TradeList = ({ currentTrades, handleViewClick }) => {
       </thead>
       <tbody>
         {currentTrades.map((trade) => (
-
           <tr key={trade.id}>
             <td>{trade.open_date}</td>
             <td>{trade.symbol}</td>
@@ -34,7 +33,10 @@ const TradeList = ({ currentTrades, handleViewClick }) => {
             >
               <Button
                 variant="secondary"
-                onClick={() => handleViewClick(trade.id)}
+                onClick={() => {
+                  handleViewClick(trade.id);
+                  fetchTagsForTrade(trade.id);
+                }}
               >
                 View
               </Button>
