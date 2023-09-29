@@ -3,28 +3,6 @@ import { chunkArray } from "../services/statisticsService";
 import React from "react";
 
 function TableForStats({ statisticData }) {
-  // const statisticCalculationsNet = {
-  //   "Total gain/loss:": calculateTotalGainLossNet,
-  //   "Largest gain:": calculateLagrestGainNet,
-  //   "Average daily gain/loss:": calculateAverageDailyGainLossNet,
-  //   "Largest loss:": calculateLargestLossNet,
-  // };
-
-  // const statisticCalculationsGross = {
-  //   "Total gain/loss:": calculateTotalGainLossGross,
-  //   "Largest gain:": calculateLagrestGainGross,
-  //   "Average daily gain/loss:": calculateAverageDailyGainLossGross,
-  //   "Largest loss:": calculateLargestLossGross,
-  // };
-
-  // const chunkArray = (array, size) => {
-  //   const results = [];
-  //   let copiedArray = [...array]; // Create a shallow copy
-  //   while (copiedArray.length) {
-  //     results.push(copiedArray.splice(0, size));
-  //   }
-  //   return results;
-  // };
 
   const chunkedData = chunkArray(statisticData, 2);
 
@@ -37,7 +15,7 @@ function TableForStats({ statisticData }) {
               {row.map((item, colIndex) => (
                 <React.Fragment key={colIndex}>
                   <td>{item.title}</td>
-                  <td>{item.value}</td>
+                  <td>{isNaN(item.value) || !isFinite(item.value) ? "N/A" : item.value}</td>
                 </React.Fragment>
               ))}
             </tr>
