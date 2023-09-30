@@ -23,7 +23,11 @@ const TradeList = ({ currentTrades, handleViewClick, fetchTagsForTrade }) => {
               {trade.profit_loss}
             </td>
             <td>{trade.total_shares_traded}</td>
-            <td>{trade.notes}</td>
+            <td>
+              {trade.notes && trade.notes.length > 50
+                ? `${trade.notes.slice(0, 50)}...`
+                : trade.notes}
+            </td>
             <td
               style={{
                 display: "flex",

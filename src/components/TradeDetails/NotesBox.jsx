@@ -1,36 +1,55 @@
 import Button from "react-bootstrap/Button";
+import { useState, useEffect } from "react";
+import { addNoteToTrade } from "../../services/noteService";
 
 const NotesBox = ({ selectedTrade, isSettingNote, setIsSettingNote }) => {
-  const handleNoteChange = (event) => {
-    // You can use this function to handle the change in the note input or textarea.
-    // For instance, updating the state.
+  const [modifiedNote, setModifiedNote] = useState(selectedTrade.notes);
+  const [originalNote, setOriginalNote] = useState(selectedTrade.notes);
+
+  const saveNote = async () => {
+    if (modifiedNote !== originalNote) {
+      const noteObject = { notes: modifiedNote };
+
+      const response = await addNoteToTrade(selectedTrade.id, noteObject);
+
+      if (response.message === "Trade updated") {
+        setIsSettingNote(false);
+        setOriginalNote(modifiedNote);
+      }
+    }
   };
+
+  useEffect(() => {
+    setModifiedNote(selectedTrade.notes);
+    setOriginalNote(selectedTrade.notes);
+  }, [selectedTrade.notes]);
 
   return (
     <div className="border border-gray-300 p-4 flex-grow">
       <Button
         variant="secondary"
-        onClick={() => setIsSettingNote(!isSettingNote)}
+        onClick={() => {
+          setIsSettingNote(!isSettingNote);
+          if (isSettingNote) setModifiedNote(selectedTrade.notes);
+        }}
       >
         {isSettingNote ? "Cancel" : "Add/Edit Notes"}
       </Button>
 
       {isSettingNote ? (
-        // When isSettingNote is true, render an input or textarea for the user to set the note.
         <div>
           <textarea
-            value={selectedTrade.notes || ""}
-            onChange={handleNoteChange}
+            value={modifiedNote}
+            type="text"
+            onChange={(e) => setModifiedNote(e.target.value)}
             className="mt-4 w-full p-2"
             rows="5"
           />
           <Button
             variant="success"
             className="mt-2"
-            onClick={() => {
-              // Add logic here to save the note and toggle the isSettingNote
-              setIsSettingNote(false);
-            }}
+            onClick={saveNote}
+            disabled={modifiedNote === originalNote}
           >
             Save
           </Button>

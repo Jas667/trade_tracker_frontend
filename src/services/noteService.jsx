@@ -14,4 +14,19 @@ export const addNoteToTrade = async (tradeId, noteObject) => {
       } catch (e) {
         console.error(e);
       }
-    }
+}
+    
+export const getNotesForTrade = async (tradeId) => { 
+      try {
+        const response = await fetch(`${API_BASE_URL}comment/all/${tradeId}`, {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        return response.json();
+      } catch (e) {
+        console.error(e);
+      }
+};

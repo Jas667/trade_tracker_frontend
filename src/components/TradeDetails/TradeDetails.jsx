@@ -98,6 +98,7 @@ const TradeDetails = ({ fetchTagsForTrade }) => {
     }
   };
 
+
   return (
     <div className="flex mb-4">
       {/* Left-hand section (vertical layout) */}
