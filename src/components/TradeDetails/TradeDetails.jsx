@@ -24,6 +24,8 @@ const TradeDetails = ({ fetchTagsForTrade }) => {
   const [tagsToDelete, setTagsToDelete] = useState([]);
   const [tagsToCreate, setTagsToCreate] = useState("");
 
+  const [isSettingNote, setIsSettingNote] = useState(false);
+
   const markForDeletion = (tagId) => {
     setTagsToDelete((prevTags) => [...prevTags, tagId]);
   };
@@ -56,7 +58,7 @@ const TradeDetails = ({ fetchTagsForTrade }) => {
     if (tagsToCreate.length === 0) {
       handleCancelCreatNew();
       return;
-    }
+    } 
     //split the tagsToCreate string into an array of strings, splitting at the commas and removing any whitespace
     const newTags = tagsToCreate.split(",").map((tag) => tag.trim());
 
@@ -122,9 +124,9 @@ const TradeDetails = ({ fetchTagsForTrade }) => {
       </div>
       {/* Right-hand section for the notes */}
       <NotesBox
-        notes={selectedTrade.notes}
-        tradeId={selectedTrade.id}
         selectedTrade={selectedTrade}
+        isSettingNote={isSettingNote}
+        setIsSettingNote={setIsSettingNote}
       />
     </div>
   );
