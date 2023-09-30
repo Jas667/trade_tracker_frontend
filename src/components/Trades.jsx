@@ -16,6 +16,7 @@ const Trades = ({ rawTradeData }) => {
 
   const [tags, setTags] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
+  const [isCreatingNew, setIsCreatingNew] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
   const tradesPerPage = 10;
@@ -54,7 +55,7 @@ const Trades = ({ rawTradeData }) => {
             handleBackToTradesClick={handleBackToTradesClick}
           />
           <AppContext.Provider
-            value={{ selectedTrade, tags, isEditing, setIsEditing }}
+            value={{ selectedTrade, tags, isEditing, setIsEditing, isCreatingNew, setIsCreatingNew }}
           >
             <TradeDetails
               selectedTrade={selectedTrade}
@@ -62,6 +63,8 @@ const Trades = ({ rawTradeData }) => {
               isEditing={isEditing}
               setIsEditing={setIsEditing}
               fetchTagsForTrade={fetchTagsForTrade}
+              isCreatingNew={isCreatingNew}
+              setIsCreatingNew={setIsCreatingNew}
             />
           </AppContext.Provider>
         </>

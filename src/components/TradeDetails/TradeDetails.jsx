@@ -5,16 +5,31 @@ import TradeDetailsBox from "./TradeDetailsBox";
 import AppContext from "../../../context/ContextProvider";
 import { useContext } from "react";
 import { useState } from "react";
-import { deleteTagFromTrade } from "../../services/tagService";
+import {
+  deleteTagFromTrade,
+  createNewTag,
+  addTagsToTrade,
+} from "../../services/tagService";
 
 const TradeDetails = ({ fetchTagsForTrade }) => {
-  const { selectedTrade, tags, isEditing, setIsEditing } =
-    useContext(AppContext);
+  const {
+    selectedTrade,
+    tags,
+    isEditing,
+    setIsEditing,
+    isCreatingNew,
+    setIsCreatingNew,
+  } = useContext(AppContext);
 
   const [tagsToDelete, setTagsToDelete] = useState([]);
+  const [tagsToCreate, setTagsToCreate] = useState("");
 
   const markForDeletion = (tagId) => {
     setTagsToDelete((prevTags) => [...prevTags, tagId]);
+  };
+
+  const handleTagsToCreateChange = (e) => {
+    setTagsToCreate(e.target.value);
   };
 
   const handleCancel = () => {
@@ -24,6 +39,44 @@ const TradeDetails = ({ fetchTagsForTrade }) => {
 
   const handleEditTags = () => {
     setIsEditing(!isEditing);
+  };
+
+  const handleCancelCreatNew = () => {
+    setIsCreatingNew(false);
+    setIsEditing(true);
+    setTagsToCreate("");
+  };
+
+  const handleCreateNew = () => {
+    setIsCreatingNew(true);
+    setIsEditing(false);
+  };
+
+  const handleCreateNewSave = async () => {
+    if (tagsToCreate.length === 0) {
+      handleCancelCreatNew();
+      return;
+    }
+    //split the tagsToCreate string into an array of strings, splitting at the commas and removing any whitespace
+    const newTags = tagsToCreate.split(",").map((tag) => tag.trim());
+
+    const newTagsObject = { tag_name: newTags };
+
+    const createNewResponse = await createNewTag(newTagsObject);
+
+    if (createNewResponse.message === "Tag(s) created") {
+      //get the ids of the newly created tags from the response, data, createdTagIds. Save them to an array and then pass that array to the addTagsToTrade function
+      const createdTagIds = createNewResponse.data.createdTagIds;
+      const tagsToAddObject = { tagIds: createdTagIds };
+
+      const addTagsResponse = await addTagsToTrade(
+        tagsToAddObject,
+        selectedTrade.id
+      );
+    }
+
+    fetchTagsForTrade(selectedTrade.id);
+    handleCancelCreatNew();
   };
 
   const handleSave = async () => {
@@ -58,6 +111,13 @@ const TradeDetails = ({ fetchTagsForTrade }) => {
           handleCancel={handleCancel}
           tagsToDelete={tagsToDelete}
           handleSave={handleSave}
+          isCreatingNew={isCreatingNew}
+          setIsCreatingNew={setIsCreatingNew}
+          handleCreateNew={handleCreateNew}
+          handleCancelCreatNew={handleCancelCreatNew}
+          handleCreateNewSave={handleCreateNewSave}
+          handleTagsToCreateChange={handleTagsToCreateChange}
+          tagsToCreate={tagsToCreate}
         />
       </div>
       {/* Right-hand section for the notes */}

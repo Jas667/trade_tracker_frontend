@@ -68,3 +68,35 @@ export const deleteTagFromTrade = async (tagIdsObject, tradeId) => {
     console.error(e);
   }
 };
+
+export const createNewTag = async (tagNameArray) => { 
+  try {
+    const response = await fetch(`${API_BASE_URL}tag/create`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(tagNameArray),
+    });
+    return response.json();
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const addTagsToTrade = async (tagIdsObject, tradeId) => { 
+  try {
+    const response = await fetch(`${API_BASE_URL}tradetag/addatagtotrade/${tradeId}`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(tagIdsObject),
+    });
+    return response.json();
+  } catch (e) {
+    console.error(e);
+  }
+};
