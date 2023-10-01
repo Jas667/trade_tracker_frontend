@@ -9,6 +9,7 @@ import {
   deleteTagFromTrade,
   createNewTag,
   addTagsToTrade,
+  getTags,
 } from "../../services/tagService";
 import { useGlobalState } from "../../../context/GlobalStateContext";
 
@@ -22,10 +23,15 @@ const TradeDetails = ({ fetchTagsForTrade }) => {
     setIsCreatingNew,
   } = useContext(AppContext);
 
-  const { isTradeTagBeingAltered, setIsTradeTagBeingAltered } = useGlobalState();
+  const { isTradeTagBeingAltered, setIsTradeTagBeingAltered } =
+    useGlobalState();
 
   const [tagsToDelete, setTagsToDelete] = useState([]);
   const [tagsToCreate, setTagsToCreate] = useState("");
+
+  const [tagsFromFetch, setTagsFromFetch] = useState([]); //this is an array of tag objects
+  const [tagsToAdd, setTagsToAdd] = useState([]); //this is an array of tag ids
+  const [isAddingTags, setIsAddingTags] = useState(false);
 
   const [isSettingNote, setIsSettingNote] = useState(false);
 
@@ -52,16 +58,45 @@ const TradeDetails = ({ fetchTagsForTrade }) => {
     setTagsToCreate("");
   };
 
+  const handleFetchAvailableTagsToAdd = async () => {
+    const response = await getTags();
+
+    if (response.message === "Tags found") {
+      setTagsFromFetch(response.data.tags);
+    }
+  };
+
   const handleCreateNew = () => {
     setIsCreatingNew(true);
     setIsEditing(false);
+  };
+
+  const handleAddTagsSave = async () => {
+    if (tagsToAdd.length === 0) {
+      setIsAddingTags(false);
+      setTagsToAdd([]);
+      return;
+    }
+    const tagsToAddObject = { tagIds: tagsToAdd };
+
+    const addTagsResponse = await addTagsToTrade(
+      tagsToAddObject,
+      selectedTrade.id
+    );
+    console.log(addTagsResponse);
+
+    if (addTagsResponse.message === "Tag added to trade") {
+      setIsAddingTags(false);
+      setTagsToAdd([]);
+      fetchTagsForTrade(selectedTrade.id);
+    }
   };
 
   const handleCreateNewSave = async () => {
     if (tagsToCreate.length === 0) {
       handleCancelCreatNew();
       return;
-    } 
+    }
     //split the tagsToCreate string into an array of strings, splitting at the commas and removing any whitespace
     const newTags = tagsToCreate.split(",").map((tag) => tag.trim());
 
@@ -102,7 +137,6 @@ const TradeDetails = ({ fetchTagsForTrade }) => {
     }
   };
 
-
   return (
     <div className="flex mb-4">
       {/* Left-hand section (vertical layout) */}
@@ -125,6 +159,14 @@ const TradeDetails = ({ fetchTagsForTrade }) => {
           handleCreateNewSave={handleCreateNewSave}
           handleTagsToCreateChange={handleTagsToCreateChange}
           tagsToCreate={tagsToCreate}
+          isAddingTags={isAddingTags}
+          setIsAddingTags={setIsAddingTags}
+          tagsToAdd={tagsToAdd}
+          setTagsToAdd={setTagsToAdd}
+          handleFetchAvailableTagsToAdd={handleFetchAvailableTagsToAdd}
+          tagsFromFetch={tagsFromFetch}
+          setTagsFromFetch={setTagsFromFetch}
+          handleAddTagsSave={handleAddTagsSave}
         />
       </div>
       {/* Right-hand section for the notes */}

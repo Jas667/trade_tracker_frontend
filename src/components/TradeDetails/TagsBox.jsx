@@ -1,6 +1,7 @@
 import Button from "react-bootstrap/Button";
 import InputForCreateNew from "./InputForCreateNew";
 
+
 const TagsBox = ({
   tags,
   isEditing,
@@ -15,9 +16,17 @@ const TagsBox = ({
   handleCreateNewSave,
   handleTagsToCreateChange,
   tagsToCreate,
+  isAddingTags,
+  setIsAddingTags,
+  tagsToAdd,
+  setTagsToAdd,
+  handleFetchAvailableTagsToAdd,
+  tagsFromFetch,
+  setTagsFromFetch,
+  handleAddTagsSave,
 }) => {
   const renderDisplay = () => {
-    if (isEditing && !isCreatingNew) {
+    if (isEditing && !isCreatingNew && !isAddingTags) {
       return (
         <>
           <Button variant="success" className="mr-2 mb-2" onClick={handleSave}>
@@ -26,7 +35,14 @@ const TagsBox = ({
           <Button variant="danger" className="mr-2 mb-2" onClick={handleCancel}>
             Cancel
           </Button>
-          <Button variant="secondary" className="mr-2 mb-2">
+          <Button
+            variant="secondary"
+            className="mr-2 mb-2"
+            onClick={() => {
+              setIsAddingTags(true);
+              handleFetchAvailableTagsToAdd();
+            }}
+          >
             Add
           </Button>
           <Button
@@ -59,6 +75,66 @@ const TagsBox = ({
           </div>
         </>
       );
+    } else if (isAddingTags) {
+      return (
+        <>
+          <div className="mt-2">
+            <div className="mb-4">
+              {" "}
+              {/* Tags div */}
+              <div className="border border-blue-300 p-4 rounded shadow-md">
+              <p>Click tags to add:</p>
+              {tagsFromFetch
+                .filter(
+                  (tagFromFetch) =>
+                    !tags.some((tag) => tag.id === tagFromFetch.id)
+                )
+                .map((tag) => (
+                  <span
+                    key={tag.id}
+                    className={`inline-block mr-2 mb-2 cursor-pointer p-1 rounded text-white ${
+                      tagsToAdd.includes(tag.id)
+                        ? "bg-green-600 border-2 border-black border-solid"
+                        : "bg-gray-500"
+                    }`}
+                    onClick={() => {
+                      if (tagsToAdd.includes(tag.id)) {
+                        setTagsToAdd((prevTags) =>
+                          prevTags.filter((tid) => tid !== tag.id)
+                        );
+                      } else {
+                        setTagsToAdd((prevTags) => [...prevTags, tag.id]);
+                      }
+                    }}
+                  >
+                    {tag.tag_name}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="flex">
+              {" "}
+              {/* Buttons div */}
+              <Button
+                variant="primary"
+                className="mr-2"
+                onClick={() => handleAddTagsSave()}
+              >
+                Save
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  setIsAddingTags(false);
+                  setTagsToAdd([]);
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </>
+      );
     } else {
       return (
         <Button variant="secondary" onClick={() => setIsEditing(true)}>
@@ -76,11 +152,13 @@ const TagsBox = ({
           <div key={tag.id} className="inline-block mr-2 mb-2">
             <span
               className={`bg-blue-500 p-1 rounded text-white ${
-                tagsToDelete.includes(tag.id) ? "line-through bg-gray-400" : ""
+                tagsToDelete.includes(tag.id) && isEditing
+                  ? "line-through bg-gray-400"
+                  : ""
               }`}
             >
               {tag.tag_name}
-              {isEditing && (
+              {isEditing && !isAddingTags && !isCreatingNew && (
                 <span
                   className="cursor-pointer ml-3 mr-1 text-black"
                   onClick={() => markForDeletion(tag.id)}
