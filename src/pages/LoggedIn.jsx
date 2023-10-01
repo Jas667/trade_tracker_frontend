@@ -18,8 +18,11 @@ import TableForStats from "../components/TableForStats";
 import GrossNetButton from "../components/GrossNetButton";
 import ViewsMenu from "../components/ViewsMenu";
 import Trades from "../components/Trades";
+import { useGlobalState } from "../../context/GlobalStateContext";
 
 export default function LoggedIn() {
+  const { isTradeDataBeingAltered, setIsTradeDataBeingAltered } = useGlobalState();
+
   const navigate = useNavigate();
   //variables
   //date values for default date range for line chart of last 30 days in format YYYY-MM-DD
