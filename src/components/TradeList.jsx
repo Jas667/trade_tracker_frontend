@@ -16,7 +16,13 @@ const TradeList = ({ currentTrades, handleViewClick, fetchTagsForTrade }) => {
       </thead>
       <tbody>
         {currentTrades.map((trade) => (
-          <tr key={trade.id}>
+          <tr
+            key={trade.id}
+            onClick={() => {
+              handleViewClick(trade.id);
+              fetchTagsForTrade(trade.id);
+            }}
+          >
             <td>{trade.open_date}</td>
             <td>{trade.symbol}</td>
             <td style={{ color: trade.profit_loss >= 0 ? "green" : "red" }}>
@@ -38,6 +44,7 @@ const TradeList = ({ currentTrades, handleViewClick, fetchTagsForTrade }) => {
               <Button
                 variant="secondary"
                 onClick={() => {
+                  e.stopPropagation();
                   handleViewClick(trade.id);
                   fetchTagsForTrade(trade.id);
                 }}
