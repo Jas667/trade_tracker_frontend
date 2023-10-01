@@ -1,10 +1,15 @@
 import Button from "react-bootstrap/Button";
 import { useState, useEffect } from "react";
 import { addNoteToTrade } from "../../services/noteService";
+import { useGlobalState } from "../../../context/GlobalStateContext";
 
 const NotesBox = ({ selectedTrade, isSettingNote, setIsSettingNote }) => {
-  const [modifiedNote, setModifiedNote] = useState(selectedTrade.notes);
+  const { isTradeNoteBeingAltered, setIsTradeNoteBeingAltered } =
+    useGlobalState();
+
+  const [modifiedNote, setModifiedNote] = useState(selectedTrade.notes || "");
   const [originalNote, setOriginalNote] = useState(selectedTrade.notes);
+  const [displayedNote, setDisplayedNote] = useState(selectedTrade.notes);
 
   const saveNote = async () => {
     if (modifiedNote !== originalNote) {
@@ -15,13 +20,15 @@ const NotesBox = ({ selectedTrade, isSettingNote, setIsSettingNote }) => {
       if (response.message === "Trade updated") {
         setIsSettingNote(false);
         setOriginalNote(modifiedNote);
+        setDisplayedNote(modifiedNote);
+        setIsTradeNoteBeingAltered(!isTradeNoteBeingAltered);
       }
     }
   };
 
   useEffect(() => {
-    setModifiedNote(selectedTrade.notes);
-    setOriginalNote(selectedTrade.notes);
+    setModifiedNote(selectedTrade.notes || "");
+    setDisplayedNote(selectedTrade.notes || "");
   }, [selectedTrade.notes]);
 
   return (
@@ -57,8 +64,8 @@ const NotesBox = ({ selectedTrade, isSettingNote, setIsSettingNote }) => {
       ) : (
         // When isSettingNote is false, show the current notes or the "No Notes" message.
         <p className="mt-4">
-          {selectedTrade.notes ? (
-            selectedTrade.notes
+          {displayedNote ? (
+            displayedNote
           ) : (
             <>
               <br />

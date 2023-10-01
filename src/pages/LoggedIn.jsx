@@ -21,7 +21,7 @@ import Trades from "../components/Trades";
 import { useGlobalState } from "../../context/GlobalStateContext";
 
 export default function LoggedIn() {
-  const { isTradeDataBeingAltered, setIsTradeDataBeingAltered } = useGlobalState();
+  const { isTradeNoteBeingAltered, setIsTradeNoteBeingAltered } = useGlobalState();
 
   const navigate = useNavigate();
   //variables
@@ -153,6 +153,7 @@ export default function LoggedIn() {
 
   useEffect(() => {
     async function fetchAndProcessTrades() {
+
       //variable to hold the trades
       let trades;
 
@@ -239,7 +240,7 @@ export default function LoggedIn() {
     }
 
     fetchAndProcessTrades();
-  }, [startDate, endDate, symbol, selectedTags, tagOptions, radioValue]);
+  }, [startDate, endDate, symbol, selectedTags, tagOptions, radioValue, isTradeNoteBeingAltered]);
 
   return (
     <>

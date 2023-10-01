@@ -10,6 +10,7 @@ import {
   createNewTag,
   addTagsToTrade,
 } from "../../services/tagService";
+import { useGlobalState } from "../../../context/GlobalStateContext";
 
 const TradeDetails = ({ fetchTagsForTrade }) => {
   const {
@@ -20,6 +21,8 @@ const TradeDetails = ({ fetchTagsForTrade }) => {
     isCreatingNew,
     setIsCreatingNew,
   } = useContext(AppContext);
+
+  const { isTradeTagBeingAltered, setIsTradeTagBeingAltered } = useGlobalState();
 
   const [tagsToDelete, setTagsToDelete] = useState([]);
   const [tagsToCreate, setTagsToCreate] = useState("");
@@ -67,6 +70,7 @@ const TradeDetails = ({ fetchTagsForTrade }) => {
     const createNewResponse = await createNewTag(newTagsObject);
 
     if (createNewResponse.message === "Tag(s) created") {
+      setIsTradeTagBeingAltered(!isTradeTagBeingAltered);
       //get the ids of the newly created tags from the response, data, createdTagIds. Save them to an array and then pass that array to the addTagsToTrade function
       const createdTagIds = createNewResponse.data.createdTagIds;
       const tagsToAddObject = { tagIds: createdTagIds };

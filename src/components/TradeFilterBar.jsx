@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { getTags } from "../services/tagService";
+import { useGlobalState } from "../../context/GlobalStateContext";
 
 function TradeFilterBar({
   onFilter,
@@ -8,6 +9,9 @@ function TradeFilterBar({
   today,
   thirtyDaysAgo,
 }) {
+
+  const { isTradeTagBeingAltered, setIsTradeTagBeingAltered } = useGlobalState();
+
   // Local state for the filters
   const [localStartDate, setLocalStartDate] = useState(startDate);
   const [localEndDate, setLocalEndDate] = useState(endDate);
@@ -58,7 +62,7 @@ function TradeFilterBar({
     }
 
     fetchTags();
-  }, []);
+  }, [isTradeTagBeingAltered]);
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);

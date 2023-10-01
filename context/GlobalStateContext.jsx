@@ -11,10 +11,11 @@ export const useGlobalState = () => {
 }
 
 export const GlobalStateProvider = ({ children }) => {
-    const [isTradeDataBeingAltered, setIsTradeDataBeingAltered ] = useState(false);
+    const [isTradeNoteBeingAltered, setIsTradeNoteBeingAltered] = useState(false);
+    const [isTradeTagBeingAltered, setIsTradeTagBeingAltered] = useState(false);
 
     return (
-        <GlobalStateContext.Provider value={{ isTradeDataBeingAltered, setIsTradeDataBeingAltered }}>
+        <GlobalStateContext.Provider value={{ isTradeNoteBeingAltered, setIsTradeNoteBeingAltered, isTradeTagBeingAltered, setIsTradeTagBeingAltered }}>
             {children}
         </GlobalStateContext.Provider>
     );

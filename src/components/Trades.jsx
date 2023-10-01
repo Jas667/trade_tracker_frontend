@@ -8,6 +8,7 @@ import BackToTradesButton from "./BackToTradesButton";
 import AppContext from "../../context/ContextProvider";
 
 const Trades = ({ rawTradeData }) => {
+
   if (rawTradeData.length === 0) return null;
 
   const [isViewingDetails, setIsViewingDetails] = useState(false);
@@ -37,7 +38,7 @@ const Trades = ({ rawTradeData }) => {
     if (tagResponse && tagResponse.data && tagResponse.data.tags) {
       setTags(tagResponse.data.tags);
     } else {
-      setTags([]);
+      setTags();
     }
   };
 
@@ -55,7 +56,14 @@ const Trades = ({ rawTradeData }) => {
             handleBackToTradesClick={handleBackToTradesClick}
           />
           <AppContext.Provider
-            value={{ selectedTrade, tags, isEditing, setIsEditing, isCreatingNew, setIsCreatingNew }}
+            value={{
+              selectedTrade,
+              tags,
+              isEditing,
+              setIsEditing,
+              isCreatingNew,
+              setIsCreatingNew,
+            }}
           >
             <TradeDetails
               selectedTrade={selectedTrade}
@@ -72,8 +80,8 @@ const Trades = ({ rawTradeData }) => {
         <>
           <TradeList
             currentTrades={currentTrades}
-              handleViewClick={handleViewClick}
-              fetchTagsForTrade={fetchTagsForTrade}
+            handleViewClick={handleViewClick}
+            fetchTagsForTrade={fetchTagsForTrade}
           />
           <Pagination
             currentPage={currentPage}
