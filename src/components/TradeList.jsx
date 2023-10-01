@@ -43,7 +43,7 @@ const TradeList = ({ currentTrades, handleViewClick, fetchTagsForTrade }) => {
             >
               <Button
                 variant="secondary"
-                onClick={() => {
+                onClick={(e) => {
                   e.stopPropagation();
                   handleViewClick(trade.id);
                   fetchTagsForTrade(trade.id);
