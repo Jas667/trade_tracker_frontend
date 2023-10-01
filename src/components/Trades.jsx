@@ -35,10 +35,11 @@ const Trades = ({ rawTradeData }) => {
 
   const fetchTagsForTrade = async (tradeId) => {
     const tagResponse = await retrieveAllTagsForTrade(tradeId);
+    console.log(tagResponse)
     if (tagResponse && tagResponse.data && tagResponse.data.tags) {
       setTags(tagResponse.data.tags);
     } else {
-      setTags();
+      setTags([]);
     }
   };
 
