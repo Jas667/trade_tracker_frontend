@@ -74,6 +74,7 @@ export function processTrades(
   
   // Convert grouped trades to an array
   const groupedTradesArray = Object.values(groupTradesByDate(trades));
+
   // 3. Accumulate the profit/loss for the grouped trades
   let cumulative = 0;
   let grossCumulative = 0;

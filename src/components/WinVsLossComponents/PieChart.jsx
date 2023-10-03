@@ -14,8 +14,10 @@ const PieChart = ({ data }) => {
     <>
       <div
         style={{
+          margin: "auto",
           padding: "10px",
           width: "50%",
+          justifyContent: "center",
         }}
       >
         <Pie data={data} options={options} />

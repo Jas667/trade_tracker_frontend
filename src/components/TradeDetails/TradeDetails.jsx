@@ -83,7 +83,6 @@ const TradeDetails = ({ fetchTagsForTrade }) => {
       tagsToAddObject,
       selectedTrade.id
     );
-    console.log(addTagsResponse);
 
     if (addTagsResponse.message === "Tag added to trade") {
       setIsAddingTags(false);

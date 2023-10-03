@@ -1,8 +1,13 @@
+import { groupTradesByDate } from "./tradeServices";
+
 export function sortDataForPieChart(rawTradeData, net = true) {
   let wins = 0;
   let losses = 0;
 
-  rawTradeData.forEach((trade) => {
+  //group trades by date and convert grouped trades to an array
+  const groupedTradesArray = Object.values(groupTradesByDate(rawTradeData));
+
+  groupedTradesArray.forEach((trade) => {
     const profitValue = net
       ? parseFloat(trade.profit_loss)
       : parseFloat(trade.gross_profit_loss);
@@ -22,12 +27,12 @@ export function sortDataForPieChart(rawTradeData, net = true) {
   let data = [];
 
   if (!isNaN(winPercentage)) {
-    labels.push(`Winning Days: ${winPercentage}%`);
+    labels.push(`(${wins}) Winning Days: ${winPercentage}%`);
     data.push(winPercentage);
   }
 
   if (!isNaN(lossPercentage)) {
-    labels.push(`Losing Days: ${lossPercentage}%`);
+    labels.push(`(${losses}) Losing Days: ${lossPercentage}%`);
     data.push(lossPercentage);
   }
 

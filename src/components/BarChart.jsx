@@ -55,7 +55,8 @@ function BarChart({ labels, datasets, customOptions, indexAxis = "x" }) {
   return (
     <>
       <Bar
-        className="w-full h-full justify-center"
+        style={{ width: "100%", height: "100%", margin: "auto"}}
+        // className="w-full h-full justify-center"
         data={{ labels, datasets: enhancedDatasets }}
         options={options}
       ></Bar>

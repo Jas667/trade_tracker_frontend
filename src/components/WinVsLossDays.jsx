@@ -42,6 +42,8 @@ const WinVsLossDays = ({ rawTradeData }) => {
       const processedTradeDataForPieChart = sortDataForPieChart(rawTradeData);
 
       const { winDays, lossDays } = splitDataIntoWinAndLoss(rawTradeData);
+
+
       const byDayOfWeekWinDays = processTradesByDayOfWeek(
         winDays,
         "Wins",
@@ -52,6 +54,7 @@ const WinVsLossDays = ({ rawTradeData }) => {
         "Losses",
         true
       );
+
 
       // 1. Process the data for day of week
       const processedWinData = {
@@ -81,18 +84,20 @@ const WinVsLossDays = ({ rawTradeData }) => {
 
   return (
     <>
-      <p>Winning vs Losing Days</p>
-      <PieChart data={tradeDataForPieChart} />
-      <p>Performance By Day Of the Week</p>
-      <BarChart
-                        labels={
-                          dataForHorizontalDayOfWeekBarChart.labels
-                        }
-                        datasets={
-                          dataForHorizontalDayOfWeekBarChart.datasets
-                        }
-                        indexAxis="y"
-      />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+        <div className="col-auto py-3 px-5 px-md-5">
+          <p className="font-bold">Winning vs Losing Days</p>
+          <PieChart data={tradeDataForPieChart} />
+        </div>
+        <div className="col-auto py-3 px-5 px-md-5">
+        <p className="font-bold" >Performance By Day Of the Week</p>
+          <BarChart
+            labels={dataForHorizontalDayOfWeekBarChart.labels}
+            datasets={dataForHorizontalDayOfWeekBarChart.datasets}
+            indexAxis="y"
+          />
+        </div>
+      </div>
     </>
   );
 };
