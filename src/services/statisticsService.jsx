@@ -1,5 +1,16 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+export const transformData = (winData, lossData) => {
+  return winData.map((winItem, index) => {
+    const lossItem = lossData[index];
+    return {
+      title: winItem.title,
+      winDayValue: winItem.value,
+      lossDayValue: lossItem.value
+    };
+  });
+}
+
 export const getStatistics = (trades, initialStatistics, isNet = true) => {
   //clone initial stats
   const updatedStatistics = [...initialStatistics];
