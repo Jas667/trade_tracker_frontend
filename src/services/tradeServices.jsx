@@ -71,9 +71,9 @@ export function processTrades(
   accumulativePL = false,
   net = true
 ) {
+  
   // Convert grouped trades to an array
   const groupedTradesArray = Object.values(groupTradesByDate(trades));
-
   // 3. Accumulate the profit/loss for the grouped trades
   let cumulative = 0;
   let grossCumulative = 0;
@@ -173,6 +173,8 @@ export function processTradesByDayOfWeek(trades, label) {
   // 5. Extract labels and dataset
   const labels = sortedTradesByDayOfWeek.map((trade) => trade.day);
   const data = sortedTradesByDayOfWeek.map((trade) => trade.profit_loss);
+
+  
 
   return {
     labels: labels,

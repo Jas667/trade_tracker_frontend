@@ -18,6 +18,7 @@ import TableForStats from "../components/TableForStats";
 import GrossNetButton from "../components/GrossNetButton";
 import ViewsMenu from "../components/ViewsMenu";
 import Trades from "../components/Trades";
+import WinVsLossDays from "../components/WinVsLossDays";
 import { useGlobalState } from "../../context/GlobalStateContext";
 
 export default function LoggedIn() {
@@ -302,6 +303,13 @@ export default function LoggedIn() {
           <>
             <div>
               <Trades rawTradeData={rawTradeData} />
+            </div>
+          </>
+        )}
+                {currentView === "winVsLossDays" && (
+          <>
+            <div>
+              <WinVsLossDays rawTradeData={rawTradeData} />
             </div>
           </>
         )}
