@@ -124,7 +124,7 @@ export function processTrades(
   }
 }
 
-export function processTradesByDayOfWeek(trades, label) {
+export function processTradesByDayOfWeek(trades, label, grouped=false) {
   // 1. Sort the trades by close_date
   trades = sortTradesByDate(trades);
 
@@ -174,7 +174,12 @@ export function processTradesByDayOfWeek(trades, label) {
   const labels = sortedTradesByDayOfWeek.map((trade) => trade.day);
   const data = sortedTradesByDayOfWeek.map((trade) => trade.profit_loss);
 
-  
+  if (grouped) {
+    return {
+      labels: labels,
+      data: data
+    }
+  }
 
   return {
     labels: labels,

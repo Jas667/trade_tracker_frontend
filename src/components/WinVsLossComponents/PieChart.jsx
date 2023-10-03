@@ -12,7 +12,6 @@ const PieChart = ({ data }) => {
 
   return (
     <>
-      <div>PieChart</div>
       <div
         style={{
           padding: "10px",

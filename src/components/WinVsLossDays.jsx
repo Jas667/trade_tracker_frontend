@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import PieChart from "./WinVsLossComponents/PieChart";
-import { sortDataForPieChart, splitDataIntoWinAndLoss } from "../services/winVsLossService";
+import {
+  sortDataForPieChart,
+  splitDataIntoWinAndLoss,
+} from "../services/winVsLossService";
 import { processTradesByDayOfWeek } from "../services/tradeServices";
+import BarChart from "./BarChart";
 
 const WinVsLossDays = ({ rawTradeData }) => {
   const [tradeDataForPieChart, setTradeDataForPieChart] = useState({
@@ -21,15 +25,15 @@ const WinVsLossDays = ({ rawTradeData }) => {
     labels: [],
     datasets: [
       {
-        label: "Win Days",
+        label: "Performance by Day of Week",
         data: [],
         backgroundColor: "aqua",
       },
       {
-        label: "Loss Days",
+        label: "",
         data: [],
         backgroundColor: "red",
-      }
+      },
     ],
   });
 
@@ -37,8 +41,37 @@ const WinVsLossDays = ({ rawTradeData }) => {
     async function processTradeData() {
       const processedTradeDataForPieChart = sortDataForPieChart(rawTradeData);
 
-      const {winDays, lossDays} = splitDataIntoWinAndLoss(rawTradeData);
-          
+      const { winDays, lossDays } = splitDataIntoWinAndLoss(rawTradeData);
+      const byDayOfWeekWinDays = processTradesByDayOfWeek(
+        winDays,
+        "Wins",
+        true
+      );
+      const byDayOfWeekLossDays = processTradesByDayOfWeek(
+        lossDays,
+        "Losses",
+        true
+      );
+
+      // 1. Process the data for day of week
+      const processedWinData = {
+        label: "Win Days",
+        data: byDayOfWeekWinDays.data,
+        backgroundColor: "aqua",
+      };
+
+      const processedLossData = {
+        label: "Loss Days",
+        data: byDayOfWeekLossDays.data,
+        backgroundColor: "red",
+      };
+
+      // 2. Integrate and set the data to state
+      setDataForHorizontalDayOfWeekBarChart((prevState) => ({
+        ...prevState,
+        labels: byDayOfWeekWinDays.labels, // assuming both responses have the same labels
+        datasets: [processedWinData, processedLossData],
+      }));
 
       setTradeDataForPieChart(processedTradeDataForPieChart);
     }
@@ -48,8 +81,18 @@ const WinVsLossDays = ({ rawTradeData }) => {
 
   return (
     <>
-      <div>Win Vs Loss Days</div>
-              <PieChart data={tradeDataForPieChart} />
+      <p>Winning vs Losing Days</p>
+      <PieChart data={tradeDataForPieChart} />
+      <p>Performance By Day Of the Week</p>
+      <BarChart
+                        labels={
+                          dataForHorizontalDayOfWeekBarChart.labels
+                        }
+                        datasets={
+                          dataForHorizontalDayOfWeekBarChart.datasets
+                        }
+                        indexAxis="y"
+      />
     </>
   );
 };

@@ -57,5 +57,5 @@ export function splitDataIntoWinAndLoss(rawTradeData, net = true) {
     }
   });
 
-  return {winDays, lossDays};
+  return { winDays, lossDays };
 }
