@@ -14,8 +14,8 @@ function ViewsMenu({ currentView, setCurrentView}) {
           <Nav.Link onClick={() => setCurrentView("winVsLossDays")}>Win vs Loss Days</Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link eventKey="disabled" disabled>
-            Disabled
+          <Nav.Link onClick={() => setCurrentView("tagsView")}>
+            Tags
           </Nav.Link>
         </Nav.Item>
       </Nav>

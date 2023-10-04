@@ -20,6 +20,7 @@ import ViewsMenu from "../components/ViewsMenu";
 import Trades from "../components/Trades";
 import WinVsLossDays from "../components/WinVsLossDays";
 import { useGlobalState } from "../../context/GlobalStateContext";
+import TagsView from "../components/TagsView";
 
 export default function LoggedIn() {
   const {
@@ -327,6 +328,13 @@ export default function LoggedIn() {
           <>
             <div>
               <WinVsLossDays rawTradeData={rawTradeData} />
+            </div>
+          </>
+        )}
+        {currentView === "tagsView" && (
+          <>
+            <div>
+              <TagsView rawTradeData={rawTradeData} />
             </div>
           </>
         )}
