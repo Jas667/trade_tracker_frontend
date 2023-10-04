@@ -11,7 +11,7 @@ import {
   performanceByIntradayHoldTime,
 } from "../services/tradeServices";
 import { getStatistics } from "../services/statisticsService";
-import { retrieveTradesByTag } from "../services/tagService";
+import { retrieveTradesOptionalTags } from "../services/tagService";
 import TradeFilterBar from "../components/TradeFilterBar";
 import BarChart from "../components/BarChart";
 import TableForStats from "../components/TableForStats";
@@ -180,7 +180,7 @@ export default function LoggedIn() {
           endDate: endDate,
         };
 
-        const response = await retrieveTradesByTag(data);
+        const response = await retrieveTradesOptionalTags(data);
         if (response.statusCode === 403 || response.statusCode === 401) {
           navigate("/login");
         }
@@ -189,7 +189,14 @@ export default function LoggedIn() {
           trades = response.data.trades;
         }
       } else {
-        const response = await getTradesByDateRange(startDate, endDate);
+        const dataWithNoTags = {
+          tagIds: [],
+          onlyWithAllTags: false,
+          startDate: startDate,
+          endDate: endDate,
+        };
+
+        const response = await retrieveTradesOptionalTags(dataWithNoTags);
         if (response.statusCode === 403 || response.statusCode === 401) {
           navigate("/login");
         }

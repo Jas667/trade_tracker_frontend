@@ -47,6 +47,7 @@ function TradeFilterBar({
     setLocalSelectedTags([]);
     setLocalSelectedTagOption("atLeastOne");
     onFilter(thirtyDaysAgo, today, "", [], "atLeastOne");
+    resetTagsDropdown([]);
   };
 
   useEffect(() => {

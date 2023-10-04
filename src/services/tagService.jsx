@@ -15,7 +15,7 @@ export const getTags = async () => {
   }
 };
 
-export const retrieveTradesByTag = async (data) => {
+export const retrieveTradesOptionalTags = async (data) => {
   try {
     const response = await fetch(
       `${API_BASE_URL}tradetag/retrieve`,
