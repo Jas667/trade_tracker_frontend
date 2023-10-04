@@ -141,7 +141,7 @@ const WinVsLossDays = ({ rawTradeData }) => {
 
   useEffect(() => {
     async function processTradeData() {
-      const processedTradeDataForPieChart = sortDataForPieChart(rawTradeData);
+      const processedTradeDataForPieChart = sortDataForPieChart(rawTradeData, radioValue);
 
       const { winDays, lossDays } = await splitDataIntoWinAndLoss(rawTradeData);
 
@@ -164,12 +164,14 @@ const WinVsLossDays = ({ rawTradeData }) => {
       const byDayOfWeekWinDays = processTradesByDayOfWeek(
         winDays,
         "Wins",
-        true
+        true,
+        radioValue
       );
       const byDayOfWeekLossDays = processTradesByDayOfWeek(
         lossDays,
         "Losses",
-        true
+        true,
+        radioValue
       );
 
       // 1. Process the data for day of week

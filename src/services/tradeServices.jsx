@@ -71,7 +71,6 @@ export function processTrades(
   accumulativePL = false,
   net = true
 ) {
-  
   // Convert grouped trades to an array
   const groupedTradesArray = Object.values(groupTradesByDate(trades));
 
@@ -125,7 +124,12 @@ export function processTrades(
   }
 }
 
-export function processTradesByDayOfWeek(trades, label, grouped=false, net=true) {
+export function processTradesByDayOfWeek(
+  trades,
+  label,
+  grouped = false,
+  net = true
+) {
   // 1. Sort the trades by close_date
   trades = sortTradesByDate(trades);
 
@@ -175,13 +179,15 @@ export function processTradesByDayOfWeek(trades, label, grouped=false, net=true)
 
   // 5. Extract labels and dataset
   const labels = sortedTradesByDayOfWeek.map((trade) => trade.day);
-  const data = sortedTradesByDayOfWeek.map((trade) => net ? trade.profit_loss : trade.gross_profit_loss);
+  const data = sortedTradesByDayOfWeek.map((trade) =>
+    net ? trade.profit_loss : trade.gross_profit_loss
+  );
 
   if (grouped) {
     return {
       labels: labels,
-      data: data
-    }
+      data: data,
+    };
   }
 
   return {
@@ -195,7 +201,7 @@ export function processTradesByDayOfWeek(trades, label, grouped=false, net=true)
   };
 }
 
-export function performanceByIntradayHoldTime(trades, label, net=true) {
+export function performanceByIntradayHoldTime(trades, label, net = true) {
   // 1. Filter intraday trades
   const intradayTrades = trades.filter(
     (trade) => trade.open_date === trade.close_date
@@ -232,12 +238,12 @@ export function performanceByIntradayHoldTime(trades, label, net=true) {
 
   // 3. & 4. Group by duration and sum profit/loss
   const categories = {
-    "Under 1:00": { min: 0, max: 1, profit_loss: 0 },
-    "1 - 1:59": { min: 1, max: 2, profit_loss: 0 },
-    "2 - 2.59": { min: 2, max: 3, profit_loss: 0 },
-    "3 - 3.59": { min: 3, max: 4, profit_loss: 0 },
-    "4 - 4.49": { min: 4, max: Infinity, profit_loss: 0 },
-    "5 +": { min: 5, max: 6, profit_loss: 0 },
+    "Under 1:00": { min: 0, max: 1, profit_loss: 0, gross_profit_loss: 0 },
+    "1 - 1:59": { min: 1, max: 2, profit_loss: 0, gross_profit_loss: 0 },
+    "2 - 2.59": { min: 2, max: 3, profit_loss: 0, gross_profit_loss: 0 },
+    "3 - 3.59": { min: 3, max: 4, profit_loss: 0, gross_profit_loss: 0 },
+    "4 - 4.49": { min: 4, max: Infinity, profit_loss: 0, gross_profit_loss: 0 },
+    "5 +": { min: 5, max: 6, profit_loss: 0, gross_profit_loss: 0 },
     //further time durations can be added here
 
     // "6 - 9.59": { min: 6, max: 10, profit_loss: 0 },
@@ -252,6 +258,9 @@ export function performanceByIntradayHoldTime(trades, label, net=true) {
         trade.holdTime < categories[category].max
       ) {
         categories[category].profit_loss += parseFloat(trade.profit_loss);
+        categories[category].gross_profit_loss += parseFloat(
+          trade.gross_profit_loss
+        );
         break;
       }
     }
@@ -259,7 +268,8 @@ export function performanceByIntradayHoldTime(trades, label, net=true) {
 
   // Convert the data into the desired format for charting
   const labels = Object.keys(categories);
-  const data = labels.map((label) => categories[label].profit_loss);
+  const dataKey = net ? "profit_loss" : "gross_profit_loss";
+  const data = labels.map((label) => categories[label][dataKey]);
 
   return {
     labels: labels,

@@ -22,7 +22,12 @@ import WinVsLossDays from "../components/WinVsLossDays";
 import { useGlobalState } from "../../context/GlobalStateContext";
 
 export default function LoggedIn() {
-  const { isTradeNoteBeingAltered, setIsTradeNoteBeingAltered, radioValue, setRadioValue } = useGlobalState();
+  const {
+    isTradeNoteBeingAltered,
+    setIsTradeNoteBeingAltered,
+    radioValue,
+    setRadioValue,
+  } = useGlobalState();
 
   const navigate = useNavigate();
   //variables
@@ -156,7 +161,6 @@ export default function LoggedIn() {
 
   useEffect(() => {
     async function fetchAndProcessTrades() {
-
       //variable to hold the trades
       let trades;
 
@@ -231,7 +235,8 @@ export default function LoggedIn() {
         const processedTradesByIntradayPerformance =
           performanceByIntradayHoldTime(
             trades,
-            `${baseChartLabels.horizontalIntradayDuration} ${label}`
+            `${baseChartLabels.horizontalIntradayDuration} ${label}`,
+            radioValue
           );
 
         setStatisticData(updatedStatistics);
@@ -245,7 +250,15 @@ export default function LoggedIn() {
     }
 
     fetchAndProcessTrades();
-  }, [startDate, endDate, symbol, selectedTags, tagOptions, radioValue, isTradeNoteBeingAltered]);
+  }, [
+    startDate,
+    endDate,
+    symbol,
+    selectedTags,
+    tagOptions,
+    radioValue,
+    isTradeNoteBeingAltered,
+  ]);
 
   return (
     <>
@@ -310,7 +323,7 @@ export default function LoggedIn() {
             </div>
           </>
         )}
-                {currentView === "winVsLossDays" && (
+        {currentView === "winVsLossDays" && (
           <>
             <div>
               <WinVsLossDays rawTradeData={rawTradeData} />
