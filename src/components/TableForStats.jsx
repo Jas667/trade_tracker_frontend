@@ -3,7 +3,6 @@ import { chunkArray } from "../services/statisticsService";
 import React from "react";
 
 function TableForStats({ statisticData }) {
-
   const chunkedData = chunkArray(statisticData, 2);
 
   return (
@@ -15,7 +14,13 @@ function TableForStats({ statisticData }) {
               {row.map((item, colIndex) => (
                 <React.Fragment key={colIndex}>
                   <td>{item.title}</td>
-                  <td>{isNaN(item.value) || !isFinite(item.value) ? "N/A" : item.value}</td>
+                  <td>
+                    {typeof item.value === "string"
+                      ? item.value
+                      : isNaN(item.value) || !isFinite(item.value)
+                      ? "N/A"
+                      : item.value}
+                  </td>
                 </React.Fragment>
               ))}
             </tr>

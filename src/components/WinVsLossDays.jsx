@@ -49,10 +49,10 @@ const WinVsLossDays = ({ rawTradeData }) => {
     { title: "Average per-share gain/loss:", value: "0.00" },
     { title: "Average losing trade:", value: "0.00" },
     { title: "Average winning trade:", value: "0.00" },
-    { title: "Probability of random chance:", value: "0%" },
+    // { title: "Probability of random chance:", value: "0%" },
     { title: "Total number of trades:", value: "0" },
-    { title: "Profit factor:", value: "0" },
-    { title: "Kelly percentage:", value: "0%" },
+    // { title: "Profit factor:", value: "0" },
+    // { title: "Kelly percentage:", value: "0%" },
     { title: "Number of winning trades:", value: "0" },
     { title: "Average Hold Time (winning trades):", value: "0" },
     { title: "Average Hold Time (losing trades):", value: "0" },
@@ -72,10 +72,10 @@ const WinVsLossDays = ({ rawTradeData }) => {
     { title: "Average per-share gain/loss:", value: "0.00" },
     { title: "Average losing trade:", value: "0.00" },
     { title: "Average winning trade:", value: "0.00" },
-    { title: "Probability of random chance:", value: "0%" },
+    // { title: "Probability of random chance:", value: "0%" },
     { title: "Total number of trades:", value: "0" },
-    { title: "Profit factor:", value: "0" },
-    { title: "Kelly percentage:", value: "0%" },
+    // { title: "Profit factor:", value: "0" },
+    // { title: "Kelly percentage:", value: "0%" },
     { title: "Number of winning trades:", value: "0" },
     { title: "Average Hold Time (winning trades):", value: "0" },
     { title: "Average Hold Time (losing trades):", value: "0" },
@@ -96,10 +96,10 @@ const WinVsLossDays = ({ rawTradeData }) => {
     { title: "Average per-share gain/loss:", winDayValue: "0.00", lossDayValue: "0.00" },
     { title: "Average losing trade:", winDayValue: "0.00", lossDayValue: "0.00" },
     { title: "Average winning trade:", winDayValue: "0.00", lossDayValue: "0.00" },
-    { title: "Probability of random chance:", winDayValue: "0%", lossDayValue: "0%" },
+    // { title: "Probability of random chance:", winDayValue: "0%", lossDayValue: "0%" },
     { title: "Total number of trades:", winDayValue: "0", lossDayValue: "0" },
-    { title: "Profit factor:", winDayValue: "0", lossDayValue: "0" },
-    { title: "Kelly percentage:", winDayValue: "0%", lossDayValue: "0%" },
+    // { title: "Profit factor:", winDayValue: "0", lossDayValue: "0" },
+    // { title: "Kelly percentage:", winDayValue: "0%", lossDayValue: "0%" },
     { title: "Number of winning trades:", winDayValue: "0", lossDayValue: "0" },
     { title: "Average Hold Time (winning trades):", winDayValue: "0", lossDayValue: "0" },
     { title: "Average Hold Time (losing trades):", winDayValue: "0", lossDayValue: "0" },
@@ -119,11 +119,8 @@ const WinVsLossDays = ({ rawTradeData }) => {
       const winDayStatisticData = getStatistics(winDays, initialWinDayStatisticData);
       const lossDayStatisticData = getStatistics(lossDays, initialLossDayStatisticData);
 
-      const finalStatisticData = transformData(winDayStatisticData, lossDayStatisticData);
 
-
-console.log(finalStatisticData);
-      console.log(finalStatisticData.length);
+      const joinedFinalStatisticData = transformData(winDayStatisticData, lossDayStatisticData);
 
 
 
@@ -160,7 +157,7 @@ console.log(finalStatisticData);
       }));
 
       setTradeDataForPieChart(processedTradeDataForPieChart);
-      setFinalStatisticData(finalStatisticData);
+      setFinalStatisticData(joinedFinalStatisticData);
     }
 
     processTradeData();
@@ -181,8 +178,11 @@ console.log(finalStatisticData);
             indexAxis="y"
           />
         </div>
-        {finalStatisticData && finalStatisticData.length > 0 && <StatsForWinLoss data={finalStatisticData} />}
       </div>
+        <div>
+          <StatsForWinLoss data={finalStatisticData} />
+          </div>
+
     </>
   );
 };
