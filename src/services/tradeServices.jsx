@@ -125,7 +125,7 @@ export function processTrades(
   }
 }
 
-export function processTradesByDayOfWeek(trades, label, grouped=false) {
+export function processTradesByDayOfWeek(trades, label, grouped=false, net=true) {
   // 1. Sort the trades by close_date
   trades = sortTradesByDate(trades);
 

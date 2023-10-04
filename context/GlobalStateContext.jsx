@@ -13,9 +13,11 @@ export const useGlobalState = () => {
 export const GlobalStateProvider = ({ children }) => {
     const [isTradeNoteBeingAltered, setIsTradeNoteBeingAltered] = useState(false);
     const [isTradeTagBeingAltered, setIsTradeTagBeingAltered] = useState(false);
+  const [radioValue, setRadioValue] = useState(true);
+
 
     return (
-        <GlobalStateContext.Provider value={{ isTradeNoteBeingAltered, setIsTradeNoteBeingAltered, isTradeTagBeingAltered, setIsTradeTagBeingAltered }}>
+        <GlobalStateContext.Provider value={{ isTradeNoteBeingAltered, setIsTradeNoteBeingAltered, isTradeTagBeingAltered, setIsTradeTagBeingAltered, radioValue, setRadioValue }}>
             {children}
         </GlobalStateContext.Provider>
     );

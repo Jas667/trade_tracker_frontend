@@ -22,7 +22,7 @@ import WinVsLossDays from "../components/WinVsLossDays";
 import { useGlobalState } from "../../context/GlobalStateContext";
 
 export default function LoggedIn() {
-  const { isTradeNoteBeingAltered, setIsTradeNoteBeingAltered } = useGlobalState();
+  const { isTradeNoteBeingAltered, setIsTradeNoteBeingAltered, radioValue, setRadioValue } = useGlobalState();
 
   const navigate = useNavigate();
   //variables
@@ -55,7 +55,9 @@ export default function LoggedIn() {
   const [selectedTags, setSelectedTags] = useState([]);
   const [tagOptions, setTagOptions] = useState("");
   //radio buttons for net/gross display
-  const [radioValue, setRadioValue] = useState(true);
+
+  //moved to global state
+  // const [radioValue, setRadioValue] = useState(true);
 
   //statistic data for table
   const [statisticData, setStatisticData] = useState([
