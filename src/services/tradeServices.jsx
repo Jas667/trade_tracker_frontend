@@ -148,10 +148,12 @@ export function processTradesByDayOfWeek(trades, label, grouped=false, net=true)
       acc[day] = {
         day: day,
         profit_loss: 0,
+        gross_profit_loss: 0,
       };
     }
 
     acc[day].profit_loss += dailyTrade.profit_loss;
+    acc[day].gross_profit_loss += dailyTrade.gross_profit_loss;
     return acc;
   }, {});
 
@@ -173,7 +175,7 @@ export function processTradesByDayOfWeek(trades, label, grouped=false, net=true)
 
   // 5. Extract labels and dataset
   const labels = sortedTradesByDayOfWeek.map((trade) => trade.day);
-  const data = sortedTradesByDayOfWeek.map((trade) => trade.profit_loss);
+  const data = sortedTradesByDayOfWeek.map((trade) => net ? trade.profit_loss : trade.gross_profit_loss);
 
   if (grouped) {
     return {
@@ -186,14 +188,14 @@ export function processTradesByDayOfWeek(trades, label, grouped=false, net=true)
     labels: labels,
     datasets: [
       {
-        label: label,
+        label: (net ? "Net " : "Gross ") + label,
         data: data,
       },
     ],
   };
 }
 
-export function performanceByIntradayHoldTime(trades, label) {
+export function performanceByIntradayHoldTime(trades, label, net=true) {
   // 1. Filter intraday trades
   const intradayTrades = trades.filter(
     (trade) => trade.open_date === trade.close_date

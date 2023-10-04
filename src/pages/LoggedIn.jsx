@@ -223,7 +223,9 @@ export default function LoggedIn() {
         //process trades by day of the week for bar chart
         const processedTradesByDayOfWeek = processTradesByDayOfWeek(
           trades,
-          `${baseChartLabels.horizontalDayOfWeek} ${label}`
+          `${baseChartLabels.horizontalDayOfWeek} ${label}`,
+          false,
+          radioValue
         );
         //process trades by intraday performance for horizontal bar chart
         const processedTradesByIntradayPerformance =
