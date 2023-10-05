@@ -12,6 +12,7 @@ const TradeList = ({ currentTrades, handleViewClick, fetchTagsForTrade }) => {
           <th>P&L</th>
           <th>Volume</th>
           <th>Notes</th>
+          <th>Tags</th>
         </tr>
       </thead>
       <tbody>
@@ -33,6 +34,24 @@ const TradeList = ({ currentTrades, handleViewClick, fetchTagsForTrade }) => {
               {trade.notes && trade.notes.length > 50
                 ? `${trade.notes.slice(0, 50)}...`
                 : trade.notes}
+            </td>
+            <td className="break-words">
+              {trade.tags.length > 0
+                ? trade.tags.map((tag) => {
+                    return (
+                      <span
+                        key={tag.id}
+                        className="inline-block mr-2 mb-2 cursor-pointer p-1 rounded text-white text-sm bg-gray-500"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          console.log("clicked tag with id: ", tag.id);
+                        }}
+                      >
+                        {tag.tag_name}
+                      </span>
+                    );
+                  })
+                : null}
             </td>
             <td
               style={{
