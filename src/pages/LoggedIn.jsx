@@ -11,7 +11,7 @@ import {
 } from "../services/tradeServices";
 import { getStatistics } from "../services/statisticsService";
 import { retrieveTradesOptionalTags } from "../services/tagService";
-import TradeFilterBar from "../components/TradeFilterBar";
+import TradeFilterBar from "../components/TradeFilterBar/TradeFilterBar";
 import BarChart from "../components/BarChart";
 import TableForStats from "../components/TableForStats";
 import GrossNetButton from "../components/GrossNetButton";

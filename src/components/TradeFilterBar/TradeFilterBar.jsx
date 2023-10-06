@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
-import { getTags } from "../services/tagService";
-import { useGlobalState } from "../../context/GlobalStateContext";
+import { getTags } from "../../services/tagService";
+import { useGlobalState } from "../../../context/GlobalStateContext";
 
 function TradeFilterBar({
   onFilter,
@@ -9,8 +9,8 @@ function TradeFilterBar({
   today,
   thirtyDaysAgo,
 }) {
-
-  const { isTradeTagBeingAltered, setIsTradeTagBeingAltered } = useGlobalState();
+  const { isTradeTagBeingAltered, setIsTradeTagBeingAltered } =
+    useGlobalState();
 
   // Local state for the filters
   const [localStartDate, setLocalStartDate] = useState(startDate);
@@ -89,7 +89,6 @@ function TradeFilterBar({
       }
     }
   };
-  
 
   const addTag = (tag) => {
     if (!localSelectedTags.some((t) => t.id === tag.id)) {
@@ -100,7 +99,7 @@ function TradeFilterBar({
       });
     }
   };
-  
+
   const removeTag = (tag) => {
     setLocalSelectedTags((prevSelected) => {
       const newSelectedTags = prevSelected.filter((t) => t.id !== tag.id);
@@ -116,7 +115,6 @@ function TradeFilterBar({
       )
     );
   };
-  
 
   return (
     <div className="bg-gray-800 text-white p-4 sm:p-2">
