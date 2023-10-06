@@ -22,7 +22,7 @@ function TradeViewsButtons({ currentView, setCurrentView }) {
             key={idx}
             id={`tradeViewradio-${idx}`}
             type="radio"
-            variant={"outline-success"}
+            variant={"outline-secondary"}
             name="tradeViewradio"
             value={button.value}
             checked={buttonValue === button.value}
