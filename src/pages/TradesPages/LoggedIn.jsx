@@ -15,11 +15,11 @@ import TradeFilterBar from "../../components/TradeFilterBar/TradeFilterBar";
 import BarChart from "../../components/chartsAndTables/BarChart";
 import TableForStats from "../../components/chartsAndTables/TableForStats";
 import GrossNetButton from "../../components/Buttons/GrossNetButton";
-import ViewsMenu from "../../views/ViewsMenu";
 import Trades from "../../views/Trades";
 import WinVsLossDays from "../../views/WinVsLossDays";
 import { useGlobalState } from "../../../context/GlobalStateContext";
 import TagsView from "../../views/TagsView";
+import TradeViewsButtons from "../../components/Buttons/TradeViewsButtons";
 
 export default function LoggedIn() {
   const {
@@ -279,7 +279,7 @@ export default function LoggedIn() {
           today={today}
           thirtyDaysAgo={thirtyDaysAgo}
         />
-        <ViewsMenu currentView={currentView} setCurrentView={setCurrentView} />
+        <TradeViewsButtons currentView={currentView} setCurrentView={setCurrentView}/>
         {currentView === "chartView" && (
           <>
             <GrossNetButton

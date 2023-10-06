@@ -22,7 +22,7 @@ function GrossNetButton({ radioValue, setRadioValue }) {
                 key={idx}
                 id={`radio-${idx}`}
                 type="radio"
-                variant={radio.value ? "outline-secondary" : "outline-success"}
+                variant={ "outline-success"}
                 name="radio"
                 value={radio.value}
                 checked={radioValue === radio.value}
