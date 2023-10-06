@@ -3,7 +3,7 @@ import Table from "react-bootstrap/Table";
 
 const StatsForTags = ({
   calculatedStatsForTags,
-  setLocalSelectedTag,
+  setLocalSelectedTags,
 }) => {
   if (!calculatedStatsForTags || !calculatedStatsForTags.length)
     return <div>No Data</div>;
@@ -16,7 +16,7 @@ const StatsForTags = ({
   
 
   const rowClickHandler = (tagId) => {
-    setLocalSelectedTag([tagId]);
+    setLocalSelectedTags([tagId]);
     // handleFilter();
     // fetchAndProcessTrades();
   };

@@ -14,6 +14,7 @@ export const GlobalStateProvider = ({ children }) => {
   const [isTradeNoteBeingAltered, setIsTradeNoteBeingAltered] = useState(false);
   const [isTradeTagBeingAltered, setIsTradeTagBeingAltered] = useState(false);
   const [radioValue, setRadioValue] = useState(true);
+  const [localSelectedTags, setLocalSelectedTags] = useState([]);
 
   // //for trade filter
   // const [label, setLabel] = useState("(Trades for Last 30 days)");
@@ -34,6 +35,8 @@ export const GlobalStateProvider = ({ children }) => {
         setIsTradeTagBeingAltered,
         radioValue,
         setRadioValue,
+        localSelectedTags,
+        setLocalSelectedTags,
       }}
     >
       {children}

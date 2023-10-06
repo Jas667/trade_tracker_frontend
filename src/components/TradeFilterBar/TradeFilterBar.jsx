@@ -9,14 +9,14 @@ function TradeFilterBar({
   today,
   thirtyDaysAgo,
 }) {
-  const { isTradeTagBeingAltered, setIsTradeTagBeingAltered } =
+  const { isTradeTagBeingAltered, setIsTradeTagBeingAltered, localSelectedTags, setLocalSelectedTags } =
     useGlobalState();
 
   // Local state for the filters
   const [localStartDate, setLocalStartDate] = useState(startDate);
   const [localEndDate, setLocalEndDate] = useState(endDate);
   const [localSymbol, setLocalSymbol] = useState("");
-  const [localSelectedTags, setLocalSelectedTags] = useState([]);
+  // const [localSelectedTags, setLocalSelectedTags] = useState([]);
   const [localSelectedTagOption, setLocalSelectedTagOption] =
     useState("atLeastOne");
 
