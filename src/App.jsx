@@ -1,7 +1,7 @@
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import LoggedIn from "./pages/LoggedIn";
-import UploadTrades from "./pages/UploadTrades";
+import LoggedIn from "./pages/TradesPages/LoggedIn";
+import UploadTrades from "./pages/TradesPages/UploadTrades";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import PieChart from "./WinVsLossComponents/PieChart";
-import StatsForWinLoss from "./WinVsLossComponents/StatsForWinLoss";
+import PieChart from "../components/WinVsLossComponents/PieChart";
+import StatsForWinLoss from "../components/WinVsLossComponents/StatsForWinLoss";
 import { useGlobalState } from "../../context/GlobalStateContext";
 
 import {
@@ -8,9 +8,9 @@ import {
   splitDataIntoWinAndLoss,
 } from "../services/winVsLossService";
 import { processTradesByDayOfWeek } from "../services/tradeServices";
-import BarChart from "./BarChart";
+import BarChart from "../components/BarChart";
 import { getStatistics, transformData } from "../services/statisticsService";
-import GrossNetButton from "./GrossNetButton";
+import GrossNetButton from "../components/GrossNetButton";
 
 const WinVsLossDays = ({ rawTradeData }) => {
   const { radioValue, setRadioValue } = useGlobalState();

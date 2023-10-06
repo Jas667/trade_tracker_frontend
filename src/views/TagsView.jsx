@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 import { useGlobalState } from "../../context/GlobalStateContext";
-import GrossNetButton from "./GrossNetButton";
+import GrossNetButton from "../components/GrossNetButton";
 import { useState } from "react";
 import {
   getStatsForTags,
   getTagNamesForLabels,
   getTotalPLForTags,
 } from "../services/tagService";
-import StatsForTags from "./TagsViewComponents.jsx/StatsForTags";
-import BarChart from "./BarChart";
+import StatsForTags from "../components/TagsViewComponents.jsx/StatsForTags";
+import BarChart from "../components/BarChart";
 
 const TagsView = ({ rawTradeData }) => {
   const { radioValue, setRadioValue } = useGlobalState();
@@ -56,7 +56,7 @@ const TagsView = ({ rawTradeData }) => {
       <StatsForTags calculatedStatsForTags={calculatedStatsForTags} />
       <div className="col-auto py-3 px-5 px-md-5">
         <div className="w-2/3 h-2/3 mx-auto">
-        <p className="font-bold">Performance By Tag</p>
+          <p className="font-bold">Performance By Tag</p>
           <BarChart
             labels={tagDataForHorizontalBarChart.labels}
             datasets={tagDataForHorizontalBarChart.datasets}

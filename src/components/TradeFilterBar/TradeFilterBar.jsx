@@ -26,6 +26,9 @@ function TradeFilterBar({
   const [showDropdown, setShowDropdown] = useState(false);
   const [inputValue, setInputValue] = useState("");
 
+  //states for when updates are made to the tradefilterbar
+  
+
   const wrapperRef = useRef(null);
 
   const handleFilter = () => {

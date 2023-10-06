@@ -1,6 +1,6 @@
 import React from "react";
-import ColorSchemesExample from "../components/NavBar/NavBar";
-import LineChart from "../components/LineChart";
+import ColorSchemesExample from "../../components/NavBar/NavBar";
+import LineChart from "../../components/LineChart";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -8,18 +8,18 @@ import {
   filterTradesBySymbol,
   processTradesByDayOfWeek,
   performanceByIntradayHoldTime,
-} from "../services/tradeServices";
-import { getStatistics } from "../services/statisticsService";
-import { retrieveTradesOptionalTags } from "../services/tagService";
-import TradeFilterBar from "../components/TradeFilterBar/TradeFilterBar";
-import BarChart from "../components/BarChart";
-import TableForStats from "../components/TableForStats";
-import GrossNetButton from "../components/GrossNetButton";
-import ViewsMenu from "../components/ViewsMenu";
-import Trades from "../components/Trades";
-import WinVsLossDays from "../components/WinVsLossDays";
-import { useGlobalState } from "../../context/GlobalStateContext";
-import TagsView from "../components/TagsView";
+} from "../../services/tradeServices";
+import { getStatistics } from "../../services/statisticsService";
+import { retrieveTradesOptionalTags } from "../../services/tagService";
+import TradeFilterBar from "../../components/TradeFilterBar/TradeFilterBar";
+import BarChart from "../../components/BarChart";
+import TableForStats from "../../components/TableForStats";
+import GrossNetButton from "../../components/GrossNetButton";
+import ViewsMenu from "../../views/ViewsMenu";
+import Trades from "../../views/Trades";
+import WinVsLossDays from "../../views/WinVsLossDays";
+import { useGlobalState } from "../../../context/GlobalStateContext";
+import TagsView from "../../views/TagsView";
 
 export default function LoggedIn() {
   const {
@@ -143,8 +143,10 @@ export default function LoggedIn() {
     filteredTags,
     filteredSelectedTagOptions
   ) => {
-    setStartDate(filteredStartDate);
-    setEndDate(filteredEndDate);
+    if (filteredStartDate && filteredEndDate) { 
+      setStartDate(filteredStartDate);
+      setEndDate(filteredEndDate);
+    }
 
     // Check if the dates are default or not
     if (filteredStartDate === thirtyDaysAgo && filteredEndDate === today) {

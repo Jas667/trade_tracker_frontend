@@ -15,6 +15,16 @@ export const GlobalStateProvider = ({ children }) => {
   const [isTradeTagBeingAltered, setIsTradeTagBeingAltered] = useState(false);
   const [radioValue, setRadioValue] = useState(true);
 
+  // //for trade filter
+  // const [label, setLabel] = useState("(Trades for Last 30 days)");
+  // //set symbol to correct info
+  // const [symbol, setSymbol] = useState("");
+  // //set selected tags to correct info
+  // const [selectedTags, setSelectedTags] = useState([]);
+  // const [tagOptions, setTagOptions] = useState("");
+  // const [startDate, setStartDate] = useState(thirtyDaysAgo);
+  // const [endDate, setEndDate] = useState(today);
+
   return (
     <GlobalStateContext.Provider
       value={{

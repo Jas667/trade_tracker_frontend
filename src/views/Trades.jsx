@@ -1,14 +1,13 @@
 import React from "react";
 import { useState } from "react";
-import TradeDetails from "./TradeDetails/TradeDetails";
-import TradeList from "./TradeList";
-import Pagination from "./Pagination";
+import TradeDetails from "../components/TradeDetails/TradeDetails";
+import TradeList from "../components/TradeList";
+import Pagination from "../components/Pagination";
 import { retrieveAllTagsForTrade } from "../services/tagService";
-import BackToTradesButton from "./BackToTradesButton";
+import BackToTradesButton from "../components/BackToTradesButton";
 import AppContext from "../../context/ContextProvider";
 
 const Trades = ({ rawTradeData }) => {
-
   if (rawTradeData.length === 0) return null;
 
   const [isViewingDetails, setIsViewingDetails] = useState(false);
