@@ -1,11 +1,10 @@
 import React from "react";
-import ColorSchemesExample from "../components/NavBar";
+import ColorSchemesExample from "../components/NavBar/NavBar";
 import LineChart from "../components/LineChart";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   processTrades,
-  getTradesByDateRange,
   filterTradesBySymbol,
   processTradesByDayOfWeek,
   performanceByIntradayHoldTime,

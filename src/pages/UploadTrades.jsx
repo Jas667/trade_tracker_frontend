@@ -1,5 +1,5 @@
 import React from "react";
-import ColorSchemesExample from "../components/NavBar";
+import ColorSchemesExample from "../components/NavBar/NavBar";
 import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
