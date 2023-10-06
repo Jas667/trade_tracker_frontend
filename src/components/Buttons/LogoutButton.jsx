@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "react-bootstrap";
-import { logout } from "../services/authService";
+import { logout } from "../../services/authService";
 import { useNavigate } from "react-router-dom";
 
 function LogoutButton() {

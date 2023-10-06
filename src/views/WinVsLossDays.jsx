@@ -8,9 +8,9 @@ import {
   splitDataIntoWinAndLoss,
 } from "../services/winVsLossService";
 import { processTradesByDayOfWeek } from "../services/tradeServices";
-import BarChart from "../components/BarChart";
+import BarChart from "../components/chartsAndTables/BarChart";
 import { getStatistics, transformData } from "../services/statisticsService";
-import GrossNetButton from "../components/GrossNetButton";
+import GrossNetButton from "../components/Buttons/GrossNetButton";
 
 const WinVsLossDays = ({ rawTradeData }) => {
   const { radioValue, setRadioValue } = useGlobalState();
@@ -141,7 +141,10 @@ const WinVsLossDays = ({ rawTradeData }) => {
 
   useEffect(() => {
     async function processTradeData() {
-      const processedTradeDataForPieChart = sortDataForPieChart(rawTradeData, radioValue);
+      const processedTradeDataForPieChart = sortDataForPieChart(
+        rawTradeData,
+        radioValue
+      );
 
       const { winDays, lossDays } = await splitDataIntoWinAndLoss(rawTradeData);
 

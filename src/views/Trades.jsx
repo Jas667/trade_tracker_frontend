@@ -2,9 +2,9 @@ import React from "react";
 import { useState } from "react";
 import TradeDetails from "../components/TradeDetails/TradeDetails";
 import TradeList from "../components/TradeList";
-import Pagination from "../components/Pagination";
+import Pagination from "../components/Buttons/Pagination";
 import { retrieveAllTagsForTrade } from "../services/tagService";
-import BackToTradesButton from "../components/BackToTradesButton";
+import BackToTradesButton from "../components/Buttons/BackToTradesButton";
 import AppContext from "../../context/ContextProvider";
 
 const Trades = ({ rawTradeData }) => {

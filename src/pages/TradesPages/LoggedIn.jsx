@@ -1,6 +1,6 @@
 import React from "react";
 import ColorSchemesExample from "../../components/NavBar/NavBar";
-import LineChart from "../../components/LineChart";
+import LineChart from "../../components/chartsAndTables/LineChart";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -12,9 +12,9 @@ import {
 import { getStatistics } from "../../services/statisticsService";
 import { retrieveTradesOptionalTags } from "../../services/tagService";
 import TradeFilterBar from "../../components/TradeFilterBar/TradeFilterBar";
-import BarChart from "../../components/BarChart";
-import TableForStats from "../../components/TableForStats";
-import GrossNetButton from "../../components/GrossNetButton";
+import BarChart from "../../components/chartsAndTables/BarChart";
+import TableForStats from "../../components/chartsAndTables/TableForStats";
+import GrossNetButton from "../../components/Buttons/GrossNetButton";
 import ViewsMenu from "../../views/ViewsMenu";
 import Trades from "../../views/Trades";
 import WinVsLossDays from "../../views/WinVsLossDays";

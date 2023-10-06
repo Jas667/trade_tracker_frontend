@@ -1,5 +1,5 @@
 import Table from "react-bootstrap/Table";
-import { chunkArray } from "../services/statisticsService";
+import { chunkArray } from "../../services/statisticsService";
 import React from "react";
 
 function TableForStats({ statisticData }) {

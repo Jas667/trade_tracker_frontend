@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useGlobalState } from "../../context/GlobalStateContext";
-import GrossNetButton from "../components/GrossNetButton";
+import GrossNetButton from "../components/Buttons/GrossNetButton";
 import { useState } from "react";
 import {
   getStatsForTags,
@@ -8,7 +8,7 @@ import {
   getTotalPLForTags,
 } from "../services/tagService";
 import StatsForTags from "../components/TagsViewComponents.jsx/StatsForTags";
-import BarChart from "../components/BarChart";
+import BarChart from "../components/chartsAndTables/BarChart";
 
 const TagsView = ({
   rawTradeData,
@@ -39,8 +39,8 @@ const TagsView = ({
         },
       ],
     });
-  
-    useEffect(() => {
+
+  useEffect(() => {
     handleFilter();
     fetchAndProcessTrades();
   }, [localSelectedTag]);

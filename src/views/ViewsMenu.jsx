@@ -6,16 +6,16 @@ function ViewsMenu({ currentView, setCurrentView}) {
     <>
       <Nav className="justify-content-center" activeKey="/home">
         <Nav.Item>
-          <Nav.Link  onClick={() => setCurrentView("chartView")}>Overview</Nav.Link>
+          <Nav.Link onClick={() => setCurrentView("chartView")}>Overview</Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link onClick={() => setCurrentView("tradeView")} >Trades</Nav.Link>
+          <Nav.Link active={currentView === "tradeView"} onClick={() => setCurrentView("tradeView")} >Trades</Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link onClick={() => setCurrentView("winVsLossDays")}>Win vs Loss Days</Nav.Link>
+          <Nav.Link active={currentView === "winVsLossDays"} onClick={() => setCurrentView("winVsLossDays")}>Win vs Loss Days</Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link onClick={() => setCurrentView("tagsView")}>
+          <Nav.Link active={currentView === "tagsView"} onClick={() => setCurrentView("tagsView")}>
             Tags
           </Nav.Link>
         </Nav.Item>
