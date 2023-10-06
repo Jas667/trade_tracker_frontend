@@ -1,10 +1,10 @@
 import React from "react";
 import Table from "react-bootstrap/Table";
 
-const StatsForTags = ({ calculatedStatsForTags }) => {
-
-
-
+const StatsForTags = ({
+  calculatedStatsForTags,
+  setLocalSelectedTag,
+}) => {
   if (!calculatedStatsForTags || !calculatedStatsForTags.length)
     return <div>No Data</div>;
 
@@ -13,6 +13,13 @@ const StatsForTags = ({ calculatedStatsForTags }) => {
     if (b.tagName === "No Tags") return -1;
     return 0;
   });
+  
+
+  const rowClickHandler = (tagId) => {
+    setLocalSelectedTag([tagId]);
+    // handleFilter();
+    // fetchAndProcessTrades();
+  };
 
   return (
     <div className="flex justify-center mt-4">
@@ -29,7 +36,11 @@ const StatsForTags = ({ calculatedStatsForTags }) => {
         </thead>
         <tbody>
           {sortedStats.map((item, index) => (
-            <tr key={item.tagId || index}>
+            <tr
+              key={item.tagId || index}
+              onClick={() => rowClickHandler(item.tagId)}
+              style={{ cursor: "pointer" }}
+            >
               <td>{item.tagName}</td>
               <td>{((item.wins / item.totalTrades) * 100).toFixed(2)}%</td>
               <td>{item.grossPL.toFixed(2)}</td>

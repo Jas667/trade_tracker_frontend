@@ -10,12 +10,24 @@ import {
 import StatsForTags from "../components/TagsViewComponents.jsx/StatsForTags";
 import BarChart from "../components/BarChart";
 
-const TagsView = ({ rawTradeData }) => {
+const TagsView = ({
+  rawTradeData,
+  onFilter,
+  startDate,
+  endDate,
+  symbol,
+  tagOptions,
+  fetchAndProcessTrades,
+}) => {
   const { radioValue, setRadioValue } = useGlobalState();
 
   const [calculatedStatsForTags, setCalculatedStatsForTags] = useState([]);
 
-  // const [tagNames, setTagNames] = useState([]);
+  const [localSelectedTag, setLocalSelectedTag] = useState([]);
+
+  const handleFilter = () => {
+    onFilter(startDate, endDate, symbol, localSelectedTag, tagOptions); // send the filter criteria back to parent
+  };
 
   const [tagDataForHorizontalBarChart, setTagDataForHorizontalBarChart] =
     useState({
@@ -27,6 +39,11 @@ const TagsView = ({ rawTradeData }) => {
         },
       ],
     });
+  
+    useEffect(() => {
+    handleFilter();
+    fetchAndProcessTrades();
+  }, [localSelectedTag]);
 
   useEffect(() => {
     if (rawTradeData) {
@@ -53,7 +70,13 @@ const TagsView = ({ rawTradeData }) => {
   return (
     <>
       <GrossNetButton radioValue={radioValue} setRadioValue={setRadioValue} />
-      <StatsForTags calculatedStatsForTags={calculatedStatsForTags} />
+      <StatsForTags
+        calculatedStatsForTags={calculatedStatsForTags}
+        setLocalSelectedTag={setLocalSelectedTag}
+        handleFilter={handleFilter}
+        fetchAndProcessTrades={fetchAndProcessTrades}
+        localSelectedTag={localSelectedTag}
+      />
       <div className="col-auto py-3 px-5 px-md-5">
         <div className="w-2/3 h-2/3 mx-auto">
           <p className="font-bold">Performance By Tag</p>

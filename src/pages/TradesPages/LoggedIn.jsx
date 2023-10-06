@@ -143,10 +143,8 @@ export default function LoggedIn() {
     filteredTags,
     filteredSelectedTagOptions
   ) => {
-    if (filteredStartDate && filteredEndDate) { 
-      setStartDate(filteredStartDate);
-      setEndDate(filteredEndDate);
-    }
+    setStartDate(filteredStartDate);
+    setEndDate(filteredEndDate);
 
     // Check if the dates are default or not
     if (filteredStartDate === thirtyDaysAgo && filteredEndDate === today) {
@@ -161,103 +159,103 @@ export default function LoggedIn() {
     // Once you set the new date range, useEffect will automatically trigger to fetch new data
   };
 
-  useEffect(() => {
-    async function fetchAndProcessTrades() {
-      //variable to hold the trades
-      let trades;
+  const fetchAndProcessTrades = async () => {
+    //variable to hold the trades
+    let trades;
 
-      //check if tags are provided, as that will change the data we need to fetch
-      if (selectedTags.length > 0) {
-        let onlyWithAllTags = false;
+    //check if tags are provided, as that will change the data we need to fetch
+    if (selectedTags.length > 0) {
+      let onlyWithAllTags = false;
 
-        if (tagOptions === "all") {
-          onlyWithAllTags = true;
-        }
-
-        const data = {
-          tagIds: selectedTags,
-          onlyWithAllTags: onlyWithAllTags,
-          startDate: startDate,
-          endDate: endDate,
-        };
-
-        const response = await retrieveTradesOptionalTags(data);
-        if (response.statusCode === 403 || response.statusCode === 401) {
-          navigate("/login");
-        }
-
-        if (response.message === "Trades found") {
-          trades = response.data.trades;
-        }
-      } else {
-        const dataWithNoTags = {
-          tagIds: [],
-          onlyWithAllTags: false,
-          startDate: startDate,
-          endDate: endDate,
-        };
-
-        const response = await retrieveTradesOptionalTags(dataWithNoTags);
-        if (response.statusCode === 403 || response.statusCode === 401) {
-          navigate("/login");
-        }
-        if (response.message === "Trades found") {
-          trades = response.data.trades;
-        }
+      if (tagOptions === "all") {
+        onlyWithAllTags = true;
       }
 
-      // If there is a symbol, filter the trades by symbol before processing
-      if (symbol !== "") {
-        trades = filterTradesBySymbol(trades, symbol);
+      const data = {
+        tagIds: selectedTags,
+        onlyWithAllTags: onlyWithAllTags,
+        startDate: startDate,
+        endDate: endDate,
+      };
+
+      const response = await retrieveTradesOptionalTags(data);
+      if (response.statusCode === 403 || response.statusCode === 401) {
+        navigate("/login");
       }
 
-      if (trades) {
-        //set raw trade data for use in trades table
-        setRawTradeData(trades);
-        //update statistics table
-        const updatedStatistics = getStatistics(
-          trades,
-          statisticData,
-          radioValue
-        );
+      if (response.message === "Trades found") {
+        trades = response.data.trades;
+      }
+    } else {
+      const dataWithNoTags = {
+        tagIds: [],
+        onlyWithAllTags: false,
+        startDate: startDate,
+        endDate: endDate,
+      };
 
-        const processedTradesBarChart = processTrades(
-          trades,
-          `${baseChartLabels.barChart} ${label}`,
-          false,
-          radioValue
-        );
-        const processedTradesLineChart = processTrades(
-          trades,
-          `${baseChartLabels.lineChart} ${label}`,
-          true,
-          radioValue
-        );
-        //process trades by day of the week for bar chart
-        const processedTradesByDayOfWeek = processTradesByDayOfWeek(
-          trades,
-          `${baseChartLabels.horizontalDayOfWeek} ${label}`,
-          false,
-          radioValue
-        );
-        //process trades by intraday performance for horizontal bar chart
-        const processedTradesByIntradayPerformance =
-          performanceByIntradayHoldTime(
-            trades,
-            `${baseChartLabels.horizontalIntradayDuration} ${label}`,
-            radioValue
-          );
-
-        setStatisticData(updatedStatistics);
-        setTradeData(processedTradesLineChart);
-        setTradeDataForBarChart(processedTradesBarChart);
-        setTradeDataForHorizontalDayOfWeekBarChart(processedTradesByDayOfWeek);
-        setTradeDataForIntradayPerformanceHorizontalBarChart(
-          processedTradesByIntradayPerformance
-        );
+      const response = await retrieveTradesOptionalTags(dataWithNoTags);
+      if (response.statusCode === 403 || response.statusCode === 401) {
+        navigate("/login");
+      }
+      if (response.message === "Trades found") {
+        trades = response.data.trades;
       }
     }
 
+    // If there is a symbol, filter the trades by symbol before processing
+    if (symbol !== "") {
+      trades = filterTradesBySymbol(trades, symbol);
+    }
+
+    if (trades) {
+      //set raw trade data for use in trades table
+      setRawTradeData(trades);
+      //update statistics table
+      const updatedStatistics = getStatistics(
+        trades,
+        statisticData,
+        radioValue
+      );
+
+      const processedTradesBarChart = processTrades(
+        trades,
+        `${baseChartLabels.barChart} ${label}`,
+        false,
+        radioValue
+      );
+      const processedTradesLineChart = processTrades(
+        trades,
+        `${baseChartLabels.lineChart} ${label}`,
+        true,
+        radioValue
+      );
+      //process trades by day of the week for bar chart
+      const processedTradesByDayOfWeek = processTradesByDayOfWeek(
+        trades,
+        `${baseChartLabels.horizontalDayOfWeek} ${label}`,
+        false,
+        radioValue
+      );
+      //process trades by intraday performance for horizontal bar chart
+      const processedTradesByIntradayPerformance =
+        performanceByIntradayHoldTime(
+          trades,
+          `${baseChartLabels.horizontalIntradayDuration} ${label}`,
+          radioValue
+        );
+
+      setStatisticData(updatedStatistics);
+      setTradeData(processedTradesLineChart);
+      setTradeDataForBarChart(processedTradesBarChart);
+      setTradeDataForHorizontalDayOfWeekBarChart(processedTradesByDayOfWeek);
+      setTradeDataForIntradayPerformanceHorizontalBarChart(
+        processedTradesByIntradayPerformance
+      );
+    }
+  };
+
+  useEffect(() => {
     fetchAndProcessTrades();
   }, [
     startDate,
@@ -342,7 +340,19 @@ export default function LoggedIn() {
         {currentView === "tagsView" && (
           <>
             <div>
-              <TagsView rawTradeData={rawTradeData} />
+              <TagsView
+                rawTradeData={rawTradeData}
+                startDate={startDate}
+                endDate={endDate}
+                onFilter={handleTradeFilter}
+                today={today}
+                thirtyDaysAgo={thirtyDaysAgo}
+                label={label}
+                symbol={symbol}
+                tagOptions={tagOptions}
+                selectedTags={selectedTags}
+                fetchAndProcessTrades={fetchAndProcessTrades}
+              />
             </div>
           </>
         )}
@@ -350,3 +360,5 @@ export default function LoggedIn() {
     </>
   );
 }
+
+// const [selectedTags, setSelectedTags] = useState([]);
