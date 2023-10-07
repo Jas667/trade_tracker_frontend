@@ -344,7 +344,7 @@ export default function LoggedIn() {
                 rawTradeData={rawTradeData}
                 startDate={startDate}
                 endDate={endDate}
-                onFilter={handleTradeFilter}
+                handleTradeFilter={handleTradeFilter}
                 today={today}
                 thirtyDaysAgo={thirtyDaysAgo}
                 label={label}

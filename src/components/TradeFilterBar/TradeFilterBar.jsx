@@ -12,7 +12,6 @@ function TradeFilterBar({
 }) {
   const {
     isTradeTagBeingAltered,
-    setIsTradeTagBeingAltered,
     localSelectedTags,
     setLocalSelectedTags,
     initialTagsFromFetch,

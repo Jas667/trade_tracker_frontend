@@ -12,7 +12,7 @@ import BarChart from "../components/chartsAndTables/BarChart";
 
 const TagsView = ({
   rawTradeData,
-  onFilter,
+  handleTradeFilter,
   startDate,
   endDate,
   symbol,
@@ -73,9 +73,14 @@ const TagsView = ({
       <StatsForTags
         calculatedStatsForTags={calculatedStatsForTags}
         setLocalSelectedTags={setLocalSelectedTags}
-        handleFilter={handleFilter}
+        // handleFilter={handleFilter}
+        handleTradeFilter={handleTradeFilter}
         fetchAndProcessTrades={fetchAndProcessTrades}
         localSelectedTags={localSelectedTags}
+        startDate={startDate}
+        endDate={endDate}
+        symbol={symbol}
+        tagOptions={tagOptions}
       />
       <div className="col-auto py-3 px-5 px-md-5">
         <div className="w-2/3 h-2/3 mx-auto">

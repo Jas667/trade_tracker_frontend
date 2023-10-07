@@ -6,7 +6,11 @@ import { resetTagsDropdown } from "../../utils/resetTagDropdown";
 const StatsForTags = ({
   calculatedStatsForTags,
   setLocalSelectedTags,
-  fetchAndProcessTrades,
+  handleTradeFilter,
+  startDate,
+  endDate,
+  symbol,
+  tagOptions,
 }) => {
   const { tags, setTags, initialTagsFromFetch } = useGlobalState();
 
@@ -23,7 +27,14 @@ const StatsForTags = ({
     setLocalSelectedTags([tagObject]);
     const updatedTags = resetTagsDropdown(initialTagsFromFetch, [tagObject]);
     setTags(updatedTags);
-    fetchAndProcessTrades();
+    //I need to figure how to auto filter here
+    handleTradeFilter(
+      startDate,
+      endDate,
+      symbol,
+      [tagObject.id],
+      tagOptions
+    );
   };
 
   return (
