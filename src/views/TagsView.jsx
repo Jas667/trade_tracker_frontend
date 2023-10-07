@@ -41,9 +41,9 @@ const TagsView = ({
     });
 
   useEffect(() => {
-    handleFilter();
+    
     fetchAndProcessTrades();
-  }, [localSelectedTags]);
+  }, [localSelectedTags, startDate, endDate, symbol, tagOptions]);
 
   useEffect(() => {
     if (rawTradeData) {

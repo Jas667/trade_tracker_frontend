@@ -1,10 +1,15 @@
 import React from "react";
 import Table from "react-bootstrap/Table";
+import { useGlobalState } from "../../../context/GlobalStateContext";
+import { resetTagsDropdown } from "../../utils/resetTagDropdown";
 
 const StatsForTags = ({
   calculatedStatsForTags,
   setLocalSelectedTags,
+  fetchAndProcessTrades,
 }) => {
+  const { tags, setTags, initialTagsFromFetch } = useGlobalState();
+
   if (!calculatedStatsForTags || !calculatedStatsForTags.length)
     return <div>No Data</div>;
 
@@ -13,12 +18,12 @@ const StatsForTags = ({
     if (b.tagName === "No Tags") return -1;
     return 0;
   });
-  
 
-  const rowClickHandler = (tagId) => {
-    setLocalSelectedTags([tagId]);
-    // handleFilter();
-    // fetchAndProcessTrades();
+  const rowClickHandler = (tagObject) => {
+    setLocalSelectedTags([tagObject]);
+    const updatedTags = resetTagsDropdown(initialTagsFromFetch, [tagObject]);
+    setTags(updatedTags);
+    fetchAndProcessTrades();
   };
 
   return (
@@ -38,7 +43,9 @@ const StatsForTags = ({
           {sortedStats.map((item, index) => (
             <tr
               key={item.tagId || index}
-              onClick={() => rowClickHandler(item.tagId)}
+              onClick={() =>
+                rowClickHandler({ id: item.tagId, name: item.tagName })
+              }
               style={{ cursor: "pointer" }}
             >
               <td>{item.tagName}</td>

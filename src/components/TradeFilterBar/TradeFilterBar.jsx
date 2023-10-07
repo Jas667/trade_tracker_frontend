@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { getTags } from "../../services/tagService";
 import { useGlobalState } from "../../../context/GlobalStateContext";
+import { resetTagsDropdown } from "../../utils/resetTagDropdown";
 
 function TradeFilterBar({
   onFilter,
@@ -9,8 +10,16 @@ function TradeFilterBar({
   today,
   thirtyDaysAgo,
 }) {
-  const { isTradeTagBeingAltered, setIsTradeTagBeingAltered, localSelectedTags, setLocalSelectedTags } =
-    useGlobalState();
+  const {
+    isTradeTagBeingAltered,
+    setIsTradeTagBeingAltered,
+    localSelectedTags,
+    setLocalSelectedTags,
+    initialTagsFromFetch,
+    setInitialTagsFromFetch,
+    tags,
+    setTags,
+  } = useGlobalState();
 
   // Local state for the filters
   const [localStartDate, setLocalStartDate] = useState(startDate);
@@ -21,13 +30,12 @@ function TradeFilterBar({
     useState("atLeastOne");
 
   //for tags
-  const [initialTagsFromFetch, setInitialTagsFromFetch] = useState([]);
-  const [tags, setTags] = useState([]);
+  // const [initialTagsFromFetch, setInitialTagsFromFetch] = useState([]);
+  // const [tags, setTags] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [inputValue, setInputValue] = useState("");
 
   //states for when updates are made to the tradefilterbar
-  
 
   const wrapperRef = useRef(null);
 
@@ -50,7 +58,10 @@ function TradeFilterBar({
     setLocalSelectedTags([]);
     setLocalSelectedTagOption("atLeastOne");
     onFilter(thirtyDaysAgo, today, "", [], "atLeastOne");
-    resetTagsDropdown([]);
+    // Call the utility function to get the updated tags
+    const updatedTags = resetTagsDropdown(initialTagsFromFetch, []);
+    // Set the updated tags to your component's state
+    setTags(updatedTags);
   };
 
   useEffect(() => {
@@ -97,7 +108,11 @@ function TradeFilterBar({
     if (!localSelectedTags.some((t) => t.id === tag.id)) {
       setLocalSelectedTags((prev) => {
         const newSelectedTags = [...prev, tag];
-        resetTagsDropdown(newSelectedTags);
+        const updatedTags = resetTagsDropdown(
+          initialTagsFromFetch,
+          newSelectedTags
+        );
+        setTags(updatedTags);
         return newSelectedTags;
       });
     }
@@ -106,18 +121,22 @@ function TradeFilterBar({
   const removeTag = (tag) => {
     setLocalSelectedTags((prevSelected) => {
       const newSelectedTags = prevSelected.filter((t) => t.id !== tag.id);
-      resetTagsDropdown(newSelectedTags);
+      const updatedTags = resetTagsDropdown(
+        initialTagsFromFetch,
+        newSelectedTags
+      );
+      setTags(updatedTags);
       return newSelectedTags;
     });
   };
 
-  const resetTagsDropdown = (currentSelectedTags) => {
-    setTags(
-      initialTagsFromFetch.filter(
-        (tag) => !currentSelectedTags.some((t) => t.id === tag.id)
-      )
-    );
-  };
+  // const resetTagsDropdown = (currentSelectedTags) => {
+  //   setTags(
+  //     initialTagsFromFetch.filter(
+  //       (tag) => !currentSelectedTags.some((t) => t.id === tag.id)
+  //     )
+  //   );
+  // };
 
   return (
     <div className="bg-gray-800 text-white p-4 sm:p-2">
