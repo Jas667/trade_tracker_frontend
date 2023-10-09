@@ -41,11 +41,11 @@ const TradeList = ({ currentTrades, handleViewClick, fetchTagsForTrade }) => {
                     return (
                       <span
                         key={tag.id}
-                        className="inline-block mr-2 mb-2 cursor-pointer p-1 rounded text-white text-sm bg-gray-500"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          console.log("clicked tag with id: ", tag.id);
-                        }}
+                        className="inline-block mr-2 mb-2 cursor-default p-1 rounded text-white text-sm bg-gray-500"
+                        // onClick={(e) => {
+                        //   e.stopPropagation();
+                        //   console.log("clicked tag with id: ", tag.id);
+                        // }}
                       >
                         {tag.tag_name}
                       </span>

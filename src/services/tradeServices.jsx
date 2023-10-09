@@ -281,3 +281,26 @@ export function performanceByIntradayHoldTime(trades, label, net = true) {
     ],
   };
 }
+
+export function performanceByStockPrice(trades, label, net = true) {
+  // 1. Group trades by stock price
+  const categories = {
+    "Under $2": { min: 0, max: 2, profit_loss: 0, gross_profit_loss: 0 },
+    "$2 - $2.99": { min: 2, max: 3, profit_loss: 0, gross_profit_loss: 0 },
+    "$3 - $3.99": { min: 3, max: 4, profit_loss: 0, gross_profit_loss: 0 },
+    "$4 - $4.99": { min: 4, max: 5, profit_loss: 0, gross_profit_loss: 0 },
+    "$5 - $5.99": {
+      min: 5,
+      max: 6,
+      profit_loss: 0,
+      gross_profit_loss: 0,
+    },
+    "$6 - $$6.99": { min: 6, max: 7, profit_loss: 0, gross_profit_loss: 0 },
+    "$7 - $7.99": { min: 7, max: 8, profit_loss: 0, gross_profit_loss: 0 },
+    "$8 - $8.99": { min: 8, max: 9, profit_loss: 0, gross_profit_loss: 0 },
+    "$9 - $9.99": { min: 9, max: 10, profit_loss: 0, gross_profit_loss: 0 },
+    "$10 +": { min: 10, max: Infinity, profit_loss: 0, gross_profit_loss: 0 },
+  };
+
+  // console.log(trades);
+}

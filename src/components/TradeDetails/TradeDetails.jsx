@@ -4,14 +4,16 @@ import NotesBox from "./NotesBox";
 import TradeDetailsBox from "./TradeDetailsBox";
 import AppContext from "../../../context/ContextProvider";
 import { useContext } from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   deleteTagFromTrade,
   createNewTag,
   addTagsToTrade,
   getTags,
 } from "../../services/tagService";
+import { individualTradeExecutions } from "../../services/tradeDetailsServices";
 import { useGlobalState } from "../../../context/GlobalStateContext";
+import TradeExecutions from "./TradeExecutions";
 
 const TradeDetails = ({ fetchTagsForTrade }) => {
   const {
@@ -34,6 +36,20 @@ const TradeDetails = ({ fetchTagsForTrade }) => {
   const [isAddingTags, setIsAddingTags] = useState(false);
 
   const [isSettingNote, setIsSettingNote] = useState(false);
+
+  const [individualTradeExecutionsData, setIndividualTradeExecutionsData] =
+    useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await individualTradeExecutions({
+        id: selectedTrade.id,
+      });
+      const filteredResponse = response.data.tradeWithDetails.trade_details;
+      setIndividualTradeExecutionsData(filteredResponse);
+    };
+    fetchData();
+  }, [selectedTrade]);
 
   const markForDeletion = (tagId) => {
     setTagsToDelete((prevTags) => [...prevTags, tagId]);
@@ -137,44 +153,49 @@ const TradeDetails = ({ fetchTagsForTrade }) => {
   };
 
   return (
-    <div className="flex mb-4">
-      {/* Left-hand section (vertical layout) */}
-      <div className="flex flex-col mr-4 w-1/3">
-        {/* Trade details box */}
-        <TradeDetailsBox selectedTrade={selectedTrade} />
-        {/* Tags box */}
-        <TagsBox
-          tags={tags}
-          isEditing={isEditing}
-          setIsEditing={setIsEditing}
-          markForDeletion={markForDeletion}
-          handleCancel={handleCancel}
-          tagsToDelete={tagsToDelete}
-          handleSave={handleSave}
-          isCreatingNew={isCreatingNew}
-          setIsCreatingNew={setIsCreatingNew}
-          handleCreateNew={handleCreateNew}
-          handleCancelCreatNew={handleCancelCreatNew}
-          handleCreateNewSave={handleCreateNewSave}
-          handleTagsToCreateChange={handleTagsToCreateChange}
-          tagsToCreate={tagsToCreate}
-          isAddingTags={isAddingTags}
-          setIsAddingTags={setIsAddingTags}
-          tagsToAdd={tagsToAdd}
-          setTagsToAdd={setTagsToAdd}
-          handleFetchAvailableTagsToAdd={handleFetchAvailableTagsToAdd}
-          tagsFromFetch={tagsFromFetch}
-          setTagsFromFetch={setTagsFromFetch}
-          handleAddTagsSave={handleAddTagsSave}
+    <>
+      <div className="flex mb-4">
+        {/* Left-hand section (vertical layout) */}
+        <div className="flex flex-col mr-4 w-1/3">
+          {/* Trade details box */}
+          <TradeDetailsBox selectedTrade={selectedTrade} />
+          {/* Tags box */}
+          <TagsBox
+            tags={tags}
+            isEditing={isEditing}
+            setIsEditing={setIsEditing}
+            markForDeletion={markForDeletion}
+            handleCancel={handleCancel}
+            tagsToDelete={tagsToDelete}
+            handleSave={handleSave}
+            isCreatingNew={isCreatingNew}
+            setIsCreatingNew={setIsCreatingNew}
+            handleCreateNew={handleCreateNew}
+            handleCancelCreatNew={handleCancelCreatNew}
+            handleCreateNewSave={handleCreateNewSave}
+            handleTagsToCreateChange={handleTagsToCreateChange}
+            tagsToCreate={tagsToCreate}
+            isAddingTags={isAddingTags}
+            setIsAddingTags={setIsAddingTags}
+            tagsToAdd={tagsToAdd}
+            setTagsToAdd={setTagsToAdd}
+            handleFetchAvailableTagsToAdd={handleFetchAvailableTagsToAdd}
+            tagsFromFetch={tagsFromFetch}
+            setTagsFromFetch={setTagsFromFetch}
+            handleAddTagsSave={handleAddTagsSave}
+          />
+        </div>
+        {/* Right-hand section for the notes */}
+        <NotesBox
+          selectedTrade={selectedTrade}
+          isSettingNote={isSettingNote}
+          setIsSettingNote={setIsSettingNote}
         />
       </div>
-      {/* Right-hand section for the notes */}
-      <NotesBox
-        selectedTrade={selectedTrade}
-        isSettingNote={isSettingNote}
-        setIsSettingNote={setIsSettingNote}
+      <TradeExecutions
+        individualTradeExecutionsData={individualTradeExecutionsData}
       />
-    </div>
+    </>
   );
 };
 

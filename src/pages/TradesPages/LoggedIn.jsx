@@ -8,6 +8,7 @@ import {
   filterTradesBySymbol,
   processTradesByDayOfWeek,
   performanceByIntradayHoldTime,
+  performanceByStockPrice,
 } from "../../services/tradeServices";
 import { getStatistics } from "../../services/statisticsService";
 import { retrieveTradesOptionalTags } from "../../services/tagService";
@@ -52,6 +53,7 @@ export default function LoggedIn() {
     lineChart: "Cumulative P&L",
     horizontalDayOfWeek: "Performance by Day of Week",
     horizontalIntradayDuration: "Performance by Intraday Hold Time",
+    horizontalByStockPrice: "Performance by Stock Price",
   });
   const [label, setLabel] = useState("(Trades for Last 30 days)");
   //set symbol to correct info
@@ -101,6 +103,19 @@ export default function LoggedIn() {
   });
 
   const [tradeDataForBarChart, setTradeDataForBarChart] = useState({
+    labels: [],
+    datasets: [
+      {
+        label: "Trades Profit/Loss",
+        data: [],
+      },
+    ],
+  });
+
+  const [
+    tradeDataForHorizontalByStockPriceChart,
+    setTradeDataForHorizontalByStockPriceChart,
+  ] = useState({
     labels: [],
     datasets: [
       {
@@ -244,6 +259,8 @@ export default function LoggedIn() {
           `${baseChartLabels.horizontalIntradayDuration} ${label}`,
           radioValue
         );
+      //process trades by stock price for horizontal bar chart
+      // const processedTradesByStockPrice = performanceByStockPrice(trades, `${baseChartLabels.horizontalByStockPrice} ${label}`, radioValue);
 
       setStatisticData(updatedStatistics);
       setTradeData(processedTradesLineChart);
