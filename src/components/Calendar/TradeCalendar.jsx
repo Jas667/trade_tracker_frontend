@@ -1,7 +1,18 @@
 // TradeCalendar.jsx
 import React from "react";
 
-const TradeCalendar = ({ trades, net, month, year, setStartDate, setEndDate, setMonthClickedStartDate, setMonthClickedEndDate }) => {
+const TradeCalendar = ({
+  trades,
+  net,
+  month,
+  year,
+  setStartDate,
+  setEndDate,
+  setMonthClickedStartDate,
+  setMonthClickedEndDate,
+  setCurrentView,
+  setButtonValue,
+}) => {
   const generateDays = () => {
     const startDate = new Date(year, month, 1);
     const endDate = new Date(year, month + 1, 0);
@@ -71,6 +82,8 @@ const TradeCalendar = ({ trades, net, month, year, setStartDate, setEndDate, set
     setEndDate(end);
     setMonthClickedStartDate(start);
     setMonthClickedEndDate(end);
+    setCurrentView("tradeView");
+    setButtonValue("tradeView");
   };
 
   return (

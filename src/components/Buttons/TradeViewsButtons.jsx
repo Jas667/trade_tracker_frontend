@@ -2,9 +2,9 @@ import { useState } from "react";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
 
-function TradeViewsButtons({ currentView, setCurrentView }) {
+function TradeViewsButtons({ currentView, setCurrentView, buttonValue, setButtonValue }) {
   const [checked, setChecked] = useState(false);
-  const [buttonValue, setButtonValue] = useState("chartView");
+  // const [buttonValue, setButtonValue] = useState("chartView");
 
   const buttons = [
     { name: "Standard View", value: "chartView" },

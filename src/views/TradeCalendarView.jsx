@@ -4,7 +4,7 @@ import TradeCalendar from "../components/Calendar/TradeCalendar";
 import GrossNetButton from "../components/Buttons/GrossNetButton";
 import { useGlobalState } from "../../context/GlobalStateContext";
 
-const TradeCalendarView = ({ trades, net, setStartDate, setEndDate}) => {
+const TradeCalendarView = ({ trades, net, setStartDate, setEndDate, currentView, setCurrentView, setButtonValue}) => {
   const { radioValue, setRadioValue, setMonthClickedStartDate, setMonthClickedEndDate } = useGlobalState();
   // Extract unique months from trades
   const getUniqueMonths = () => {
@@ -35,6 +35,9 @@ const TradeCalendarView = ({ trades, net, setStartDate, setEndDate}) => {
             setEndDate={setEndDate}
             setMonthClickedStartDate={setMonthClickedStartDate}
             setMonthClickedEndDate={setMonthClickedEndDate}
+            currentView={currentView}
+            setCurrentView={setCurrentView}
+            setButtonValue={setButtonValue}
           />
         ))}
       </div>

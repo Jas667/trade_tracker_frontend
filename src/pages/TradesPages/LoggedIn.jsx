@@ -42,6 +42,7 @@ export default function LoggedIn() {
 
   //state to manage which view we are displaying on the page. This is used to switch between things like chart views or trade views etc.
   const [currentView, setCurrentView] = useState("chartView");
+  const [buttonValue, setButtonValue] = useState("chartView");
 
   //start and end date states
   const [startDate, setStartDate] = useState(thirtyDaysAgo);
@@ -287,6 +288,8 @@ export default function LoggedIn() {
         <TradeViewsButtons
           currentView={currentView}
           setCurrentView={setCurrentView}
+          buttonValue={buttonValue}
+          setButtonValue={setButtonValue}
         />
         {currentView === "chartView" && (
           <>
@@ -367,7 +370,7 @@ export default function LoggedIn() {
         {currentView === "calendarView" && (
           <>
             <div>
-              <TradeCalendarWrapper trades={rawTradeData} net={radioValue} setStartDate={setStartDate} setEndDate={setEndDate} />
+              <TradeCalendarWrapper trades={rawTradeData} net={radioValue} setStartDate={setStartDate} setEndDate={setEndDate} currentView={currentView} setCurrentView={setCurrentView} setButtonValue={setButtonValue} buttonValue={buttonValue} />
             </div>
           </>
         )}
