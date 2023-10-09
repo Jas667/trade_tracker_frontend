@@ -1,7 +1,7 @@
 // TradeCalendar.jsx
 import React from "react";
 
-const TradeCalendar = ({ trades, net, month, year }) => {
+const TradeCalendar = ({ trades, net, month, year, setStartDate, setEndDate, setMonthClickedStartDate, setMonthClickedEndDate }) => {
   const generateDays = () => {
     const startDate = new Date(year, month, 1);
     const endDate = new Date(year, month + 1, 0);
@@ -58,8 +58,27 @@ const TradeCalendar = ({ trades, net, month, year }) => {
 
   const placeholderDaysArray = generatePlaceholderDays();
 
+  const startDateString = `${year}-${(month + 1)
+    .toString()
+    .padStart(2, "0")}-01`;
+  const endDate = new Date(year, month + 1, 0);
+  const endDateString = `${year}-${(month + 1)
+    .toString()
+    .padStart(2, "0")}-${endDate.getDate()}`;
+
+  const handleMonthClick = (start, end) => {
+    setStartDate(start);
+    setEndDate(end);
+    setMonthClickedStartDate(start);
+    setMonthClickedEndDate(end);
+  };
+
   return (
-    <div className="border border-black m-4 rounded p-2">
+    <div
+      className="border border-black m-4 rounded p-2"
+      key={`${startDateString} to ${endDateString}`}
+      onClick={() => handleMonthClick(startDateString, endDateString)}
+    >
       <div className="font-bold text-xl text-center my-2">
         {new Date(year, month).toLocaleString("default", { month: "long" })}
       </div>
@@ -78,25 +97,6 @@ const TradeCalendar = ({ trades, net, month, year }) => {
             className="p-2 min-w-20 flex items-center justify-center bg-gray-200"
           >
             {/* Empty cell */}
-          </div>
-        ))}
-        {days.map((day) => renderDay(day))}
-      </div>
-    </div>
-  );
-
-  return (
-    <div className="border border-black m-4 rounded p-2">
-      <div className="font-bold text-xl text-center my-2">
-        {new Date(year, month).toLocaleString("default", { month: "long" })}
-      </div>
-      <div className="grid grid-cols-7 gap-2">
-        {daysOfWeek.map((day) => (
-          <div
-            key={day}
-            className="p-2 min-w-20 flex items-center justify-center"
-          >
-            <div className="text-center text-xs font-bold">{day}</div>
           </div>
         ))}
         {days.map((day) => renderDay(day))}

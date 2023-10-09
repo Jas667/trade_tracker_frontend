@@ -21,12 +21,11 @@ import WinVsLossDays from "../../views/WinVsLossDays";
 import { useGlobalState } from "../../../context/GlobalStateContext";
 import TagsView from "../../views/TagsView";
 import TradeViewsButtons from "../../components/Buttons/TradeViewsButtons";
-import TradeCalendarWrapper from "../../components/Calendar/TradeCalendarWrapper";
+import TradeCalendarWrapper from "../../views/TradeCalendarView";
 
 export default function LoggedIn() {
   const {
     isTradeNoteBeingAltered,
-    setIsTradeNoteBeingAltered,
     radioValue,
     setRadioValue,
   } = useGlobalState();
@@ -104,19 +103,6 @@ export default function LoggedIn() {
   });
 
   const [tradeDataForBarChart, setTradeDataForBarChart] = useState({
-    labels: [],
-    datasets: [
-      {
-        label: "Trades Profit/Loss",
-        data: [],
-      },
-    ],
-  });
-
-  const [
-    tradeDataForHorizontalByStockPriceChart,
-    setTradeDataForHorizontalByStockPriceChart,
-  ] = useState({
     labels: [],
     datasets: [
       {
@@ -227,7 +213,7 @@ export default function LoggedIn() {
     if (trades) {
       //set raw trade data for use in trades table
       setRawTradeData(trades);
-      console.log("RAW TRADE DATA", rawTradeData);
+      // console.log("RAW TRADE DATA", rawTradeData);
       //update statistics table
       const updatedStatistics = getStatistics(
         trades,
@@ -381,7 +367,7 @@ export default function LoggedIn() {
         {currentView === "calendarView" && (
           <>
             <div>
-              <TradeCalendarWrapper trades={rawTradeData} net={radioValue} />
+              <TradeCalendarWrapper trades={rawTradeData} net={radioValue} setStartDate={setStartDate} setEndDate={setEndDate} />
             </div>
           </>
         )}

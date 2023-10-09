@@ -73,7 +73,6 @@ const TagsView = ({
       <StatsForTags
         calculatedStatsForTags={calculatedStatsForTags}
         setLocalSelectedTags={setLocalSelectedTags}
-        // handleFilter={handleFilter}
         handleTradeFilter={handleTradeFilter}
         fetchAndProcessTrades={fetchAndProcessTrades}
         localSelectedTags={localSelectedTags}

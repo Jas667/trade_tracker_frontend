@@ -1,11 +1,11 @@
 // TradeCalendarWrapper.jsx
 import React from "react";
-import TradeCalendar from "./TradeCalendar";
-import GrossNetButton from "../Buttons/GrossNetButton";
-import { useGlobalState } from "../../../context/GlobalStateContext";
+import TradeCalendar from "../components/Calendar/TradeCalendar";
+import GrossNetButton from "../components/Buttons/GrossNetButton";
+import { useGlobalState } from "../../context/GlobalStateContext";
 
-const TradeCalendarWrapper = ({ trades, net }) => {
-  const { radioValue, setRadioValue } = useGlobalState();
+const TradeCalendarView = ({ trades, net, setStartDate, setEndDate}) => {
+  const { radioValue, setRadioValue, setMonthClickedStartDate, setMonthClickedEndDate } = useGlobalState();
   // Extract unique months from trades
   const getUniqueMonths = () => {
     const months = trades.map((trade) => {
@@ -31,6 +31,10 @@ const TradeCalendarWrapper = ({ trades, net }) => {
             net={net}
             month={month}
             year={year}
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+            setMonthClickedStartDate={setMonthClickedStartDate}
+            setMonthClickedEndDate={setMonthClickedEndDate}
           />
         ))}
       </div>
@@ -38,4 +42,4 @@ const TradeCalendarWrapper = ({ trades, net }) => {
   );
 };
 
-export default TradeCalendarWrapper;
+export default TradeCalendarView;

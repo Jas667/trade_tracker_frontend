@@ -17,6 +17,9 @@ export const GlobalStateProvider = ({ children }) => {
   const [localSelectedTags, setLocalSelectedTags] = useState([]);
   const [initialTagsFromFetch, setInitialTagsFromFetch] = useState([]);
   const [tags, setTags] = useState([]);
+  
+  const [monthClickedStartDate, setMonthClickedStartDate] = useState("");
+  const [monthClickedEndDate, setMonthClickedEndDate] = useState("");
 
 
 
@@ -45,6 +48,10 @@ export const GlobalStateProvider = ({ children }) => {
         setInitialTagsFromFetch,
         tags,
         setTags,
+        monthClickedStartDate,
+        setMonthClickedStartDate,
+        monthClickedEndDate,
+        setMonthClickedEndDate,
       }}
     >
       {children}

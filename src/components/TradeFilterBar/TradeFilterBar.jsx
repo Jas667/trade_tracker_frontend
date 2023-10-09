@@ -18,7 +18,12 @@ function TradeFilterBar({
     setInitialTagsFromFetch,
     tags,
     setTags,
+    monthClickedStartDate,
+    monthClickedEndDate,
   } = useGlobalState();
+
+  //This is used to stop the calendar view click from triggering the filter bar on initial load
+  const [mounted, setMounted] = useState(false);
 
   // Local state for the filters
   const [localStartDate, setLocalStartDate] = useState(startDate);
@@ -79,6 +84,15 @@ function TradeFilterBar({
   }, [isTradeTagBeingAltered]);
 
   useEffect(() => {
+    if (mounted) {
+      setLocalStartDate(monthClickedStartDate);
+      setLocalEndDate(monthClickedEndDate);
+    } else {
+      setMounted(true);
+    }
+  }, [monthClickedEndDate, monthClickedStartDate]);
+
+  useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -128,14 +142,6 @@ function TradeFilterBar({
       return newSelectedTags;
     });
   };
-
-  // const resetTagsDropdown = (currentSelectedTags) => {
-  //   setTags(
-  //     initialTagsFromFetch.filter(
-  //       (tag) => !currentSelectedTags.some((t) => t.id === tag.id)
-  //     )
-  //   );
-  // };
 
   return (
     <div className="bg-gray-800 text-white p-4 sm:p-2">
