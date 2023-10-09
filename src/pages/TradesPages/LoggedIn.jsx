@@ -21,6 +21,7 @@ import WinVsLossDays from "../../views/WinVsLossDays";
 import { useGlobalState } from "../../../context/GlobalStateContext";
 import TagsView from "../../views/TagsView";
 import TradeViewsButtons from "../../components/Buttons/TradeViewsButtons";
+import TradeCalendarWrapper from "../../components/Calendar/TradeCalendarWrapper";
 
 export default function LoggedIn() {
   const {
@@ -226,6 +227,7 @@ export default function LoggedIn() {
     if (trades) {
       //set raw trade data for use in trades table
       setRawTradeData(trades);
+      console.log("RAW TRADE DATA", rawTradeData)
       //update statistics table
       const updatedStatistics = getStatistics(
         trades,
@@ -337,6 +339,10 @@ export default function LoggedIn() {
             </div>
             <div>
               <TableForStats statisticData={statisticData} />
+            </div>
+            <div>
+              {/* HERE FOR THE CALENDAR TO TEST */}
+              <TradeCalendarWrapper trades={rawTradeData} net={true} />
             </div>
           </>
         )}
