@@ -11,6 +11,7 @@ function TradeViewsButtons({ currentView, setCurrentView }) {
     { name: "Trades View", value: "tradeView" },
     { name: "Win VS Loss Days View", value: "winVsLossDays" },
     { name: "Tags View", value: "tagsView" },
+    {name: "Calendar View", value: "calendarView"}
   ];
 
   return (

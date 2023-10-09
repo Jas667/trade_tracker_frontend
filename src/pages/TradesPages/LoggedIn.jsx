@@ -227,7 +227,7 @@ export default function LoggedIn() {
     if (trades) {
       //set raw trade data for use in trades table
       setRawTradeData(trades);
-      console.log("RAW TRADE DATA", rawTradeData)
+      console.log("RAW TRADE DATA", rawTradeData);
       //update statistics table
       const updatedStatistics = getStatistics(
         trades,
@@ -298,7 +298,10 @@ export default function LoggedIn() {
           today={today}
           thirtyDaysAgo={thirtyDaysAgo}
         />
-        <TradeViewsButtons currentView={currentView} setCurrentView={setCurrentView}/>
+        <TradeViewsButtons
+          currentView={currentView}
+          setCurrentView={setCurrentView}
+        />
         {currentView === "chartView" && (
           <>
             <GrossNetButton
@@ -340,10 +343,6 @@ export default function LoggedIn() {
             <div>
               <TableForStats statisticData={statisticData} />
             </div>
-            <div>
-              {/* HERE FOR THE CALENDAR TO TEST */}
-              <TradeCalendarWrapper trades={rawTradeData} net={true} />
-            </div>
           </>
         )}
         {currentView === "tradeView" && (
@@ -376,6 +375,13 @@ export default function LoggedIn() {
                 selectedTags={selectedTags}
                 fetchAndProcessTrades={fetchAndProcessTrades}
               />
+            </div>
+          </>
+        )}
+        {currentView === "calendarView" && (
+          <>
+            <div>
+              <TradeCalendarWrapper trades={rawTradeData} net={radioValue} />
             </div>
           </>
         )}
