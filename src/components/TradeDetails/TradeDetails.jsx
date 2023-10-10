@@ -14,8 +14,9 @@ import {
 import { individualTradeExecutions } from "../../services/tradeDetailsServices";
 import { useGlobalState } from "../../../context/GlobalStateContext";
 import TradeExecutions from "./TradeExecutions";
+import BackToTradesButton from "../Buttons/BackToTradesButton";
 
-const TradeDetails = ({ fetchTagsForTrade }) => {
+const TradeDetails = ({ fetchTagsForTrade, handleBackToTradesClick }) => {
   const {
     selectedTrade,
     tags,
@@ -192,6 +193,7 @@ const TradeDetails = ({ fetchTagsForTrade }) => {
           setIsSettingNote={setIsSettingNote}
         />
       </div>
+      <BackToTradesButton handleBackToTradesClick={handleBackToTradesClick} />
       <TradeExecutions
         individualTradeExecutionsData={individualTradeExecutionsData}
       />

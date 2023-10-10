@@ -72,6 +72,7 @@ const Trades = ({ rawTradeData }) => {
               fetchTagsForTrade={fetchTagsForTrade}
               isCreatingNew={isCreatingNew}
               setIsCreatingNew={setIsCreatingNew}
+              handleBackToTradesClick={handleBackToTradesClick}
             />
           </AppContext.Provider>
         </>
