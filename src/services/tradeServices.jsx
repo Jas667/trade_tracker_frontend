@@ -289,18 +289,48 @@ export function performanceByStockPrice(trades, label, net = true) {
     "$2 - $2.99": { min: 2, max: 3, profit_loss: 0, gross_profit_loss: 0 },
     "$3 - $3.99": { min: 3, max: 4, profit_loss: 0, gross_profit_loss: 0 },
     "$4 - $4.99": { min: 4, max: 5, profit_loss: 0, gross_profit_loss: 0 },
-    "$5 - $5.99": {
-      min: 5,
-      max: 6,
-      profit_loss: 0,
-      gross_profit_loss: 0,
-    },
-    "$6 - $$6.99": { min: 6, max: 7, profit_loss: 0, gross_profit_loss: 0 },
+    "$5 - $5.99": { min: 5, max: 6, profit_loss: 0, gross_profit_loss: 0 },
+    "$6 - $6.99": { min: 6, max: 7, profit_loss: 0, gross_profit_loss: 0 },
     "$7 - $7.99": { min: 7, max: 8, profit_loss: 0, gross_profit_loss: 0 },
     "$8 - $8.99": { min: 8, max: 9, profit_loss: 0, gross_profit_loss: 0 },
     "$9 - $9.99": { min: 9, max: 10, profit_loss: 0, gross_profit_loss: 0 },
     "$10 +": { min: 10, max: Infinity, profit_loss: 0, gross_profit_loss: 0 },
   };
 
-  // console.log(trades);
+  trades.forEach((trade) => {
+    const price = parseFloat(trade.open_price);
+    for (let category in categories) {
+      if (
+        price >= categories[category].min &&
+        price < categories[category].max
+      ) {
+        categories[category].profit_loss += parseFloat(trade.profit_loss);
+        categories[category].gross_profit_loss += parseFloat(
+          trade.gross_profit_loss
+        );
+        break;
+      }
+    }
+  });
+
+  // Convert the data into the desired format for charting
+  const labels = Object.keys(categories);
+  const dataKey = net ? "profit_loss" : "gross_profit_loss";
+  const data = labels.map((label) => categories[label][dataKey]);
+
+  return {
+    labels: labels,
+    datasets: [
+      {
+        label: label,
+        data: data,
+      },
+    ],
+  };
 }
+
+export function findAccuracyPercentage(trades, net = true) {
+  const winningTrades = trades.filter((trade) => net? trade.profit_loss > 0 : trade.gross_profit_loss > 0);
+  const accuracy = (winningTrades.length / trades.length) * 100;
+  return accuracy.toFixed(2);
+};

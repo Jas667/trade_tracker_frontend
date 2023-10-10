@@ -9,6 +9,7 @@ import {
   processTradesByDayOfWeek,
   performanceByIntradayHoldTime,
   performanceByStockPrice,
+  findAccuracyPercentage,
 } from "../../services/tradeServices";
 import { getStatistics } from "../../services/statisticsService";
 import { retrieveTradesOptionalTags } from "../../services/tagService";
@@ -22,6 +23,7 @@ import { useGlobalState } from "../../../context/GlobalStateContext";
 import TagsView from "../../views/TagsView";
 import TradeViewsButtons from "../../components/Buttons/TradeViewsButtons";
 import TradeCalendarWrapper from "../../views/TradeCalendarView";
+import AccuracyCircle from "../../components/chartsAndTables/AccuracyChart";
 
 export default function LoggedIn() {
   const { isTradeNoteBeingAltered, radioValue, setRadioValue } =
@@ -124,6 +126,19 @@ export default function LoggedIn() {
   });
 
   const [
+    tradeDataForHorizontalByPriceBarChart,
+    setTradeDataForHorizontalByPriceBarChart,
+  ] = useState({
+    labels: [],
+    datasets: [
+      {
+        label: "Trades Profit/Loss",
+        data: [],
+      },
+    ],
+  });
+
+  const [
     tradeDataForIntradayPerformanceHorizontalBarChart,
     setTradeDataForIntradayPerformanceHorizontalBarChart,
   ] = useState({
@@ -135,6 +150,8 @@ export default function LoggedIn() {
       },
     ],
   });
+
+  const [accuracy, setAccuracy] = useState(0);
 
   const handleTradeFilter = (
     filteredStartDate,
@@ -246,7 +263,14 @@ export default function LoggedIn() {
           radioValue
         );
       //process trades by stock price for horizontal bar chart
-      // const processedTradesByStockPrice = performanceByStockPrice(trades, `${baseChartLabels.horizontalByStockPrice} ${label}`, radioValue);
+      const processedTradesByStockPrice = performanceByStockPrice(
+        trades,
+        `${baseChartLabels.horizontalByStockPrice} ${label}`,
+        radioValue
+      );
+
+      const accuracyForCircle = findAccuracyPercentage(trades);
+
 
       setStatisticData(updatedStatistics);
       setTradeData(processedTradesLineChart);
@@ -255,6 +279,8 @@ export default function LoggedIn() {
       setTradeDataForIntradayPerformanceHorizontalBarChart(
         processedTradesByIntradayPerformance
       );
+      setTradeDataForHorizontalByPriceBarChart(processedTradesByStockPrice);
+      setAccuracy(accuracyForCircle);
     }
   };
 
@@ -324,6 +350,17 @@ export default function LoggedIn() {
                   }
                   indexAxis="y"
                 />
+              </div>
+              <div className="col-auto py-3 px-5 px-md-5">
+                <BarChart
+                  labels={tradeDataForHorizontalByPriceBarChart.labels}
+                  datasets={tradeDataForHorizontalByPriceBarChart.datasets}
+                  indexAxis="y"
+                  // AccuracyCircle
+                />
+              </div>
+              <div className="col-auto py-3 px-5 px-md-5 d-flex justify-content-center align-items-center">
+                <AccuracyCircle accuracy={accuracy}/>
               </div>
             </div>
             <div>
