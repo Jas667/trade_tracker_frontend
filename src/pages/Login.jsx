@@ -60,6 +60,7 @@ export default function Login() {
     try {
       const response = await login(formData);
       const data = await response.json();
+      console.log(data);
 
       //switch statement to handle different responses
       switch (response.status) {
@@ -74,8 +75,14 @@ export default function Login() {
               identifier: "User not found.",
             }));
           } else {
-            setErrorMessage((prev) => ({ ...prev, password: data.message }));
+            setErrorMessage((prev) => ({ ...prev, password: "Incorrect Login Info" }));
           }
+          break;
+        case 429:
+          setErrorMessage((prev) => ({
+            ...prev,
+            identifier: "Too many login attempts. Please try again later.",
+          }));
           break;
         default:
           setErrorMessage((prev) => ({
