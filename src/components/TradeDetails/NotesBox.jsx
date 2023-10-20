@@ -7,6 +7,7 @@ const NotesBox = ({ selectedTrade, isSettingNote, setIsSettingNote }) => {
   const { isTradeNoteBeingAltered, setIsTradeNoteBeingAltered } =
     useGlobalState();
 
+  const [isNoteTooLong, setIsNoteTooLong] = useState(false);
   const [modifiedNote, setModifiedNote] = useState(selectedTrade.notes || "");
   const [originalNote, setOriginalNote] = useState(selectedTrade.notes);
   const [displayedNote, setDisplayedNote] = useState(selectedTrade.notes);
@@ -48,18 +49,23 @@ const NotesBox = ({ selectedTrade, isSettingNote, setIsSettingNote }) => {
           <textarea
             value={modifiedNote}
             type="text"
-            onChange={(e) => setModifiedNote(e.target.value)}
+            onChange={(e) => {
+              setModifiedNote(e.target.value)
+              setIsNoteTooLong(e.target.value.length >= 2500);
+            }}
             className="mt-4 w-full p-2"
             rows="5"
+            maxLength="2500"
           />
           <Button
             variant="success"
             className="mt-2"
             onClick={saveNote}
-            disabled={modifiedNote === originalNote}
+            disabled={modifiedNote === originalNote || isNoteTooLong}
           >
             Save
           </Button>
+          {isNoteTooLong && <p className="text-red-500 mt-2">Note is too long! Note must be less than 2500 characters.</p>}
         </div>
       ) : (
         // When isSettingNote is false, show the current notes or the "No Notes" message.
