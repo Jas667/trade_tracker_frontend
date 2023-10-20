@@ -28,26 +28,37 @@ const TradeCalendar = ({
     return days;
   };
 
-  const findTradeForDay = (day) => {
-    return trades.find(
-      (trade) => new Date(trade.open_date).toDateString() === day.toDateString()
-    );
+  const aggregateTradesForDay = (day) => {
+    return trades
+      .filter(
+        (trade) =>
+          new Date(trade.open_date).toDateString() === day.toDateString()
+      )
+      .reduce(
+        (acc, trade) => {
+          acc.gross += parseFloat(trade.gross_profit_loss);
+          acc.net += parseFloat(trade.profit_loss);
+          return acc;
+        },
+        { gross: 0, net: 0 }
+      );
   };
 
   const renderDay = (day) => {
-    const trade = findTradeForDay(day);
+    const tradeValues = aggregateTradesForDay(day);
     let bgColor = "bg-gray-200";
     let valueDisplay = "";
-
-    if (trade) {
-      const value = net ? trade.profit_loss : trade.gross_profit_loss;
-      bgColor = parseFloat(value) > 0 ? "bg-green-400" : "bg-red-400";
-      valueDisplay = `$${parseFloat(value).toFixed(2)}`; // added dollar sign and formatted to 2 decimal places
+  
+    // Check if either gross or net value exists for the day
+    if (tradeValues.gross !== 0 || tradeValues.net !== 0) {
+      const value = net ? tradeValues.net : tradeValues.gross;
+      bgColor = value > 0 ? "bg-green-400" : "bg-red-400";
+      valueDisplay = `$${parseFloat(value).toFixed(2)}`;
     }
 
     return (
       <div
-        key={trade?.id || day.toString()}
+        key={day.toString()}
         className={`p-2 min-w-20 flex items-center justify-center ${bgColor}`}
       >
         <div className="text-center text-xs">
