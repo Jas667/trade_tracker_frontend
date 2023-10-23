@@ -1,12 +1,12 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TradeDetails from "../components/TradeDetails/TradeDetails";
 import TradeList from "../components/TradeList";
 import Pagination from "../components/Buttons/Pagination";
 import { retrieveAllTagsForTrade } from "../services/tagService";
 import BackToTradesButton from "../components/Buttons/BackToTradesButton";
 import AppContext from "../../context/ContextProvider";
-
+import NextPreviousTradeButton from "../components/Buttons/NextPreviousTradeButton";
 const Trades = ({ rawTradeData }) => {
   if (rawTradeData.length === 0) return null;
 
@@ -53,6 +53,11 @@ const Trades = ({ rawTradeData }) => {
         <>
           <BackToTradesButton
             handleBackToTradesClick={handleBackToTradesClick}
+          />
+          <NextPreviousTradeButton
+            rawTradeData={rawTradeData}
+            selectedTrade={selectedTrade}
+            setSelectedTrade={setSelectedTrade}
           />
           <AppContext.Provider
             value={{

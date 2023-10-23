@@ -15,6 +15,8 @@ import { individualTradeExecutions } from "../../services/tradeDetailsServices";
 import { useGlobalState } from "../../../context/GlobalStateContext";
 import TradeExecutions from "./TradeExecutions";
 import BackToTradesButton from "../Buttons/BackToTradesButton";
+import NextPreviousTradeButton from "../Buttons/NextPreviousTradeButton";
+
 
 const TradeDetails = ({ fetchTagsForTrade, handleBackToTradesClick }) => {
   const {
