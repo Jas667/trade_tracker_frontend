@@ -146,7 +146,9 @@ const WinVsLossDays = ({ rawTradeData }) => {
         radioValue
       );
 
+
       const { winDays, lossDays } = await splitDataIntoWinAndLoss(rawTradeData);
+
 
       const winDayStatisticData = getStatistics(
         winDays,
