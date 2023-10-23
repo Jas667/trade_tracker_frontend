@@ -26,7 +26,7 @@ const TradeList = ({ currentTrades, handleViewClick, fetchTagsForTrade }) => {
           >
             <td>{trade.open_date}</td>
             <td>{trade.symbol}</td>
-            <td style={{ color: trade.profit_loss >= 0 ? "green" : "red" }}>
+            <td style={{ color: trade.profit_loss >= 0 ? "green" : "#d20005" }}>
               {trade.profit_loss}
             </td>
             <td>{trade.total_shares_traded}</td>

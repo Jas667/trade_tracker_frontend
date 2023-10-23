@@ -49,13 +49,15 @@ function BarChart({ labels, datasets, customOptions, indexAxis = "x" }) {
   const enhancedDatasets = datasets.map((dataset) => ({
     ...BarChart.defaultProps.singleDatasetDefaults,
     ...dataset,
-    backgroundColor: dataset.data.map((value) => (value >= 0 ? "aqua" : "red")),
+    backgroundColor: dataset.data.map((value) =>
+      value >= 0 ? "#57bcf7" : "#d20005"
+    ),
   }));
 
   return (
     <>
       <Bar
-        style={{ width: "100%", height: "100%", margin: "auto"}}
+        style={{ width: "100%", height: "100%", margin: "auto" }}
         // className="w-full h-full justify-center"
         data={{ labels, datasets: enhancedDatasets }}
         options={options}
@@ -71,7 +73,7 @@ BarChart.defaultProps = {
   customOptions: {},
   singleDatasetDefaults: {
     label: "",
-    backgroundColor: "aqua",
+    backgroundColor: "#57bcf7",
     borderColor: "black",
     borderWidth: 2,
   },

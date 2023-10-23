@@ -40,7 +40,7 @@ export function sortDataForPieChart(rawTradeData, net = true) {
     labels: labels,
     datasets: [
       {
-        backgroundColor: ["aqua", "red"],
+        backgroundColor: ["#57bcf7", "#d20005"],
         data: data,
       },
     ],
@@ -50,14 +50,16 @@ export function sortDataForPieChart(rawTradeData, net = true) {
 export function splitDataIntoWinAndLoss(rawTradeData, net = true) {
   const winDays = [];
   const lossDays = [];
-  
+
   // Step 1: Group trades by date and calculate the net profit/loss for each date
   const groupedByDate = rawTradeData.reduce((acc, trade) => {
-    const profitValue = net ? parseFloat(trade.profit_loss) : parseFloat(trade.gross_profit_loss);
+    const profitValue = net
+      ? parseFloat(trade.profit_loss)
+      : parseFloat(trade.gross_profit_loss);
     if (!acc[trade.close_date]) {
       acc[trade.close_date] = {
         trades: [],
-        netProfit: 0
+        netProfit: 0,
       };
     }
     acc[trade.close_date].trades.push(trade);
@@ -66,7 +68,7 @@ export function splitDataIntoWinAndLoss(rawTradeData, net = true) {
   }, {});
 
   // Step 2: Based on the net result for each date, push all trades of that date to winDays or lossDays
-  Object.values(groupedByDate).forEach(group => {
+  Object.values(groupedByDate).forEach((group) => {
     if (group.netProfit > 0) {
       winDays.push(...group.trades);
     } else {
@@ -76,4 +78,3 @@ export function splitDataIntoWinAndLoss(rawTradeData, net = true) {
 
   return { winDays, lossDays };
 }
-

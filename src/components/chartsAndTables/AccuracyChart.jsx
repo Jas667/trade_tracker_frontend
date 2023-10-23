@@ -7,7 +7,7 @@ const AccuracyCircle = ({ accuracy }) => {
     datasets: [
       {
         data: [accuracy, 100 - accuracy],
-        backgroundColor: ["aqua", "red"],
+        backgroundColor: ["#57bcf7", "#d20005"],
         circumference: 180,
         rotation: 270,
       },
@@ -34,7 +34,7 @@ const AccuracyCircle = ({ accuracy }) => {
   };
 
   return (
-    <div className="flex justify-center items-center max-w-xs max-h-xs w-full h-full" >
+    <div className="flex justify-center items-center max-w-xs max-h-xs w-full h-full">
       <Doughnut data={data} options={options} />
     </div>
   );

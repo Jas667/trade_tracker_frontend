@@ -44,11 +44,11 @@ function LineChart({ labels, datasets, customOptions }) {
 
   return (
     <>
-        <Line
-          className="w-full h-full justify-center"
-          data={{ labels, datasets: enhancedDatasets }}
-          options={options}
-        ></Line>
+      <Line
+        className="w-full h-full justify-center"
+        data={{ labels, datasets: enhancedDatasets }}
+        options={options}
+      ></Line>
     </>
   );
 }
@@ -61,9 +61,9 @@ LineChart.defaultProps = {
   singleDatasetDefaults: {
     label: "",
     borderColor: "black",
-    backgroundColor: "aqua",
-    pointBackgroundColor: "aqua",
-    pointBorderColor: "aqua",
+    backgroundColor: "#57bcf7",
+    pointBackgroundColor: "#57bcf7",
+    pointBorderColor: "#57bcf7",
     borderWidth: 2,
   },
 };

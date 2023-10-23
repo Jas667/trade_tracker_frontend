@@ -9,8 +9,8 @@ function StatsForWinLoss({ data }) {
         <thead>
           <tr>
             <th>Statistics</th>
-            <th style={{ backgroundColor: "aqua" }}>Winning Days</th>
-            <th style={{ backgroundColor: "red" }}>Losing Days</th>
+            <th style={{ backgroundColor: "#57bcf7" }}>Winning Days</th>
+            <th style={{ backgroundColor: "#d20005" }}>Losing Days</th>
           </tr>
         </thead>
         <tbody>

@@ -34,12 +34,12 @@ const WinVsLossDays = ({ rawTradeData }) => {
       {
         label: "Performance by Day of Week",
         data: [],
-        backgroundColor: "aqua",
+        backgroundColor: "#57bcf7",
       },
       {
         label: "",
         data: [],
-        backgroundColor: "red",
+        backgroundColor: "#d20005",
       },
     ],
   });
@@ -146,9 +146,7 @@ const WinVsLossDays = ({ rawTradeData }) => {
         radioValue
       );
 
-
       const { winDays, lossDays } = await splitDataIntoWinAndLoss(rawTradeData);
-
 
       const winDayStatisticData = getStatistics(
         winDays,
@@ -183,13 +181,13 @@ const WinVsLossDays = ({ rawTradeData }) => {
       const processedWinData = {
         label: "Win Days",
         data: byDayOfWeekWinDays.data,
-        backgroundColor: "aqua",
+        backgroundColor: "#57bcf7",
       };
 
       const processedLossData = {
         label: "Loss Days",
         data: byDayOfWeekLossDays.data,
-        backgroundColor: "red",
+        backgroundColor: "#d20005",
       };
 
       // 2. Integrate and set the data to state
