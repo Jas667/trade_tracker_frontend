@@ -22,7 +22,6 @@ const TagsBox = ({
   setTagsToAdd,
   handleFetchAvailableTagsToAdd,
   tagsFromFetch,
-  setTagsFromFetch,
   handleAddTagsSave,
 }) => {
   const renderDisplay = () => {

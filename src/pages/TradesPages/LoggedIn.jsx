@@ -26,7 +26,7 @@ import TradeCalendarWrapper from "../../views/TradeCalendarView";
 import AccuracyCircle from "../../components/chartsAndTables/AccuracyChart";
 
 export default function LoggedIn() {
-  const { isTradeNoteBeingAltered, radioValue, setRadioValue } =
+  const { isTradeNoteBeingAltered, radioValue, setRadioValue, reRenderAfterTagUpdate } =
     useGlobalState();
 
   const navigate = useNavigate();
@@ -294,6 +294,7 @@ export default function LoggedIn() {
     tagOptions,
     radioValue,
     isTradeNoteBeingAltered,
+    reRenderAfterTagUpdate
   ]);
 
   return (

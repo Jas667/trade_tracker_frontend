@@ -17,7 +17,6 @@ import TradeExecutions from "./TradeExecutions";
 import BackToTradesButton from "../Buttons/BackToTradesButton";
 import NextPreviousTradeButton from "../Buttons/NextPreviousTradeButton";
 
-
 const TradeDetails = ({ fetchTagsForTrade, handleBackToTradesClick }) => {
   const {
     selectedTrade,
@@ -28,8 +27,11 @@ const TradeDetails = ({ fetchTagsForTrade, handleBackToTradesClick }) => {
     setIsCreatingNew,
   } = useContext(AppContext);
 
-  const { isTradeTagBeingAltered, setIsTradeTagBeingAltered } =
-    useGlobalState();
+  const {
+    isTradeTagBeingAltered,
+    setIsTradeTagBeingAltered,
+    setReRenderAfterTagUpdate,
+  } = useGlobalState();
 
   const [tagsToDelete, setTagsToDelete] = useState([]);
   const [tagsToCreate, setTagsToCreate] = useState("");
@@ -106,6 +108,7 @@ const TradeDetails = ({ fetchTagsForTrade, handleBackToTradesClick }) => {
     if (addTagsResponse.message === "Tag added to trade") {
       setIsAddingTags(false);
       setTagsToAdd([]);
+      setReRenderAfterTagUpdate((prev) => prev + 1);
       fetchTagsForTrade(selectedTrade.id);
     }
   };
@@ -133,7 +136,7 @@ const TradeDetails = ({ fetchTagsForTrade, handleBackToTradesClick }) => {
         selectedTrade.id
       );
     }
-
+    setReRenderAfterTagUpdate((prev) => prev + 1);
     fetchTagsForTrade(selectedTrade.id);
     handleCancelCreatNew();
   };
@@ -149,6 +152,7 @@ const TradeDetails = ({ fetchTagsForTrade, handleBackToTradesClick }) => {
     if (response.status === 204) {
       setIsEditing(false);
       setTagsToDelete([]);
+      setReRenderAfterTagUpdate((prev) => prev + 1);
       fetchTagsForTrade(selectedTrade.id);
     } else {
       console.error(response);
