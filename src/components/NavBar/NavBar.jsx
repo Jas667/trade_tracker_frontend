@@ -12,6 +12,7 @@ function ColorSchemesExample() {
           <Nav className="me-auto">
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/upload">Upload Trades</Nav.Link>
+            <Nav.Link href="/tags">Tags</Nav.Link>
           </Nav>
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end">
