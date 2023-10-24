@@ -16,6 +16,7 @@ import { useGlobalState } from "../../../context/GlobalStateContext";
 import TradeExecutions from "./TradeExecutions";
 import BackToTradesButton from "../Buttons/BackToTradesButton";
 import NextPreviousTradeButton from "../Buttons/NextPreviousTradeButton";
+import ImageUpload from "../ImageUpload";
 
 const TradeDetails = ({ fetchTagsForTrade, handleBackToTradesClick }) => {
   const {
@@ -202,6 +203,12 @@ const TradeDetails = ({ fetchTagsForTrade, handleBackToTradesClick }) => {
       <BackToTradesButton handleBackToTradesClick={handleBackToTradesClick} />
       <TradeExecutions
         individualTradeExecutionsData={individualTradeExecutionsData}
+      />
+      <ImageUpload onImageUpload={ 
+        (selectedFile) => {
+          console.log(selectedFile);
+        }}
+        selectedTrade={selectedTrade}
       />
     </>
   );
