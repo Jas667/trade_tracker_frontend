@@ -1,11 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
 import ColorSchemesExample from "../../components/NavBar/NavBar";
+import {
+  getTags,
+  addTagGlobally,
+  deleteTagGlobally,
+  editTagNameGlobally,
+} from "../../services/tagService";
+import DismissibleAlert from "../../components/DismissIbleAlert";
 
 export default function Tags() {
-  const dummyTags = ["Tag1", "Tag2", "Tag3"]; // Dummy data
-
   const [tags, setTags] = useState([]);
+  const [tagArrayObject, setTagArrayObject] = useState([]);
+
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [showAlert, setShowAlert] = useState(false);
+
+  const [refreshTags, setRefreshTags] = useState(false); //this is a dummy state to force a rerender of the tags
+
   const [newTag, setNewTag] = useState("");
   const [editTag, setEditTag] = useState("");
   const [tagToEdit, setTagToEdit] = useState(null);
@@ -14,33 +26,75 @@ export default function Tags() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   useEffect(() => {
-    // Replace with an API call to fetch tags
-    setTags(dummyTags);
-  }, []);
+    const fetchTags = async () => {
+      const response = await getTags();
+      if (response.message === "Tags found") {
+        const fetchedTags = response.data.tags;
+        const tagNames = fetchedTags.map((tag) => tag.tag_name);
+        const tagArrayObject = fetchedTags.map((tag) => ({
+          tag_name: tag.tag_name,
+          tag_id: tag.id,
+        }));
 
-  const handleAddTag = () => {
+        setTags(tagNames);
+        setTagArrayObject(tagArrayObject);
+      }
+    };
+
+    fetchTags();
+  }, [refreshTags]);
+
+  const handleAddTag = async () => {
     // Call API to add a tag
-    setTags([...tags, newTag]);
-    setNewTag("");
+    const response = await addTagGlobally({ tag_name: [newTag] });
+    if (response.statusCode === 400) {
+      setErrorMessage(response.message);
+      setShowAlert(true);
+    } else {
+      setTags([...tags, newTag]);
+      setRefreshTags((prev) => !prev);
+      setNewTag("");
+      setShowAlert(false);
+    }
   };
 
-  const handleSaveEditedTag = () => {
-    // Call API to edit the tag
-    const updatedTags = tags.map((tag) => (tag === tagToEdit ? editTag : tag));
-    setTags(updatedTags);
-    setShowEditModal(false);
+  const handleSaveEditedTag = async () => {
+    //find the tag id using the name of clicked tag
+    const tagId = tagArrayObject.find(
+      (tag) => tag.tag_name === tagToEdit
+    ).tag_id;
+    
+    const response = await editTagNameGlobally(tagId, editTag);
+    
+    if (response.message === "Tag updated") {
+      setRefreshTags((prev) => !prev);
+      setShowEditModal(false);
+    } else {
+      setErrorMessage(response.message);
+      setShowAlert(true);
+    }
+
   };
 
-  const handleDeleteTag = () => {
-    // Call API to delete the tag
-    const updatedTags = tags.filter((tag) => tag !== tagToDelete);
-    setTags(updatedTags);
-    setShowDeleteModal(false);
+  const handleDeleteTag = async () => {
+    //find the tag id using the name of clicked tag
+    const tagId = tagArrayObject.find(
+      (tag) => tag.tag_name === tagToDelete
+    ).tag_id;
+
+    const response = await deleteTagGlobally(tagId);
+    if (response.status === 204) {
+      setRefreshTags((prev) => !prev);
+      setShowDeleteModal(false);
+    } else {
+      setErrorMessage(response.message);
+      setShowAlert(true);
+    }
   };
 
   return (
     <>
-              <ColorSchemesExample />
+      <ColorSchemesExample />
       <div className="my-3 mx-40 bg-gray-50 flex flex-col justify-center overflow-hidden">
         <h2 className="mb-5">Tags</h2>
 
@@ -49,8 +103,7 @@ export default function Tags() {
             <span
               key={tag}
               className="inline-block bg-blue-500 p-4 m-1 rounded shadow-md hover:shadow-lg transition-shadow duration-200 ease-in-out text-white"
-                >
-                      
+            >
               {tag}
               <button
                 className="ml-2 text-xs text-red-500 bg-red-100 px-2 py-0.5 rounded hover:bg-red-200 transition-all duration-200 ease-in-out"
@@ -75,16 +128,21 @@ export default function Tags() {
           ))}
         </div>
         <div className="w-1/2">
-        <input
-          type="text"
-          placeholder="Add a new tag"
-          value={newTag}
-          onChange={(e) => setNewTag(e.target.value)}
-          className="form-control mb-2"
-        />
-        <Button variant="secondary" onClick={handleAddTag}>
-          Add Tag
-        </Button>
+          <DismissibleAlert
+            message={errorMessage}
+            show={showAlert}
+            onClose={() => setShowAlert(false)}
+          />
+          <input
+            type="text"
+            placeholder="Add a new tag"
+            value={newTag}
+            onChange={(e) => setNewTag(e.target.value)}
+            className="form-control mb-2"
+          />
+          <Button variant="secondary" onClick={handleAddTag}>
+            Add Tag
+          </Button>
         </div>
         <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
           <Modal.Header closeButton>Edit Tag</Modal.Header>
@@ -110,7 +168,10 @@ export default function Tags() {
         <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
           <Modal.Header closeButton>Delete Tag</Modal.Header>
           <Modal.Body>
-            <p>Deleting this tag will remove it from all associated trades.</p>
+            <p>
+              WARNING! Deleting this tag will also delete it from all associated
+              trades. This action cannot be undone.
+            </p>
           </Modal.Body>
           <Modal.Footer>
             <Button
@@ -124,8 +185,7 @@ export default function Tags() {
             </Button>
           </Modal.Footer>
         </Modal>
-              </div>
-              
+      </div>
     </>
   );
 }

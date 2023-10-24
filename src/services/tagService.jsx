@@ -15,6 +15,53 @@ export const getTags = async () => {
   }
 };
 
+export const addTagGlobally = async (tagName) => { 
+  try {
+    const response = await fetch(`${API_BASE_URL}tag/create`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(tagName),
+    });
+    return response.json();
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const deleteTagGlobally = async (tagId) => { 
+  try {
+    const response = await fetch(`${API_BASE_URL}tag/delete/${tagId}`, {
+      method: "DELETE",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response;
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const editTagNameGlobally = async (tagId, tagName) => { 
+  try {
+    const response = await fetch(`${API_BASE_URL}tag/update/${tagId}`, {
+      method: "PUT",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({tag_name: tagName}),
+    });
+    return response.json();
+  } catch (e) {
+    console.error(e);
+  }
+};
+
 export const retrieveTradesOptionalTags = async (data) => {
   try {
     const response = await fetch(`${API_BASE_URL}tradetag/retrieve`, {
