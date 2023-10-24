@@ -228,7 +228,6 @@ export default function LoggedIn() {
     if (trades) {
       //set raw trade data for use in trades table
       setRawTradeData(trades);
-      console.log("rawTradeData", rawTradeData);
       //update statistics table
       const updatedStatistics = getStatistics(
         trades,

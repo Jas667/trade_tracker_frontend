@@ -60,7 +60,6 @@ export default function Login() {
     try {
       const response = await login(formData);
       const data = await response.json();
-      console.log(data);
 
       //switch statement to handle different responses
       switch (response.status) {
