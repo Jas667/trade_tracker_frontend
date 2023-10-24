@@ -50,8 +50,8 @@ export default function Tags() {
     if (response.statusCode === 400) {
       setErrorMessage(response.message);
       setShowAlert(true);
+      setNewTag("");
     } else {
-      setTags([...tags, newTag]);
       setRefreshTags((prev) => !prev);
       setNewTag("");
       setShowAlert(false);
@@ -70,6 +70,7 @@ export default function Tags() {
       setRefreshTags((prev) => !prev);
       setShowEditModal(false);
     } else {
+      setShowEditModal(false);
       setErrorMessage(response.message);
       setShowAlert(true);
     }
@@ -153,7 +154,7 @@ export default function Tags() {
               onChange={(e) => setEditTag(e.target.value)}
               className="form-control mb-2"
             />
-            <p>Editing this tag will change all associated tags.</p>
+            <p>Editing this tag will change the tag for all associated trades.</p>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => setShowEditModal(false)}>
