@@ -44,22 +44,26 @@ const ImageUpload = ({ onImageUpload, selectedTrade }) => {
 
       setSelectedFile(null);
       fileInputRef.current.value = null;
+
+      onImageUpload();
     }
   };
 
   return (
     <div className="mb-4">
-      <Alert
-        key={alertKey}
-        variant={alertType}
-        onClose={() => {
-          setAlertMessage(null);
-          setAlertType(null);
-        }}
-        dismissible
-      >
-        {alertMessage}
-      </Alert>
+      {alertMessage && (
+        <Alert
+          key={alertKey}
+          variant={alertType}
+          onClose={() => {
+            setAlertMessage(null);
+            setAlertType(null);
+          }}
+          dismissible
+        >
+          {alertMessage}
+        </Alert>
+      )}
       <label className="block text-gray-700 text-sm font-bold mb-2">
         Upload Image:
       </label>

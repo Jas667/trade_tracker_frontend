@@ -26,3 +26,15 @@ export const getImagesForTrade = async (tradeId) => {
     console.error(e);
   }
 };
+
+export const deleteImage = async (imageId) => { 
+  try {
+    const response = await fetch(`${API_BASE_URL}image/delete/${imageId}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+    return response;
+  } catch (e) {
+    console.error(e);
+  }
+};

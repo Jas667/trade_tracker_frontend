@@ -61,16 +61,16 @@ const TradeDetails = ({ fetchTagsForTrade, handleBackToTradesClick }) => {
   }, [selectedTrade]);
 
   useEffect(() => {
-    const fetchImagesForTrade = async () => {
-      const response = await getImagesForTrade(selectedTrade.id);
-      console.log(response);
-      if (response.message === "Images found") {
-        const imageUrls = response.data.imnages.map((img) => img.image_url);
-        setImages(imageUrls);
-      }
-    };
     fetchImagesForTrade();
   }, [selectedTrade]);
+
+  const fetchImagesForTrade = async () => {
+    const response = await getImagesForTrade(selectedTrade.id);
+    if (response.message === "Images found") {
+      // const imageUrls = response.data.imnages.map((img) => img.image_url);
+      setImages(response.data.imnages);
+    }
+  };
 
   const markForDeletion = (tagId) => {
     setTagsToDelete((prevTags) => [...prevTags, tagId]);
@@ -219,8 +219,8 @@ const TradeDetails = ({ fetchTagsForTrade, handleBackToTradesClick }) => {
       <TradeExecutions
         individualTradeExecutionsData={individualTradeExecutionsData}
       />
-      <ImageUpload selectedTrade={selectedTrade} />
-      <ImageGallery images={images} />
+      <ImageUpload selectedTrade={selectedTrade} onImageUpload={fetchImagesForTrade} />
+      <ImageGallery images={images} onDeleteImage={fetchImagesForTrade} />
     </>
   );
 };
