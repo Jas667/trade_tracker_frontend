@@ -15,8 +15,9 @@ import { individualTradeExecutions } from "../../services/tradeDetailsServices";
 import { useGlobalState } from "../../../context/GlobalStateContext";
 import TradeExecutions from "./TradeExecutions";
 import BackToTradesButton from "../Buttons/BackToTradesButton";
-import NextPreviousTradeButton from "../Buttons/NextPreviousTradeButton";
 import ImageUpload from "../ImageUpload";
+import ImageGallery from "../ImageGallery";
+import { getImagesForTrade } from "../../services/imageService";
 
 const TradeDetails = ({ fetchTagsForTrade, handleBackToTradesClick }) => {
   const {
@@ -43,6 +44,8 @@ const TradeDetails = ({ fetchTagsForTrade, handleBackToTradesClick }) => {
 
   const [isSettingNote, setIsSettingNote] = useState(false);
 
+  const [images, setImages] = useState([]);
+
   const [individualTradeExecutionsData, setIndividualTradeExecutionsData] =
     useState([]);
 
@@ -55,6 +58,18 @@ const TradeDetails = ({ fetchTagsForTrade, handleBackToTradesClick }) => {
       setIndividualTradeExecutionsData(filteredResponse);
     };
     fetchData();
+  }, [selectedTrade]);
+
+  useEffect(() => {
+    const fetchImagesForTrade = async () => {
+      const response = await getImagesForTrade(selectedTrade.id);
+      console.log(response);
+      if (response.message === "Images found") {
+        const imageUrls = response.data.imnages.map((img) => img.image_url);
+        setImages(imageUrls);
+      }
+    };
+    fetchImagesForTrade();
   }, [selectedTrade]);
 
   const markForDeletion = (tagId) => {
@@ -204,12 +219,8 @@ const TradeDetails = ({ fetchTagsForTrade, handleBackToTradesClick }) => {
       <TradeExecutions
         individualTradeExecutionsData={individualTradeExecutionsData}
       />
-      <ImageUpload onImageUpload={ 
-        (selectedFile) => {
-          console.log(selectedFile);
-        }}
-        selectedTrade={selectedTrade}
-      />
+      <ImageUpload selectedTrade={selectedTrade} />
+      <ImageGallery images={images} />
     </>
   );
 };

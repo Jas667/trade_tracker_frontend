@@ -14,3 +14,15 @@ export const uploadImage = async (file, tradeId) => {
     console.error(e);
   }
 };
+
+export const getImagesForTrade = async (tradeId) => { 
+  try {
+    const response = await fetch(`${API_BASE_URL}image/all/${tradeId}`, {
+      method: "GET",
+      credentials: "include",
+    });
+    return response.json();
+  } catch (e) {
+    console.error(e);
+  }
+};

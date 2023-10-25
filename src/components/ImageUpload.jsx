@@ -1,16 +1,13 @@
 import React, { useState, useRef } from "react";
 import { uploadImage } from "../services/imageService";
-import DismissibleAlert from "./DismissIbleAlert";
 import { Alert } from "react-bootstrap";
 
 const ImageUpload = ({ onImageUpload, selectedTrade }) => {
   const [selectedFile, setSelectedFile] = useState(null);
 
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [showAlert, setShowAlert] = useState(false);
-
   const [alertMessage, setAlertMessage] = useState(null);
-  const [alertType, setAlertType] = useState(null); // This can be 'success' or 'danger'
+  const [alertType, setAlertType] = useState(null);
+  const [alertKey, setAlertKey] = useState(0);
 
   const fileInputRef = useRef(null);
 
@@ -27,10 +24,11 @@ const ImageUpload = ({ onImageUpload, selectedTrade }) => {
       if (file.size >= 5 * 1024 * 1024) {
         setAlertType("danger");
         setAlertMessage("Max file size is 5MB.");
+        setAlertKey((prev) => prev + 1);
       } else {
         setAlertType("danger");
         setAlertMessage("Invalid file type. Only JPEG and PNG are allowed.");
-        alert("Invalid file type. Only JPEG and PNG are allowed.");
+        setAlertKey((prev) => prev + 1);
       }
       setSelectedFile(null);
       fileInputRef.current.value = null;
@@ -42,6 +40,8 @@ const ImageUpload = ({ onImageUpload, selectedTrade }) => {
     if (response.message === "Image uploaded successfully") {
       setAlertType("success");
       setAlertMessage("Image uploaded successfully!");
+      setAlertKey((prev) => prev + 1);
+
       setSelectedFile(null);
       fileInputRef.current.value = null;
     }
@@ -50,17 +50,16 @@ const ImageUpload = ({ onImageUpload, selectedTrade }) => {
   return (
     <div className="mb-4">
       <Alert
+        key={alertKey}
         variant={alertType}
-        onClose={() => setAlertMessage(null)}
+        onClose={() => {
+          setAlertMessage(null);
+          setAlertType(null);
+        }}
         dismissible
       >
         {alertMessage}
       </Alert>
-      <DismissibleAlert
-        message={errorMessage}
-        show={showAlert}
-        onClose={() => setShowAlert(false)}
-      />
       <label className="block text-gray-700 text-sm font-bold mb-2">
         Upload Image:
       </label>
