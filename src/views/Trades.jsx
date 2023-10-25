@@ -41,6 +41,10 @@ const Trades = ({ rawTradeData }) => {
     }
   };
 
+  // const handleTradeChange = (trade) => { 
+  //   fetchTagsForTrade(trade.id);
+  // };
+
   const handleBackToTradesClick = () => {
     setIsViewingDetails(false);
     setSelectedTrade(null);

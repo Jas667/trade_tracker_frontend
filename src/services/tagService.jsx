@@ -17,6 +17,7 @@ export const getTags = async () => {
 
 export const addTagGlobally = async (tagName) => { 
   try {
+    console.log(tagName);
     const response = await fetch(`${API_BASE_URL}tag/create`, {
       method: "POST",
       credentials: "include",

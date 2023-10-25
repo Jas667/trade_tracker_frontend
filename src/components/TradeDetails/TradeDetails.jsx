@@ -184,6 +184,7 @@ const TradeDetails = ({ fetchTagsForTrade, handleBackToTradesClick }) => {
           <TradeDetailsBox selectedTrade={selectedTrade} />
           {/* Tags box */}
           <TagsBox
+            selectedTrade={selectedTrade}
             tags={tags}
             isEditing={isEditing}
             setIsEditing={setIsEditing}
@@ -206,6 +207,7 @@ const TradeDetails = ({ fetchTagsForTrade, handleBackToTradesClick }) => {
             tagsFromFetch={tagsFromFetch}
             setTagsFromFetch={setTagsFromFetch}
             handleAddTagsSave={handleAddTagsSave}
+            onTradeNextPrevious={fetchTagsForTrade}
           />
         </div>
         {/* Right-hand section for the notes */}

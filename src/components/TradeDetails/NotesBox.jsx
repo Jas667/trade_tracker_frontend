@@ -30,7 +30,7 @@ const NotesBox = ({ selectedTrade, isSettingNote, setIsSettingNote }) => {
   useEffect(() => {
     setModifiedNote(selectedTrade.notes || "");
     setDisplayedNote(selectedTrade.notes || "");
-  }, [selectedTrade.notes]);
+  }, [selectedTrade]);
 
   return (
     <div className="border border-gray-300 p-4 flex-grow">

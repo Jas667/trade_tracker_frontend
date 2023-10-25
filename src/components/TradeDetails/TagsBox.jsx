@@ -1,5 +1,6 @@
 import Button from "react-bootstrap/Button";
 import InputForCreateNew from "./InputForCreateNew";
+import { useEffect } from "react";
 
 
 const TagsBox = ({
@@ -23,7 +24,14 @@ const TagsBox = ({
   handleFetchAvailableTagsToAdd,
   tagsFromFetch,
   handleAddTagsSave,
+  selectedTrade,
+  onTradeNextPrevious
 }) => {
+
+  useEffect(() => { 
+    onTradeNextPrevious(selectedTrade.id);
+  }, [selectedTrade]);
+
   const renderDisplay = () => {
     if (isEditing && !isCreatingNew && !isAddingTags) {
       return (
