@@ -18,6 +18,7 @@ import BackToTradesButton from "../Buttons/BackToTradesButton";
 import ImageUpload from "../ImageUpload";
 import ImageGallery from "../ImageGallery";
 import { getImagesForTrade } from "../../services/imageService";
+import ViewImagesButton from "../Buttons/ViewImagesButton";
 
 const TradeDetails = ({ fetchTagsForTrade, handleBackToTradesClick }) => {
   const {
@@ -45,6 +46,9 @@ const TradeDetails = ({ fetchTagsForTrade, handleBackToTradesClick }) => {
   const [isSettingNote, setIsSettingNote] = useState(false);
 
   const [images, setImages] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
 
   const [individualTradeExecutionsData, setIndividualTradeExecutionsData] =
     useState([]);
@@ -70,6 +74,11 @@ const TradeDetails = ({ fetchTagsForTrade, handleBackToTradesClick }) => {
       // const imageUrls = response.data.imnages.map((img) => img.image_url);
       setImages(response.data.imnages);
     }
+  };
+
+  const openFirstImage = () => {
+    setSelectedImageIndex(0);
+    setSelectedImage(images[0].image_url);
   };
 
   const markForDeletion = (tagId) => {
@@ -177,6 +186,9 @@ const TradeDetails = ({ fetchTagsForTrade, handleBackToTradesClick }) => {
 
   return (
     <>
+      <div>
+        <ViewImagesButton openImagesClick={openFirstImage} images={images} />
+      </div>
       <div className="flex mb-4">
         {/* Left-hand section (vertical layout) */}
         <div className="flex flex-col mr-4 w-1/3">
@@ -221,8 +233,18 @@ const TradeDetails = ({ fetchTagsForTrade, handleBackToTradesClick }) => {
       <TradeExecutions
         individualTradeExecutionsData={individualTradeExecutionsData}
       />
-      <ImageUpload selectedTrade={selectedTrade} onImageUpload={fetchImagesForTrade} />
-      <ImageGallery images={images} onDeleteImage={fetchImagesForTrade} />
+      <ImageUpload
+        selectedTrade={selectedTrade}
+        onImageUpload={fetchImagesForTrade}
+      />
+      <ImageGallery
+        images={images}
+        onDeleteImage={fetchImagesForTrade}
+        selectedImage={selectedImage}
+        setSelectedImage={setSelectedImage}
+        selectedImageIndex={selectedImageIndex}
+        setSelectedImageIndex={setSelectedImageIndex}
+      />
     </>
   );
 };

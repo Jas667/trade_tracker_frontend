@@ -2,14 +2,18 @@ import React, { useState } from "react";
 import { deleteImage } from "../services/imageService";
 import { Alert } from "react-bootstrap";
 
-const ImageGallery = ({ images, onDeleteImage }) => {
+const ImageGallery = ({
+  images,
+  onDeleteImage,
+  selectedImage,
+  setSelectedImage,
+  selectedImageIndex,
+  setSelectedImageIndex,
+}) => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const [showModal, setShowModal] = useState(false);
   const [imageToDelete, setImageToDelete] = useState(null);
-  const [selectedImage, setSelectedImage] = useState(null);
-
-  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
 
   const [alertMessage, setAlertMessage] = useState(null);
   const [alertType, setAlertType] = useState(null);
