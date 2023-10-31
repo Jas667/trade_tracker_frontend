@@ -4,8 +4,21 @@ import TradeCalendar from "../components/Calendar/TradeCalendar";
 import GrossNetButton from "../components/Buttons/GrossNetButton";
 import { useGlobalState } from "../../context/GlobalStateContext";
 
-const TradeCalendarView = ({ trades, net, setStartDate, setEndDate, currentView, setCurrentView, setButtonValue}) => {
-  const { radioValue, setRadioValue, setMonthClickedStartDate, setMonthClickedEndDate } = useGlobalState();
+const TradeCalendarView = ({
+  trades,
+  net,
+  setStartDate,
+  setEndDate,
+  currentView,
+  setCurrentView,
+  setButtonValue,
+}) => {
+  const {
+    radioValue,
+    setRadioValue,
+    setMonthClickedStartDate,
+    setMonthClickedEndDate,
+  } = useGlobalState();
   // Extract unique months from trades
   const getUniqueMonths = () => {
     const months = trades.map((trade) => {
@@ -23,6 +36,18 @@ const TradeCalendarView = ({ trades, net, setStartDate, setEndDate, currentView,
   return (
     <>
       <GrossNetButton radioValue={radioValue} setRadioValue={setRadioValue} />
+      <div className="mt-8 mb-6 max-w-xl mx-auto">
+        <ul className="mt-8 mb-6 text-lg leading-relaxed bg-gray-200 p-4 rounded-md shadow-lg text-center list-disc pl-8">
+          <li>
+            Click on a calendar to switch to the 'Trades View' for that month of
+            trades.
+          </li>
+          <li>
+            Click on an individual day that has trade data to view a more
+            detailed breakdown of how that day was traded.
+          </li>
+        </ul>
+      </div>
       <div className="flex flex-wrap">
         {uniqueMonths.map(({ month, year }) => (
           <TradeCalendar

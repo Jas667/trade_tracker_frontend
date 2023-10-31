@@ -1,5 +1,8 @@
 // TradeCalendar.jsx
 import React from "react";
+import { useState } from "react";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
 
 const TradeCalendar = ({
   trades,
@@ -13,6 +16,25 @@ const TradeCalendar = ({
   setCurrentView,
   setButtonValue,
 }) => {
+  const [show, setShow] = useState(false);
+  const [selectedDayTradeValues, setSelectedDayTradeValues] = useState(null);
+  const [modalClosed, setModalClosed] = useState(false);
+
+  const calendarRef = React.useRef(null);
+
+  const handleClose = (event) => {
+    if (event) event.stopPropagation();
+    setShow(false);
+    setModalClosed(true);
+    setTimeout(() => setModalClosed(false), 100);
+  };
+
+  const handleShow = (day) => {
+    const tradeValues = aggregateTradesForDay(day);
+    setSelectedDayTradeValues(tradeValues);
+    setShow(true);
+  };
+
   const generateDays = () => {
     const startDate = new Date(year, month, 1);
     const endDate = new Date(year, month + 1, 0);
@@ -48,18 +70,26 @@ const TradeCalendar = ({
     const tradeValues = aggregateTradesForDay(day);
     let bgColor = "bg-gray-200";
     let valueDisplay = "";
-  
+    let hasTrades = false;
+
     // Check if either gross or net value exists for the day
     if (tradeValues.gross !== 0 || tradeValues.net !== 0) {
       const value = net ? tradeValues.net : tradeValues.gross;
-      bgColor = value > 0 ? "bg-green-400" : "bg-red-400";
+      bgColor = value > 0 ? "bg-green-400 hover:bg-green-200" : "bg-red-400 hover:bg-red-200";
       valueDisplay = `$${parseFloat(value).toFixed(2)}`;
+      hasTrades = true;
     }
 
     return (
       <div
         key={day.toString()}
         className={`p-2 min-w-20 flex items-center justify-center ${bgColor}`}
+        onClick={(e) => {
+          if (hasTrades) {
+            handleShow(day);
+            e.stopPropagation(); // prevent month's click event
+          }
+        }}
       >
         <div className="text-center text-xs">
           <span className="font-bold underline">{day.getDate()}</span>
@@ -88,18 +118,21 @@ const TradeCalendar = ({
     .toString()
     .padStart(2, "0")}-${endDate.getDate()}`;
 
-  const handleMonthClick = (start, end) => {
-    setStartDate(start);
-    setEndDate(end);
-    setMonthClickedStartDate(start);
-    setMonthClickedEndDate(end);
-    setCurrentView("tradeView");
-    setButtonValue("tradeView");
-  };
+    const handleMonthClick = (start, end) => {
+      if (modalClosed) return;
+    
+      setStartDate(start);
+      setEndDate(end);
+      setMonthClickedStartDate(start);
+      setMonthClickedEndDate(end);
+      setCurrentView("tradeView");
+      setButtonValue("tradeView");
+    };
 
   return (
     <div
-      className="border border-black m-4 rounded p-2"
+      ref={calendarRef}
+      className="border border-black m-4 rounded p-2 hover:bg-gray-300 cursor-pointer"
       key={`${startDateString} to ${endDateString}`}
       onClick={() => handleMonthClick(startDateString, endDateString)}
     >
@@ -125,6 +158,29 @@ const TradeCalendar = ({
         ))}
         {days.map((day) => renderDay(day))}
       </div>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton onClick={(e) => e.stopPropagation()}>
+          <Modal.Title>
+            Trades for{" "}
+            {selectedDayTradeValues
+              ? new Date(selectedDayTradeValues.open_date).toLocaleDateString()
+              : ""}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {/* Display trades for the selected day. This is just an example. */}
+          Gross: $
+          {selectedDayTradeValues ? selectedDayTradeValues.gross.toFixed(2) : 0}
+          <br />
+          Net: $
+          {selectedDayTradeValues ? selectedDayTradeValues.net.toFixed(2) : 0}
+        </Modal.Body>
+        <Modal.Footer>
+        <Button variant="secondary" onClick={(e) => handleClose(e)}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
