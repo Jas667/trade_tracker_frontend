@@ -9,6 +9,8 @@ const ImageGallery = ({ images, onDeleteImage }) => {
   const [imageToDelete, setImageToDelete] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
 
+  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
+
   const [alertMessage, setAlertMessage] = useState(null);
   const [alertType, setAlertType] = useState(null);
   const [alertKey, setAlertKey] = useState(0);
@@ -35,8 +37,27 @@ const ImageGallery = ({ images, onDeleteImage }) => {
     }
   };
 
-  const handleImageClick = (img) => {
-    setSelectedImage(img);
+  const handleImageClick = (img, index) => {
+    setSelectedImage(img.image_url);
+    setSelectedImageIndex(index);
+  };
+
+  const moveToNextImage = (event) => {
+    event.stopPropagation();
+    if (selectedImageIndex < images.length - 1) {
+      const newIndex = selectedImageIndex + 1;
+      setSelectedImageIndex(newIndex);
+      setSelectedImage(images[newIndex].image_url);
+    }
+  };
+
+  const moveToPreviousImage = (event) => {
+    event.stopPropagation();
+    if (selectedImageIndex > 0) {
+      const newIndex = selectedImageIndex - 1;
+      setSelectedImageIndex(newIndex);
+      setSelectedImage(images[newIndex].image_url);
+    }
   };
 
   return (
@@ -63,7 +84,7 @@ const ImageGallery = ({ images, onDeleteImage }) => {
               src={`${API_BASE_URL}userImageUploads/${imageObj.image_url}`}
               alt={`Trade Image ${index}`}
               className="w-full h-auto transition-transform transform group-hover:scale-105"
-              onClick={() => handleImageClick(imageObj.image_url)}
+              onClick={() => handleImageClick(imageObj, index)}
             />
             <button
               onClick={() => handleDelete(imageObj.id)}
@@ -103,6 +124,23 @@ const ImageGallery = ({ images, onDeleteImage }) => {
             className="fixed inset-0 flex items-center justify-center z-50 p-20 max-w-2/5 max-h-2/5 "
             onClick={() => setSelectedImage(null)}
           >
+            {selectedImageIndex > 0 && (
+              <button
+                onClick={(event) => moveToPreviousImage(event)}
+                className="absolute left-0 my-auto h-12 w-12 bg-gray-500 hover:bg-gray-700 text-white rounded-full opacity-70"
+              >
+                {"<"}
+              </button>
+            )}
+            {selectedImageIndex < images.length - 1 && (
+              <button
+                onClick={(event) => moveToNextImage(event)}
+                className="absolute right-0 my-auto h-12 w-12 bg-gray-500 hover:bg-gray-700 text-white rounded-full opacity-70"
+              >
+                {">"}
+              </button>
+            )}
+
             <img
               src={`${API_BASE_URL}userImageUploads/${selectedImage}`}
               alt="Enlarged"

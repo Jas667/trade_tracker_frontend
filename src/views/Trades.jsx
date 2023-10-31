@@ -41,7 +41,7 @@ const Trades = ({ rawTradeData }) => {
     }
   };
 
-  // const handleTradeChange = (trade) => { 
+  // const handleTradeChange = (trade) => {
   //   fetchTagsForTrade(trade.id);
   // };
 
@@ -84,6 +84,11 @@ const Trades = ({ rawTradeData }) => {
               handleBackToTradesClick={handleBackToTradesClick}
             />
           </AppContext.Provider>
+          <NextPreviousTradeButton
+            rawTradeData={rawTradeData}
+            selectedTrade={selectedTrade}
+            setSelectedTrade={setSelectedTrade}
+          />
         </>
       ) : (
         <>
