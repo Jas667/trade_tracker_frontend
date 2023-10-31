@@ -5,7 +5,7 @@ function BackToTradesButton({ handleBackToTradesClick }) {
     <div>
       <Button
         onClick={handleBackToTradesClick}
-        className="max-w-md mb-2"
+        className="max-w-md mb-2 mt-3"
         variant="secondary"
       >
         ← Back to Trades

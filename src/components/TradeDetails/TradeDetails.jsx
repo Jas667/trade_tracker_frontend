@@ -245,6 +245,7 @@ const TradeDetails = ({ fetchTagsForTrade, handleBackToTradesClick }) => {
         selectedImageIndex={selectedImageIndex}
         setSelectedImageIndex={setSelectedImageIndex}
       />
+      <BackToTradesButton handleBackToTradesClick={handleBackToTradesClick} />
     </>
   );
 };
