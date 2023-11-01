@@ -85,9 +85,9 @@ const TradeCalendar = ({
         key={day.toString()}
         className={`p-2 min-w-20 flex items-center justify-center ${bgColor}`}
         onClick={(e) => {
+          e.stopPropagation(); // prevent month's click event
           if (hasTrades) {
             handleShow(day);
-            e.stopPropagation(); // prevent month's click event
           }
         }}
       >
