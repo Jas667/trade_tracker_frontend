@@ -159,7 +159,7 @@ const TradeCalendar = ({
         {days.map((day) => renderDay(day))}
       </div>
       <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton onClick={(e) => e.stopPropagation()}>
+        <Modal.Header closeButton >
           <Modal.Title>
             Trades for{" "}
             {selectedDayTradeValues
