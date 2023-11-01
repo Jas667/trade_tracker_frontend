@@ -3,8 +3,8 @@ import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   LineElement,
-  CategoryScale, //x-axis
-  LinearScale, //y-axis
+  CategoryScale,
+  LinearScale,
   PointElement,
   Legend,
   Tooltip,
@@ -40,6 +40,13 @@ function LineChart({ labels, datasets, customOptions }) {
   const enhancedDatasets = datasets.map((dataset) => ({
     ...LineChart.defaultProps.singleDatasetDefaults,
     ...dataset,
+    fill: {
+      target: 'origin',
+      above: 'rgba(87, 188, 247, 0.4)',   // blueish
+      below: 'rgba(255, 0, 0, 0.4)'      // redish
+    },
+    pointBackgroundColor: dataset.data.map(value => value >= 0 ? 'rgba(87, 188, 247, 0.4)' : 'rgba(255, 0, 0, 0.4)'),
+    pointBorderColor: dataset.data.map(value => value >= 0 ? 'rgba(87, 188, 247, 0.4)' : 'rgba(255, 0, 0, 0.4)'),
   }));
 
   return (
@@ -62,8 +69,6 @@ LineChart.defaultProps = {
     label: "",
     borderColor: "black",
     backgroundColor: "#57bcf7",
-    pointBackgroundColor: "#57bcf7",
-    pointBorderColor: "#57bcf7",
     borderWidth: 2,
   },
 };
