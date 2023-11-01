@@ -3,6 +3,7 @@ import React from "react";
 import { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
+import CumulativePLChart from "../chartsAndTables/CumulativePLChart";
 
 const TradeCalendar = ({
   trades,
@@ -20,6 +21,9 @@ const TradeCalendar = ({
   const [selectedDayTradeValues, setSelectedDayTradeValues] = useState(null);
   const [modalClosed, setModalClosed] = useState(false);
 
+  const [selectedDayTrades, setSelectedDayTrades] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(null);
+
   const calendarRef = React.useRef(null);
 
   const handleClose = (event) => {
@@ -30,6 +34,11 @@ const TradeCalendar = ({
   };
 
   const handleShow = (day) => {
+    setSelectedDate(day);
+    const tradesForDay = trades.filter(
+      (trade) => new Date(trade.open_date).toDateString() === day.toDateString()
+    );
+    setSelectedDayTrades(tradesForDay);
     const tradeValues = aggregateTradesForDay(day);
     setSelectedDayTradeValues(tradeValues);
     setShow(true);
@@ -140,7 +149,7 @@ const TradeCalendar = ({
       key={`${startDateString} to ${endDateString}`}
       onClick={(e) => {
         e.stopPropagation();
-        handleMonthClick(startDateString, endDateString)
+        handleMonthClick(startDateString, endDateString);
       }}
     >
       <div className="font-bold text-xl text-center my-2">
@@ -165,22 +174,15 @@ const TradeCalendar = ({
         ))}
         {days.map((day) => renderDay(day))}
       </div>
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={handleClose} backdrop="static">
         <Modal.Header closeButton>
           <Modal.Title>
-            Trades for{" "}
-            {selectedDayTradeValues
-              ? new Date(selectedDayTradeValues.open_date).toLocaleDateString()
-              : ""}
+            Trades for {selectedDate ? selectedDate.toDateString() : ""}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {/* Display trades for the selected day. This is just an example. */}
-          Gross: $
-          {selectedDayTradeValues ? selectedDayTradeValues.gross.toFixed(2) : 0}
-          <br />
-          Net: $
-          {selectedDayTradeValues ? selectedDayTradeValues.net.toFixed(2) : 0}
+          <CumulativePLChart trades={selectedDayTrades} net={net} />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={(e) => handleClose(e)}>
