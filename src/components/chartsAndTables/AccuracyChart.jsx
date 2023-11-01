@@ -8,6 +8,8 @@ const AccuracyCircle = ({ accuracy }) => {
       {
         data: [accuracy, 100 - accuracy],
         backgroundColor: ["#57bcf7", "#d20005"],
+        borderColor: "black",
+        borderWidth: 2,
         circumference: 180,
         rotation: 270,
       },

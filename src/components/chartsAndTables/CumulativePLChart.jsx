@@ -21,14 +21,6 @@ function CumulativePLChart({ trades, net }) {
   const tradeLabels = trades.map((_, idx) => `Trade ${idx + 1}`);
   tradeLabels.unshift("0");
 
-  //   const getGradient = (canvas, color) => {
-  //     const ctx = canvas.getContext("2d");
-  //     const gradient = ctx.createLinearGradient(0, 0, 0, 400); // Assuming the height of your chart is 400. Adjust if necessary
-  //     gradient.addColorStop(0, color);
-  //     gradient.addColorStop(1, "rgba(255,255,255,0)");
-  //     return gradient;
-  //   };
-
   const data = {
     labels: tradeLabels,
     datasets: [
