@@ -75,7 +75,10 @@ const TradeCalendar = ({
     // Check if either gross or net value exists for the day
     if (tradeValues.gross !== 0 || tradeValues.net !== 0) {
       const value = net ? tradeValues.net : tradeValues.gross;
-      bgColor = value > 0 ? "bg-green-400 hover:bg-green-200" : "bg-red-400 hover:bg-red-200";
+      bgColor =
+        value > 0
+          ? "bg-green-400 hover:bg-green-200"
+          : "bg-red-400 hover:bg-red-200";
       valueDisplay = `$${parseFloat(value).toFixed(2)}`;
       hasTrades = true;
     }
@@ -118,23 +121,27 @@ const TradeCalendar = ({
     .toString()
     .padStart(2, "0")}-${endDate.getDate()}`;
 
-    const handleMonthClick = (start, end) => {
-      if (modalClosed) return;
-    
-      setStartDate(start);
-      setEndDate(end);
-      setMonthClickedStartDate(start);
-      setMonthClickedEndDate(end);
-      setCurrentView("tradeView");
-      setButtonValue("tradeView");
-    };
+  const handleMonthClick = (start, end) => {
+    if (show || modalClosed) return;
+    if (modalClosed) return;
+
+    setStartDate(start);
+    setEndDate(end);
+    setMonthClickedStartDate(start);
+    setMonthClickedEndDate(end);
+    setCurrentView("tradeView");
+    setButtonValue("tradeView");
+  };
 
   return (
     <div
       ref={calendarRef}
       className="border border-black m-4 rounded p-2 hover:bg-gray-300 cursor-pointer"
       key={`${startDateString} to ${endDateString}`}
-      onClick={() => handleMonthClick(startDateString, endDateString)}
+      onClick={(e) => {
+        e.stopPropagation();
+        handleMonthClick(startDateString, endDateString)
+      }}
     >
       <div className="font-bold text-xl text-center my-2">
         {new Date(year, month).toLocaleString("default", { month: "long" })}
@@ -159,7 +166,7 @@ const TradeCalendar = ({
         {days.map((day) => renderDay(day))}
       </div>
       <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton >
+        <Modal.Header closeButton>
           <Modal.Title>
             Trades for{" "}
             {selectedDayTradeValues
@@ -176,7 +183,7 @@ const TradeCalendar = ({
           {selectedDayTradeValues ? selectedDayTradeValues.net.toFixed(2) : 0}
         </Modal.Body>
         <Modal.Footer>
-        <Button variant="secondary" onClick={(e) => handleClose(e)}>
+          <Button variant="secondary" onClick={(e) => handleClose(e)}>
             Close
           </Button>
         </Modal.Footer>
