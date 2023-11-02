@@ -28,18 +28,6 @@ function NextPreviousTradeButton({
     }
   };
 
-  const renderTooltipNoPrev = (props) => (
-    <Tooltip id="button-tooltip-prev" {...props}>
-      You are at the beginning of selected trades
-    </Tooltip>
-  );
-
-  const renderTooltipNoNext = (props) => (
-    <Tooltip id="button-tooltip-next" {...props}>
-      You are at the end of selected trades
-    </Tooltip>
-  );
-
   const showPrevTooltip = currentIndex === 0;
   const showNextTooltip = currentIndex === rawTradeData.length - 1;
 

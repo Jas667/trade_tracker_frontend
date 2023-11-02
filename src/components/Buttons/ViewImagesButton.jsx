@@ -1,21 +1,12 @@
 import Button from "react-bootstrap/Button";
-import Tooltip from "react-bootstrap/Tooltip";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import TooltipComponent from "./Tooltips/TooltipComponent";
 
 function ViewImagesButton({ openImagesClick, images }) {
-  const renderTooltip = (props) => (
-    <Tooltip id="button-tooltip" {...props}>
-      No images for trade
-    </Tooltip>
-  );
-
   return (
     <div className="flex justify-end mt-3">
       {images.length === 0 ? (
-        <OverlayTrigger placement="bottom" overlay={renderTooltip}>
+        <TooltipComponent message="No images for trade" placement="bottom">
           <span className="d-inline-block">
-            {" "}
-            {/* Wrap the button in a span to allow the tooltip to show when button is disabled */}
             <Button
               onClick={openImagesClick}
               className="max-w-md mb-2"
@@ -25,7 +16,7 @@ function ViewImagesButton({ openImagesClick, images }) {
               View Trade Images
             </Button>
           </span>
-        </OverlayTrigger>
+        </TooltipComponent>
       ) : (
         <Button
           onClick={openImagesClick}

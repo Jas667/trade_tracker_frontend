@@ -3,7 +3,7 @@ import React from 'react';
 import Tooltip from 'react-bootstrap/Tooltip';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 
-const TooltipComponent = ({ message, children, placement = 'top', ...props }) => {
+const TooltipComponent = ({ message, children, placement = 'bottom', ...props }) => {
   const renderTooltip = (props) => (
     <Tooltip id={`tooltip-${placement}`} {...props}>
       {message}
