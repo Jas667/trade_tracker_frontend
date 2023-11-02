@@ -5,15 +5,20 @@ import { Chart as ChartJS, Filler } from "chart.js";
 ChartJS.register(Filler);
 
 function CumulativePLChart({ trades, net }) {
+
   const selectedField = net ? "profit_loss" : "gross_profit_loss";
 
   // Compute cumulative data
-  const cumulativeData = trades.map((trade, idx, allTrades) =>
-    idx === 0
-      ? parseFloat(trade[selectedField])
-      : parseFloat(trade[selectedField]) +
-        parseFloat(allTrades[idx - 1][selectedField])
-  );
+  const cumulativeData = trades.reduce((accumulator, currentTrade, idx) => {
+    const currentValue = parseFloat(currentTrade[selectedField]);
+    if (idx === 0) {
+      accumulator.push(currentValue);
+    } else {
+      accumulator.push(accumulator[idx - 1] + currentValue);
+    }
+    return accumulator;
+  }, []);
+  
 
   cumulativeData.unshift(0); // Prepend a zero to the beginning of the array
 
@@ -51,7 +56,7 @@ const options = {
           return "\n";
         },
         footer: (tooltipItems) => {
-          let trade = trades[tooltipItems[0].dataIndex - 1];
+          let trade = trades[tooltipItems[0].dataIndex];
           if (trade && trade.tags && trade.tags.length) {
             return trade.tags.map(tag => `Tag: ${tag.tag_name}`);
           }
