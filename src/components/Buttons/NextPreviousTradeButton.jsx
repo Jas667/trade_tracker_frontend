@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
-import Tooltip from "react-bootstrap/Tooltip";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import TooltipComponent from "./Tooltips/TooltipComponent";
 
 function NextPreviousTradeButton({
   rawTradeData,
@@ -41,11 +40,17 @@ function NextPreviousTradeButton({
     </Tooltip>
   );
 
+  const showPrevTooltip = currentIndex === 0;
+  const showNextTooltip = currentIndex === rawTradeData.length - 1;
+
   return (
     <div className="flex justify-between mt-4">
-      {currentIndex === 0 ? (
-        <OverlayTrigger placement="bottom" overlay={renderTooltipNoPrev}>
-          <span className="d-inline-block">
+      {showPrevTooltip ? (
+        <TooltipComponent
+          message="You are at the beginning of selected trades"
+          placement="bottom"
+        >
+          <span>
             <Button
               onClick={handlePrevious}
               className="max-w-md mb-2"
@@ -55,7 +60,7 @@ function NextPreviousTradeButton({
               ← Prev
             </Button>
           </span>
-        </OverlayTrigger>
+        </TooltipComponent>
       ) : (
         <Button
           onClick={handlePrevious}
@@ -65,9 +70,13 @@ function NextPreviousTradeButton({
           ← Prev
         </Button>
       )}
-      {currentIndex === rawTradeData.length - 1 ? (
-        <OverlayTrigger placement="bottom" overlay={renderTooltipNoNext}>
-          <span className="d-inline-block">
+
+      {showNextTooltip ? (
+        <TooltipComponent
+          message="You are at the end of selected trades"
+          placement="bottom"
+        >
+          <span>
             <Button
               onClick={handleNext}
               className="max-w-md mb-2"
@@ -77,7 +86,7 @@ function NextPreviousTradeButton({
               Next →
             </Button>
           </span>
-        </OverlayTrigger>
+        </TooltipComponent>
       ) : (
         <Button
           onClick={handleNext}
