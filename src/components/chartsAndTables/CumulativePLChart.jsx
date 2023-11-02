@@ -40,21 +40,37 @@ function CumulativePLChart({ trades, net }) {
     ],
   };
 
-  const options = {
-    plugins: {
-      legend: {
-        display: false,
-      },
+const options = {
+  plugins: {
+    legend: {
+      display: false,
     },
-    scales: {
-      x: {
-        ticks: {
-          autoSkip: true,
-          maxTicksLimit: 10, // Adjust to control the number of ticks displayed on the x-axis
+    tooltip: {
+      callbacks: {
+        afterBody: () => {
+          return "\n";
         },
+        footer: (tooltipItems) => {
+          let trade = trades[tooltipItems[0].dataIndex - 1];
+          if (trade && trade.tags && trade.tags.length) {
+            return trade.tags.map(tag => `Tag: ${tag.tag_name}`);
+          }
+          return null;
+        }
+      }
+    }
+  },
+  scales: {
+    x: {
+      ticks: {
+        autoSkip: true,
+        maxTicksLimit: 10,
       },
     },
-  };
+  },
+};
+
+
 
   return <Line data={data} options={options} />;
 }

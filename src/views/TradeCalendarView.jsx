@@ -46,6 +46,9 @@ const TradeCalendarView = ({
             Click on an individual day that has trade data to view a more
             detailed breakdown of how that day was traded.
           </li>
+          <li>
+            In expanded day view, hover over a trade to see the tags associated with the trade.
+          </li>
         </ul>
       </div>
       <div className="flex flex-wrap">
