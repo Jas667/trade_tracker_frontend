@@ -2,6 +2,7 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import LogoutButton from "../Buttons/LogoutButton";
+import TooltipComponent from "../Tooltips/TooltipComponent";
 
 
 function ColorSchemesExample() {
@@ -13,7 +14,9 @@ function ColorSchemesExample() {
           <Nav className="me-auto">
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/upload">Upload Trades</Nav.Link>
-            <Nav.Link href="/tags">Tags</Nav.Link>
+            <TooltipComponent message="Create Edit & Delete Tags" placement="bottom">
+              <Nav.Link href="/tags">Tags</Nav.Link>
+            </TooltipComponent>
           </Nav>
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end">
