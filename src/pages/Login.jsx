@@ -68,14 +68,7 @@ export default function Login() {
           navigate("/");
           break;
         case 400:
-          if (data.message.includes("User")) {
-            setErrorMessage((prev) => ({
-              ...prev,
-              identifier: "User not found.",
-            }));
-          } else {
             setErrorMessage((prev) => ({ ...prev, password: "Incorrect Login Info" }));
-          }
           break;
         case 429:
           setErrorMessage((prev) => ({
