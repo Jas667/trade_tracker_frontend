@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { getTags } from "../../services/tagService";
 import { useGlobalState } from "../../../context/GlobalStateContext";
 import { resetTagsDropdown } from "../../utils/resetTagDropdown";
+import TooltipComponent from "../Tooltips/TooltipComponent";
 
 function TradeFilterBar({
   onFilter,
@@ -280,12 +281,14 @@ function TradeFilterBar({
             >
               Filter
             </button>
+            <TooltipComponent message="Defaults to last 30 days of trades" placement="bottom">
             <button
               className="text-white border p-1 rounded hover:bg-gray-400"
               onClick={handleClear}
             >
               Clear
-            </button>
+              </button>
+              </TooltipComponent>
           </div>
         </div>
       </div>

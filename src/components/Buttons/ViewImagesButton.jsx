@@ -1,5 +1,5 @@
 import Button from "react-bootstrap/Button";
-import TooltipComponent from "./Tooltips/TooltipComponent";
+import TooltipComponent from "../Tooltips/TooltipComponent";
 
 function ViewImagesButton({ openImagesClick, images }) {
   return (
