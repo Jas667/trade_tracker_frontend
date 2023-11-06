@@ -5,7 +5,7 @@ import { editProfile } from "../../services/profileService";
 
 function UserProfile({ profile, onEdit }) {
   // Destructure profile props for ease of use
-  const { username, email, firstName, lastName } = profile;
+  const { username, email } = profile;
 
   //username edit
   const [isEditingUsername, setIsEditingUsername] = useState(false);
@@ -36,6 +36,38 @@ function UserProfile({ profile, onEdit }) {
       setIsEditingUsername(false);
     } else {
       setEditedUsername(originalUsername);
+    }
+  };
+
+  //email edit
+  const [isEditingEmail, setIsEditingEmail] = useState(false);
+  const [editedEmail, setEditedEmail] = useState(email);
+  const [originalEmail, setOriginalEmail] = useState(email);
+
+  useEffect(() => {
+    setEditedEmail(email);
+    setOriginalEmail(email);
+  }, [email]);
+
+  const toggleEditEmail = () => {
+    if (isEditingEmail) {
+      // Reset edited username to the original when cancelling
+      setEditedEmail(originalEmail);
+    }
+    setIsEditingEmail(!isEditingEmail);
+  };
+
+  const handleEmailChange = (event) => {
+    setEditedEmail(event.target.value);
+  };
+
+  const saveEmail = async () => {
+    const response = await editProfile({ email: editedEmail });
+    if (response.message === "User updated") {
+      setOriginalEmail(editedEmail);
+      setIsEditingEmail(false);
+    } else {
+      setEditedEmail(originalEmail);
     }
   };
 
@@ -90,46 +122,41 @@ function UserProfile({ profile, onEdit }) {
           <div className="flex items-center justify-between border-b border-gray-200 pb-3">
             <div>
               <div className="text-gray-700 font-bold">Email</div>
-              <div className="text-gray-600">{email}</div>
+              {!isEditingEmail ? (
+                <div className="text-gray-600">{originalEmail}</div>
+              ) : (
+                <input
+                  type="text"
+                  value={editedEmail}
+                  onChange={handleEmailChange}
+                  className="text-gray-600"
+                />
+              )}
             </div>
-            <button
-              onClick={() => onEdit("email")}
-              className="btn btn-primary btn-sm"
-            >
-              <i className="fas fa-edit"></i> Edit
-            </button>
-          </div>
-        </div>
-
-        {/* First Name Item */}
-        <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-          <div className="flex items-center justify-between border-b border-gray-200 pb-3">
-            <div>
-              <div className="text-gray-700 font-bold">First Name</div>
-              <div className="text-gray-600">{firstName}</div>
-            </div>
-            <button
-              onClick={() => onEdit("firstName")}
-              className="btn btn-primary btn-sm"
-            >
-              <i className="fas fa-edit"></i> Edit
-            </button>
-          </div>
-        </div>
-
-        {/* Last Name Item */}
-        <div className="w-full md:w-1/2 px-3">
-          <div className="flex items-center justify-between border-b border-gray-200 pb-3">
-            <div>
-              <div className="text-gray-700 font-bold">Last Name</div>
-              <div className="text-gray-600">{lastName}</div>
-            </div>
-            <button
-              onClick={() => onEdit("lastName")}
-              className="btn btn-primary btn-sm"
-            >
-              <i className="fas fa-edit"></i> Edit
-            </button>
+            {!isEditingEmail ? (
+              <button
+                onClick={toggleEditEmail}
+                className="btn btn-primary btn-sm"
+              >
+                <i className="fas fa-edit"></i> Edit
+              </button>
+            ) : (
+              <>
+                <button
+                  onClick={saveEmail}
+                  disabled={originalEmail === editedEmail}
+                  className="btn btn-primary btn-sm"
+                >
+                  Save
+                </button>
+                <button
+                  onClick={toggleEditEmail}
+                  className="btn btn-secondary btn-sm"
+                >
+                  Cancel
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>

@@ -9,9 +9,7 @@ const Profile = () => {
   // States to handle user details
   const [profile, setProfile] = useState({
     username: "",
-    email: "",
-    firstName: "",
-    lastName: "",
+    email: ""
   });
 
   // // Load user details from the API on component mount
@@ -21,9 +19,7 @@ const Profile = () => {
       if (fetchedUserData.message === "User found") {
         const extractedUserData = {
           username: fetchedUserData.data.user.username,
-          email: fetchedUserData.data.user.email,
-          firstName: fetchedUserData.data.user.first_name,
-          lastName: fetchedUserData.data.user.last_name,
+          email: fetchedUserData.data.user.email
         };
 
         setProfile(extractedUserData);
