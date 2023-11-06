@@ -11,3 +11,19 @@ export const getProfile = async () => {
       console.error(e);
       }
 };
+
+export const editProfile = async (toUpdate) => { 
+      try {
+      const response = await fetch(`${API_BASE_URL}user/update`, {
+            method: "PUT",
+            credentials: "include",
+            headers: {
+                  "Content-Type": "application/json",
+            },
+            body: JSON.stringify(toUpdate),
+      });
+      return response.json();
+      } catch (e) {
+      console.error(e);
+      }
+};

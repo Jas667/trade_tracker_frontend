@@ -28,8 +28,6 @@ const Profile = () => {
 
         setProfile(extractedUserData);
         setUserData(extractedUserData);
-        console.log(profile);
-        console.log(userData);
       }
     };
     fetchData();
