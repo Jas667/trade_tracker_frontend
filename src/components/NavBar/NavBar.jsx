@@ -3,6 +3,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import LogoutButton from "../Buttons/LogoutButton";
 import TooltipComponent from "../Tooltips/TooltipComponent";
+import ProfileButton from "../Buttons/ProfileButton";
 
 
 function ColorSchemesExample() {
@@ -21,6 +22,7 @@ function ColorSchemesExample() {
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end">
             <Navbar.Text>
+              <ProfileButton />
               <LogoutButton />
             </Navbar.Text>
           </Navbar.Collapse>
