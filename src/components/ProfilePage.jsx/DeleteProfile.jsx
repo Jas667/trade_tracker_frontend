@@ -31,9 +31,13 @@ function DeleteProfile({ deleteProfile }) {
           <Modal.Title>Warning</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Warning. Deleting your profile will delete all associated data. This
-          action cannot be undone. To continue, please type 'I WANT TO DELETE'
-          below.
+          <p class="text-lg font-bold text-red-600 bg-red-100 p-2 rounded">
+            ⚠️ Warning!
+          </p>
+          <br></br> Deleting your profile will delete all associated data. This
+          action cannot be undone. To continue, please type: <br></br>
+          <br></br>{" "}
+          <p class="text-lg font-bold">'I WANT TO DELETE'</p>
           <Form.Control
             type="text"
             value={inputValue}
