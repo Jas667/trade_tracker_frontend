@@ -224,7 +224,6 @@ export default function LoggedIn() {
     if (symbol !== "") {
       trades = filterTradesBySymbol(trades, symbol);
     }
-
     if (trades) {
       //set raw trade data for use in trades table
       setRawTradeData(trades);

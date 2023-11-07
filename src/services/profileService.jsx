@@ -43,3 +43,15 @@ export const updatePassword = async (toUpdate) => {
       console.error(e);
       }
 };
+
+export const deleteUserProfile = async () => { 
+      try {
+      const response = await fetch(`${API_BASE_URL}user/delete`, {
+            method: "DELETE",
+            credentials: "include",
+      });
+      return response;
+      } catch (e) {
+      console.error(e);
+      }
+};

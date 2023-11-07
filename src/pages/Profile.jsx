@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from "react";
 import ColorSchemesExample from "../components/NavBar/NavBar";
-import { getProfile, updatePassword } from "../services/profileService";
+import { getProfile, updatePassword, deleteUserProfile } from "../services/profileService";
 import UserProfile from "../components/ProfilePage.jsx/UserProfile";
 import PasswordEdit from "../components/ProfilePage.jsx/PasswordEdit";
+import DeleteProfile from "../components/ProfilePage.jsx/DeleteProfile";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
+
+  const navigate = useNavigate();
+
   const [userData, setUserData] = useState({});
   // States to handle user details
   const [profile, setProfile] = useState({
@@ -32,10 +37,8 @@ const Profile = () => {
     fetchData();
   }, []);
 
-  // Function to call API for password change
+
   const changePassword = async (oldPassword, newPassword) => {
-    // Placeholder for API call
-    console.log("Submitting new password to the server...");
     const response = await updatePassword({ oldPassword, newPassword });
     if (response.message === "Password updated") {
       setAlertType("success");
@@ -46,13 +49,31 @@ const Profile = () => {
     }
   };
 
+  const deleteProfile = async () => { 
+    const response = await deleteUserProfile();
+    if(response.status === 204) {
+      navigate("/login");
+    } else {
+      setAlertType("danger");
+      setAlertMessage("Something went wrong. Please try again later.");
+    }
+  };
+
   return (
     <>
       <ColorSchemesExample />
       <div className="my-3 mx-40 bg-gray-50 flex flex-col justify-center overflow-hidden">
         <div className="text-xl font-bold p-4">Profile</div>
         <UserProfile profile={profile} />
-        <PasswordEdit changePassword={changePassword} alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} />
+        <PasswordEdit
+          changePassword={changePassword}
+          alertMessage={alertMessage}
+          alertType={alertType}
+          setAlertMessage={setAlertMessage}
+        />
+        <div className="flex">
+          <DeleteProfile deleteProfile={deleteProfile} />
+        </div>
       </div>
     </>
   );
