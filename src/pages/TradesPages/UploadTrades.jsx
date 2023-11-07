@@ -19,8 +19,10 @@ export default function UploadTradesFromExcel() {
     if (file && file.name.endsWith(".csv")) {
       setSelectedFile(file);
     } else {
-      alert("Please select a CSV file.");
+      setAlertType("danger");
+      setAlertMessage("Incorrect file format. Please select a CSV file.");
       setSelectedFile(null);
+      setInputKey(Date.now());
     }
   };
 
