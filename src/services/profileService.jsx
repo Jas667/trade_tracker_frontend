@@ -27,3 +27,19 @@ export const editProfile = async (toUpdate) => {
       console.error(e);
       }
 };
+
+export const updatePassword = async (toUpdate) => { 
+      try {
+      const response = await fetch(`${API_BASE_URL}user/password`, {
+            method: "PUT",
+            credentials: "include",
+            headers: {
+                  "Content-Type": "application/json",
+            },
+            body: JSON.stringify(toUpdate),
+      });
+      return response.json();
+      } catch (e) {
+      console.error(e);
+      }
+};

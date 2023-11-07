@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ColorSchemesExample from "../components/NavBar/NavBar";
-import { getProfile } from "../services/profileService";
+import { getProfile, updatePassword } from "../services/profileService";
 import UserProfile from "../components/ProfilePage.jsx/UserProfile";
 import PasswordEdit from "../components/ProfilePage.jsx/PasswordEdit";
 
@@ -9,8 +9,11 @@ const Profile = () => {
   // States to handle user details
   const [profile, setProfile] = useState({
     username: "",
-    email: ""
+    email: "",
   });
+
+  const [alertMessage, setAlertMessage] = useState(null);
+  const [alertType, setAlertType] = useState(null); // This can be 'success' or 'danger'
 
   // // Load user details from the API on component mount
   useEffect(() => {
@@ -19,7 +22,7 @@ const Profile = () => {
       if (fetchedUserData.message === "User found") {
         const extractedUserData = {
           username: fetchedUserData.data.user.username,
-          email: fetchedUserData.data.user.email
+          email: fetchedUserData.data.user.email,
         };
 
         setProfile(extractedUserData);
@@ -29,19 +32,18 @@ const Profile = () => {
     fetchData();
   }, []);
 
-    // Function to call API for password change
-    const changePassword = async (currentPassword, newPassword) => {
-      // Placeholder for API call
-      console.log('Submitting new password to the server...');
-  
-      // Replace the console.log with your actual API call
-      // const response = await yourApiService.changePassword({ currentPassword, newPassword });
-      // Handle the response accordingly
-    };
-
-  const handleEdit = (section) => {
-    // Handle edit logic here, maybe open a modal or form
-    console.log(`Edit ${section}`);
+  // Function to call API for password change
+  const changePassword = async (oldPassword, newPassword) => {
+    // Placeholder for API call
+    console.log("Submitting new password to the server...");
+    const response = await updatePassword({ oldPassword, newPassword });
+    if (response.message === "Password updated") {
+      setAlertType("success");
+      setAlertMessage("Password updated successfully!");
+    } else {
+      setAlertType("danger");
+      setAlertMessage(response.message);
+    }
   };
 
   return (
@@ -49,8 +51,8 @@ const Profile = () => {
       <ColorSchemesExample />
       <div className="my-3 mx-40 bg-gray-50 flex flex-col justify-center overflow-hidden">
         <div className="text-xl font-bold p-4">Profile</div>
-        <UserProfile profile={profile} onEdit={handleEdit} />
-        <PasswordEdit onSubmit={changePassword} />
+        <UserProfile profile={profile} />
+        <PasswordEdit changePassword={changePassword} alertMessage={alertMessage} alertType={alertType} setAlertMessage={setAlertMessage} />
       </div>
     </>
   );
