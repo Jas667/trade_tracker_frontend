@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 import { InputWithErrorTooltip } from "../components/InputWithErrorTooltip";
 import { HalfScreenImageVertical } from "../components/HalfScreenImageVertical";
 import { useNavigate } from "react-router-dom";
+import { Alert } from "react-bootstrap";
+
 
 export default function Login() {
   //useState hook for form data
@@ -20,8 +22,19 @@ export default function Login() {
     password: null,
   });
 
+  //success message for registration
+  const [successMessage, setSuccessMessage] = useState(null);
+
   //add state to track when the form is submitted
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const registered = searchParams.get("registered");
+    if (registered) {
+    setSuccessMessage("Registration successful. Please log in.");
+    }
+  }, []);
 
   useEffect(() => {
     if (isSubmitting) {
@@ -30,11 +43,12 @@ export default function Login() {
         password: null,
       });
       setIsSubmitting(false); // Reset the isSubmitting state
+      setSuccessMessage(null);
     }
   }, [isSubmitting]);
 
   //useHistory hook to redirect to dashboard
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   //handle change function
   const handleChange = (e) => {
@@ -68,7 +82,10 @@ export default function Login() {
           navigate("/");
           break;
         case 400:
-            setErrorMessage((prev) => ({ ...prev, password: "Incorrect Login Info" }));
+          setErrorMessage((prev) => ({
+            ...prev,
+            password: "Incorrect Login Info",
+          }));
           break;
         case 429:
           setErrorMessage((prev) => ({
@@ -99,6 +116,15 @@ export default function Login() {
           className="max-w-[400px] w-full mx-auto bg-white p-4"
         >
           <h2 className="text-4xl font-bold text-center py-6">Trade Tracker</h2>
+          {successMessage && (
+            <Alert
+              variant="success"
+              onClose={() => setSuccessMessage(null)}
+              dismissible
+            >
+              Registration successful. Please log in.
+            </Alert>
+          )}
           <InputWithErrorTooltip
             name="identifier"
             label="Username/Email"

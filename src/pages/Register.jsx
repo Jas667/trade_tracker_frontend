@@ -5,9 +5,11 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { InputWithErrorTooltip } from "../components/InputWithErrorTooltip";
 import { HalfScreenImageVertical } from "../components/HalfScreenImageVertical";
-// import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
+  const navigate = useNavigate();
+
   //useState hook for form data
   const [formData, setFormData] = useState({
     username: "",
@@ -94,6 +96,7 @@ export default function Register() {
             last_name: null,
             password: null,
           }); // Clear any previous errors on success
+          navigate("/login?registered=true");
           break;
         case 400:
           if (data.message.includes("Missing")) {
