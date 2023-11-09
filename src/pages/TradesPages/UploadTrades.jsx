@@ -30,10 +30,15 @@ export default function UploadTradesFromExcel() {
     setIsLoading(true);
     try {
       const response = await uploadTrades(selectedFile);
+      const data = await response.json();
+      console.log(data);
 
       if (response.status === 201) {
         setAlertType("success");
         setAlertMessage("File uploaded successfully!");
+      } else if (data.message.includes("Uploads not available for test users")) {
+        setAlertType("danger");
+        setAlertMessage("Uploads not available for test users. Please use dummy data from dates 01-08-2023 to 31-08-2023");
       } else {
         setAlertType("danger");
         setAlertMessage("Something went wrong. Please try again.");
