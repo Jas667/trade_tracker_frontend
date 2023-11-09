@@ -4,6 +4,7 @@ import Navbar from "react-bootstrap/Navbar";
 import LogoutButton from "../Buttons/LogoutButton";
 import TooltipComponent from "../Tooltips/TooltipComponent";
 import ProfileButton from "../Buttons/ProfileButton";
+import { Link } from "react-router-dom";
 
 
 function ColorSchemesExample() {
@@ -13,10 +14,10 @@ function ColorSchemesExample() {
         <Container>
           <Navbar.Brand href="#home">Trade Tracker</Navbar.Brand>
           <Nav className="me-auto">
-            <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="/upload">Upload Trades</Nav.Link>
+            <Nav.Link as={Link} to="/">Home</Nav.Link>
+            <Nav.Link as={Link} to="/upload">Upload Trades</Nav.Link>
             <TooltipComponent message="Create Edit & Delete Tags" placement="bottom">
-              <Nav.Link href="/tags">Tags</Nav.Link>
+              <Nav.Link as={Link} to="/tags">Tags</Nav.Link>
             </TooltipComponent>
           </Nav>
           <Navbar.Toggle />
