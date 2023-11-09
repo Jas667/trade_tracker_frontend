@@ -31,7 +31,6 @@ export default function UploadTradesFromExcel() {
     try {
       const response = await uploadTrades(selectedFile);
       const data = await response.json();
-      console.log(data);
 
       if (response.status === 201) {
         setAlertType("success");
