@@ -84,6 +84,12 @@ export default function Register() {
     setIsSubmitting(true); // Mark the form as being submitted
     try {
       const response = await register(formData);
+
+      if (response.status === 401) {
+        navigate("/login?test=true");
+        return;
+      }
+
       const data = await response.json();
 
       //switch statement to handle different responses

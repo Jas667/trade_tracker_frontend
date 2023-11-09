@@ -9,7 +9,6 @@ import { HalfScreenImageVertical } from "../components/HalfScreenImageVertical";
 import { useNavigate } from "react-router-dom";
 import { Alert } from "react-bootstrap";
 
-
 export default function Login() {
   //useState hook for form data
   const [formData, setFormData] = useState({
@@ -24,6 +23,7 @@ export default function Login() {
 
   //success message for registration
   const [successMessage, setSuccessMessage] = useState(null);
+  const [testMessage, setTestMessage] = useState(null);
 
   //add state to track when the form is submitted
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -31,8 +31,14 @@ export default function Login() {
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const registered = searchParams.get("registered");
+    const test = searchParams.get("test");
     if (registered) {
-    setSuccessMessage("Registration successful. Please log in.");
+      setSuccessMessage("Registration successful. Please log in.");
+    }
+    if (test) {
+      setTestMessage(
+        `Currently in test only mode. To test site, please log in using:<br /><br />Username = TestUser<br />Password = adminadmin`
+      );
     }
   }, []);
 
@@ -79,6 +85,18 @@ export default function Login() {
       switch (response.status) {
         case 200:
           setErrorMessage({ identifier: null, password: null }); // Clear any previous errors on success
+
+          // Check if the logged in user is the test user. This is only for testing purposes.
+          // Check if the logged in user is the test user. This is only for testing purposes.
+          // Check if the logged in user is the test user. This is only for testing purposes.
+          console.log(data)
+          if (formData.identifier === "TestUser") {
+            // Store the information that the test user has logged in
+            sessionStorage.setItem("isTestUser", "true");
+          } else {
+            sessionStorage.removeItem("isTestUser");
+          }
+
           navigate("/");
           break;
         case 400:
@@ -123,6 +141,15 @@ export default function Login() {
               dismissible
             >
               Registration successful. Please log in.
+            </Alert>
+          )}
+          {testMessage && (
+            <Alert
+              variant="info"
+              onClose={() => setSuccessMessage(null)}
+              dismissible
+            >
+              <div dangerouslySetInnerHTML={{ __html: testMessage }} />
             </Alert>
           )}
           <InputWithErrorTooltip

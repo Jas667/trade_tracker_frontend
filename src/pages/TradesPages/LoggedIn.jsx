@@ -24,10 +24,15 @@ import TagsView from "../../views/TagsView";
 import TradeViewsButtons from "../../components/Buttons/TradeViewsButtons";
 import TradeCalendarWrapper from "../../views/TradeCalendarView";
 import AccuracyCircle from "../../components/chartsAndTables/AccuracyChart";
+import { Alert } from "react-bootstrap";
 
 export default function LoggedIn() {
-  const { isTradeNoteBeingAltered, radioValue, setRadioValue, reRenderAfterTagUpdate } =
-    useGlobalState();
+  const {
+    isTradeNoteBeingAltered,
+    radioValue,
+    setRadioValue,
+    reRenderAfterTagUpdate,
+  } = useGlobalState();
 
   const navigate = useNavigate();
   //variables
@@ -63,8 +68,8 @@ export default function LoggedIn() {
   const [tagOptions, setTagOptions] = useState("");
   //radio buttons for net/gross display
 
-  //moved to global state
-  // const [radioValue, setRadioValue] = useState(true);
+  //For alert if user is a test user
+  const [testUser, setTestUser] = useState(null);
 
   //statistic data for table
   const [statisticData, setStatisticData] = useState([
@@ -269,7 +274,6 @@ export default function LoggedIn() {
 
       const accuracyForCircle = findAccuracyPercentage(trades);
 
-
       setStatisticData(updatedStatistics);
       setTradeData(processedTradesLineChart);
       setTradeDataForBarChart(processedTradesBarChart);
@@ -283,6 +287,15 @@ export default function LoggedIn() {
   };
 
   useEffect(() => {
+    const isTestUser = sessionStorage.getItem("isTestUser");
+    if (isTestUser) {
+      setTestUser(
+        "Use date range '01/08/2023' to '31/08/2023' in filter bar above to view sample trade data and test the site features."
+      );
+    }
+  }, []);
+
+  useEffect(() => {
     fetchAndProcessTrades();
   }, [
     startDate,
@@ -292,7 +305,7 @@ export default function LoggedIn() {
     tagOptions,
     radioValue,
     isTradeNoteBeingAltered,
-    reRenderAfterTagUpdate
+    reRenderAfterTagUpdate,
   ]);
 
   return (
@@ -307,6 +320,16 @@ export default function LoggedIn() {
           today={today}
           thirtyDaysAgo={thirtyDaysAgo}
         />
+        <br />
+        {testUser && (
+          <Alert
+            variant="info"
+            onClose={() => setTestUser(null)}
+            dismissible
+          >
+            {testUser}
+          </Alert>
+        )}
         <TradeViewsButtons
           currentView={currentView}
           setCurrentView={setCurrentView}
@@ -359,7 +382,7 @@ export default function LoggedIn() {
                 />
               </div>
               <div className="col-auto py-3 px-5 px-md-5 d-flex justify-content-center align-items-center">
-                <AccuracyCircle accuracy={accuracy}/>
+                <AccuracyCircle accuracy={accuracy} />
               </div>
             </div>
             <div>
