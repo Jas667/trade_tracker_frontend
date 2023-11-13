@@ -25,6 +25,7 @@ import TradeViewsButtons from "../../components/Buttons/TradeViewsButtons";
 import TradeCalendarWrapper from "../../views/TradeCalendarView";
 import AccuracyCircle from "../../components/chartsAndTables/AccuracyChart";
 import { Alert } from "react-bootstrap";
+import {testApi} from "../../services/testService";
 
 export default function LoggedIn() {
   const {
@@ -286,6 +287,11 @@ export default function LoggedIn() {
     }
   };
 
+  useEffect(() => { 
+    const response = testApi();
+    console.log(response);
+  }, []);
+
   useEffect(() => {
     const isTestUser = sessionStorage.getItem("isTestUser");
     if (isTestUser) {
@@ -322,11 +328,7 @@ export default function LoggedIn() {
         />
         <br />
         {testUser && (
-          <Alert
-            variant="info"
-            onClose={() => setTestUser(null)}
-            dismissible
-          >
+          <Alert variant="info" onClose={() => setTestUser(null)} dismissible>
             {testUser}
           </Alert>
         )}

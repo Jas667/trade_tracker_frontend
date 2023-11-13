@@ -1,0 +1,13 @@
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+const testApi = async () => { 
+      try {
+      const response = await fetch(`${API_BASE_URL}/api`, {
+            method: "GET",
+            credentials: "include",
+      });
+      return response.json();
+      } catch (e) {
+      console.error(e);
+      }
+};
