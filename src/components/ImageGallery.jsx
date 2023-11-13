@@ -49,6 +49,9 @@ const ImageGallery = ({
   const moveToNextImage = (event) => {
     event.stopPropagation();
     if (selectedImageIndex < images.length - 1) {
+
+      console.log("IMAGES: ", images);
+      
       const newIndex = selectedImageIndex + 1;
       setSelectedImageIndex(newIndex);
       setSelectedImage(`${images[newIndex].user_id}/${images[newIndex].image_url}}`);
