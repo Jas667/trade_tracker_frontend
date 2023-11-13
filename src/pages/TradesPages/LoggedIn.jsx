@@ -25,7 +25,7 @@ import TradeViewsButtons from "../../components/Buttons/TradeViewsButtons";
 import TradeCalendarWrapper from "../../views/TradeCalendarView";
 import AccuracyCircle from "../../components/chartsAndTables/AccuracyChart";
 import { Alert } from "react-bootstrap";
-import {testApi} from "../../services/testService";
+import {testApi} from "../../services/apiTestService";
 
 export default function LoggedIn() {
   const {
