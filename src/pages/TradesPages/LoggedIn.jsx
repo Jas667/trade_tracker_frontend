@@ -289,7 +289,7 @@ export default function LoggedIn() {
 
   useEffect(() => { 
     const response = testApi();
-    console.log(response);
+    console.log("NUMBER OF PROXIES BEING TESTED. CURRENTLY SET TO ONE. IP ADDRESS: ", response);
   }, []);
 
   useEffect(() => {
