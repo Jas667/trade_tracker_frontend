@@ -42,7 +42,7 @@ const ImageGallery = ({
   };
 
   const handleImageClick = (img, index) => {
-    setSelectedImage(img.image_url);
+    setSelectedImage(`${img.userId}/${img.image_url}`);
     setSelectedImageIndex(index);
   };
 
@@ -85,7 +85,7 @@ const ImageGallery = ({
         {images.map((imageObj, index) => (
           <div key={imageObj.id} className="relative group">
             <img
-              src={`${API_BASE_URL}userImageUploads/${imageObj.image_url}`}
+              src={`${API_BASE_URL}userImageUploads/${imageObj.userId}/${imageObj.image_url}`}
               alt={`Trade Image ${index}`}
               className="w-full h-auto transition-transform transform group-hover:scale-105"
               onClick={() => handleImageClick(imageObj, index)}
