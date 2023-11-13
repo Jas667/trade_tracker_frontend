@@ -92,6 +92,11 @@ const Trades = ({ rawTradeData }) => {
         </>
       ) : (
         <>
+          <Pagination
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            totalPages={totalPages}
+          />
           <TradeList
             currentTrades={currentTrades}
             handleViewClick={handleViewClick}
