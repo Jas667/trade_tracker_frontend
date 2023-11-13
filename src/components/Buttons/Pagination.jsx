@@ -15,7 +15,7 @@ const TradePagination = ({ currentPage, setCurrentPage, totalPages }) => {
     pageNumbers.push(i);
   }
   return (
-    <div className="mt-4">
+    <div className="mt-3 mb-3">
       <Pagination>
         <Pagination.First
           onClick={() => setCurrentPage(1)}
