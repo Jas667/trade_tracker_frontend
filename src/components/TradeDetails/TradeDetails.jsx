@@ -77,6 +77,8 @@ const TradeDetails = ({ fetchTagsForTrade, handleBackToTradesClick }) => {
   };
 
   const openFirstImage = () => {
+    console.log("openFirstImage");
+    console.log(images);
     setSelectedImageIndex(0);
     setSelectedImage(images[0].image_url);
   };
