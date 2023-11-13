@@ -6,7 +6,7 @@ export const testApi = async () => {
             method: "GET",
             credentials: "include",
       });
-      return response;
+      return response.json();
       } catch (e) {
       console.error(e);
       }
