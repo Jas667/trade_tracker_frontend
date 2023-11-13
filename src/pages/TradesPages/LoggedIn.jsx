@@ -288,8 +288,12 @@ export default function LoggedIn() {
   };
 
   useEffect(() => { 
-    const response = testApi();
-    console.log("NUMBER OF PROXIES BEING TESTED. CURRENTLY SET TO ONE. IP ADDRESS: ", response);
+    const getNoOfProxies = async () => { 
+
+      const response = await testApi();
+      console.log("NUMBER OF PROXIES BEING TESTED. CURRENTLY SET TO ONE. IP ADDRESS: ", response);
+    };
+    getNoOfProxies();
   }, []);
 
   useEffect(() => {
