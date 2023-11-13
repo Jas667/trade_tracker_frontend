@@ -44,6 +44,8 @@ const ImageGallery = ({
   const handleImageClick = (img, index) => {
     setSelectedImage(`${img.userId}/${img.image_url}`);
     setSelectedImageIndex(index);
+    console.log("IMAGES")
+    console.log(images)
   };
 
   const moveToNextImage = (event) => {
