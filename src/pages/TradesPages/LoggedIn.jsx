@@ -291,7 +291,7 @@ export default function LoggedIn() {
     const getNoOfProxies = async () => { 
 
       const response = await testApi();
-      console.log("NUMBER OF PROXIES BEING TESTED. CURRENTLY SET TO ONE. IP ADDRESS: ", response);
+      console.log(response);
     };
     getNoOfProxies();
   }, []);
