@@ -25,7 +25,7 @@ import TradeViewsButtons from "../../components/Buttons/TradeViewsButtons";
 import TradeCalendarWrapper from "../../views/TradeCalendarView";
 import AccuracyCircle from "../../components/chartsAndTables/AccuracyChart";
 import { Alert } from "react-bootstrap";
-import {testApi} from "../../services/apiTestService";
+// import {testApi} from "../../services/apiTestService";
 
 export default function LoggedIn() {
   const {
@@ -287,14 +287,16 @@ export default function LoggedIn() {
     }
   };
 
-  useEffect(() => { 
-    const getNoOfProxies = async () => { 
+  //This is for testing the proxy server 
 
-      const response = await testApi();
-      console.log(response);
-    };
-    getNoOfProxies();
-  }, []);
+  // useEffect(() => { 
+  //   const getNoOfProxies = async () => { 
+
+  //     const response = await testApi();
+  //     console.log(response);
+  //   };
+  //   getNoOfProxies();
+  // }, []);
 
   useEffect(() => {
     const isTestUser = sessionStorage.getItem("isTestUser");
