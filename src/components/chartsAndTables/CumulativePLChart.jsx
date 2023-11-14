@@ -56,9 +56,15 @@ const options = {
           return "\n";
         },
         footer: (tooltipItems) => {
-          let trade = trades[tooltipItems[0].dataIndex];
-          if (trade && trade.tags && trade.tags.length) {
-            return trade.tags.map(tag => `Tag: ${tag.tag_name}`);
+          let tradeIndex = tooltipItems[0].dataIndex - 1;
+          
+          // Check if the adjusted index is valid for the trades array
+          if (tradeIndex >= 0) {
+            let trade = trades[tradeIndex];
+        
+            if (trade && trade.tags && trade.tags.length) {
+              return trade.tags.map(tag => `Tag: ${tag.tag_name}`);
+            }
           }
           return null;
         }
