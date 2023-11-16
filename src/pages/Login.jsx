@@ -176,6 +176,7 @@ export default function Login() {
           </button>
           <div className="flex justify-between">
             <Link to="/register">Creat Account</Link>
+            <Link to="/forgot-password">Forgotten Password</Link>
           </div>
         </form>
       </div>

@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { GlobalStateProvider } from "../context/GlobalStateContext";
+import ForgotPassword from "./pages/ForgotPassword";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Route path="/" element={<LoggedIn />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/upload" element={<UploadTrades />} />
             <Route path="/tags" element={<Tags />} />
             <Route path="/profile" element={<Profile />} />
