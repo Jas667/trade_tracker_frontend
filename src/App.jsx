@@ -9,7 +9,6 @@ import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { GlobalStateProvider } from "../context/GlobalStateContext";
 import ForgotPassword from "./pages/ForgotPassword";
-import PasswordReset from "./pages/PasswordReset";
 
 function App() {
   return (

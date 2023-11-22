@@ -71,3 +71,19 @@ export const resetPasswordEmail = async (email) => {
       console.error(e);
       }
 };
+
+export const resetPasswordUsingResetCode = async (resetCode, newPassword) => { 
+      try {
+      const response = await fetch(`${API_BASE_URL}user/reset-password-token`, {
+            method: "PUT",
+            credentials: "include",
+            headers: {
+                  "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ resetCode, newPassword }),
+      });
+      return response.json();
+      } catch (e) {
+      console.error(e);
+      }
+};
