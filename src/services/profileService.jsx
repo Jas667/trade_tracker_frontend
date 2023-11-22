@@ -55,3 +55,19 @@ export const deleteUserProfile = async () => {
       console.error(e);
       }
 };
+
+export const resetPasswordEmail = async (email) => { 
+      try {
+      const response = await fetch(`${API_BASE_URL}user/reset-password`, {
+            method: "PUT",
+            credentials: "include",
+            headers: {
+                  "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email }),
+      });
+      return response.json();
+      } catch (e) {
+      console.error(e);
+      }
+};

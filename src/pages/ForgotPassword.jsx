@@ -4,9 +4,12 @@ import loginImg from "../assets/data_examine_2_horizontal.jpg";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { InputWithErrorTooltip } from "../components/InputWithErrorTooltip";
+import { resetPasswordEmail } from "../services/profileService";
+import { Alert } from "react-bootstrap";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
+  const [alert, setAlert] = useState({ show: false, message: "" });
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -14,9 +17,18 @@ const ForgotPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-        // Send a POST request to your backend with the user's email.
-        console.log(email);
+    try {
+      const response = await resetPasswordEmail(email);
+      setAlert({ show: true, message: response.message });
+    } catch (e) {
+      console.error(e);
+    }
   };
+
+  const handleCloseAlert = () => {
+    setAlert({ ...alert, show: false });
+  };
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 h-screen w-full">
       <HalfScreenImageVertical
@@ -30,14 +42,19 @@ const ForgotPassword = () => {
         >
           <h2 className="text-4xl font-bold text-center py-6">Trade Tracker</h2>
           <div>
+            {alert.show && (
+              <Alert variant="info" onClose={handleCloseAlert} dismissible>
+                {alert.message}
+              </Alert>
+            )}
             <h2>Reset Password</h2>
-              <InputWithErrorTooltip
-                name="email"
-                label="Email"
-                type="email"
-                value={email}
-                onChange={handleEmailChange}
-              />
+            <InputWithErrorTooltip
+              name="email"
+              label="Email"
+              type="email"
+              value={email}
+              onChange={handleEmailChange}
+            />
           </div>
           <button
             type="submit"

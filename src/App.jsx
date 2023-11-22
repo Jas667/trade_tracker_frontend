@@ -24,7 +24,6 @@ function App() {
             <Route path="/upload" element={<UploadTrades />} />
             <Route path="/tags" element={<Tags />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="reset-password/:token" element={<PasswordReset />} />
           </Routes>
         </Router>
       </GlobalStateProvider>
