@@ -9,6 +9,7 @@ import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { GlobalStateProvider } from "../context/GlobalStateContext";
 import ForgotPassword from "./pages/ForgotPassword";
+import PasswordReset from "./pages/PasswordReset";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path="/upload" element={<UploadTrades />} />
             <Route path="/tags" element={<Tags />} />
             <Route path="/profile" element={<Profile />} />
+            <Route exact path="reset-password/:token" element={<PasswordReset />} />
           </Routes>
         </Router>
       </GlobalStateProvider>
