@@ -47,7 +47,7 @@ The trade filter bar is the main way to filter trades in the application. It is 
 
 ### Views
 
-![Views](readme_images/ViewsMenu.png)
+![Views](readme_images/ViewMenu.png)
 
 The views menu allows you to analyse your trades in a variety of ways. The default view is standard. All displays offer different analytics on the same selection of trades. Some are self explanatory. For the others, which offer more complex/interactive analytics, I have shown them below.
 
